@@ -7,14 +7,20 @@ parserOptions:
     jsx: false
 rules:
   accessor-pairs: error
-  array-bracket-newline: 'off'
+  array-bracket-newline:
+    - error
+    - consistent
   array-bracket-spacing: error
   array-callback-return: error
-  array-element-newline: error
-  arrow-body-style: error
+  array-element-newline:
+    - error
+    - consistent
+  arrow-body-style: 
+    - error
+    - always
   arrow-parens:
     - error
-    - as-needed
+    - always
   arrow-spacing:
     - error
     - after: true
@@ -23,7 +29,9 @@ rules:
   block-spacing: error
   brace-style: error
   callback-return: error
-  camelcase: error
+  camelcase: 
+    - error
+    - properties: never
   capitalized-comments:
     - error
     - never
@@ -36,12 +44,17 @@ rules:
   comma-style:
     - error
     - last
-  complexity: error
+  complexity: 
+    - error
+    - max: 5
   computed-property-spacing:
     - error
     - never
-  consistent-return: error
-  consistent-this: error
+  consistent-return:
+    - warn
+  consistent-this: 
+    - error
+    - self
   curly: error
   default-case: error
   default-case-last: error
@@ -51,11 +64,17 @@ rules:
     - property
   dot-notation: error
   eol-last: error
-  eqeqeq: error
+  eqeqeq:
+    - error
+    - always
+    - null: ignore
   func-call-spacing: error
   func-name-matching: error
-  func-names: 'off'
-  func-style: error
+  func-names: error
+  func-style:
+    - error
+    - declaration
+    - allowArrowFunctions: true
   function-paren-newline: error
   generator-star-spacing: error
   global-require: error
@@ -69,7 +88,9 @@ rules:
   implicit-arrow-linebreak:
     - error
     - beside
-  indent: 'off'
+  indent:
+      - error
+      - 2
   indent-legacy: 'off'
   init-declarations: 'off'
   jsx-quotes: error
@@ -87,7 +108,9 @@ rules:
   max-len: 'off'
   max-lines: 'off'
   max-lines-per-function: 'off'
-  max-nested-callbacks: error
+  max-nested-callbacks:
+      - error
+      - max: 5
   max-params: error
   max-statements: error
   max-statements-per-line: error
@@ -106,6 +129,9 @@ rules:
   no-buffer-constructor: error
   no-caller: error
   no-catch-shadow: error
+  no-cond-assign:
+    - error
+    - always
   no-confusing-arrow: error
   no-console: error
   no-constructor-return: error
@@ -173,9 +199,9 @@ rules:
   no-sync: error
   no-tabs: error
   no-template-curly-in-string: error
-  no-ternary: error
+  no-ternary: 'off'
   no-throw-literal: error
-  no-trailing-spaces: error
+  no-trailing-spaces: 'off'
   no-undef-init: error
   no-undefined: error
   no-underscore-dangle: error
@@ -197,10 +223,14 @@ rules:
   no-whitespace-before-property: error
   nonblock-statement-body-position: error
   object-curly-newline: error
-  object-curly-spacing: 'off'
+  object-curly-spacing:
+    - error
+    - never
   object-property-newline: error
   object-shorthand: error
-  one-var: 'off'
+  one-var:
+    - error
+    - never
   one-var-declaration-per-line: error
   operator-assignment: error
   operator-linebreak: error
@@ -220,7 +250,11 @@ rules:
   prefer-spread: error
   prefer-template: error
   quote-props: 'off'
-  quotes: 'off'
+  quotes:
+    - error
+    - single
+    - avoidEscape: true
+      allowTemplateLiterals: true
   radix: error
   require-atomic-updates: error
   require-await: error
@@ -235,8 +269,14 @@ rules:
   sort-imports: error
   sort-keys: 'off'
   sort-vars: error
-  space-before-blocks: 'off'
-  space-before-function-paren: 'off'
+  space-before-blocks:
+    - error
+    - always
+  space-before-function-paren:
+    - error
+    - anonymous: always
+      named: never
+      asyncArrow: always
   space-in-parens:
     - error
     - never

@@ -1,7 +1,8 @@
 # Content Negotiation
 # https://jsonapi.org/format/#content-negotiation
 
-# *-ruleset.yaml files SHOULD NOT contain any testable items.
+# *-ruleset.yaml files generally SHOULD NOT contain any testable rules.
+# all rules in this file MUST have corresponding tests
 
 extends:
   - jsonapi-content-negotiation-clients.yaml

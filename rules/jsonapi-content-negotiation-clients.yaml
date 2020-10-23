@@ -1,6 +1,8 @@
 # Content Negotiation - Client Responsibilities
 # https://jsonapi.org/format/#content-negotiation-clients
 
+# all rules in this file MUST have corresponding tests
+
 rules:
   request-content-type:
     description: "All JSON:API request bodies MUST be received with the header Content-Type: application/vnd.api+json"
