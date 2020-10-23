@@ -20,6 +20,7 @@ Each file `extends` rules/rulesets contained in its corresponding subsections.
 In lieu of a formal style guide (I know... ironic :grin:):
 - Take care to maintain the existing coding style, including tests.
 - Add tests for all new/edited rules including JSONPath testing.
+- Verify all linting and tests PASS: `npm test`
 
 ## License
 [MIT License](https://github.com/jmlue42/spectral-jsonapi-ruleset/blob/main/LICENSE)

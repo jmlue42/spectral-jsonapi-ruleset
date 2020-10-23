@@ -1,7 +1,9 @@
+'use strict';
+
 const { join } = require('path');
 const { expect } = require('chai');
-const { Spectral, Document, Parsers, isOpenApiv3 } = require('@stoplight/spectral');
-const { JSONPath} = require('jsonpath-plus');
+const { Spectral, Document, Parsers } = require('@stoplight/spectral');
+const { JSONPath } = require('jsonpath-plus');
 
 const RULESET_FILE = join(__dirname, '../rules/jsonapi-content-negotiation-servers.yaml');
 
