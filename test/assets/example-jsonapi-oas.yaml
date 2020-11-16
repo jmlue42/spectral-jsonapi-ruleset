@@ -1,0 +1,354 @@
+openapi: 3.0.0
+info:
+  title: Sample JSON:API OAS File
+  description: Example file on how a JSON:API compliant API can be described in OAS v3+
+  version: 1.0.0
+  contact:
+    name: Jeff Marquez
+    email: some_email@domain.com
+    url: http://www.example.com
+tags:
+  - name: myTag
+    description: tag description
+servers:
+  - url: https://api.domain.com/v1
+    description: production
+  - url: https://api-sandbox.domain.com/v1
+    description: production sandbox
+  - url: https://api.{environment}.domain.com/v1
+    description: pre-production
+    variables:
+      environment:
+        enum:
+          - 'dev'
+          - 'qa'
+        default: 'dev'
+paths:
+  /myResources:
+    get:
+      tags:
+        - myTag
+      summary: Short Description
+      description: A longer MEANINGFUL descripition. Do not copy summary.
+      security:
+        - ApiKeyAuth: []
+          AuthCode:
+            - 'actions:read'
+      parameters:
+        - $ref: '#/components/parameters/filter'
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/JsonAPIDataDocument'
+        '401':
+          description: 'Unauthorized: Invalid or Expired Authentication'
+          headers:
+            WWWAuthenticate:
+              $ref: '#/components/headers/WWWAuthenticate'
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/401Error'
+        '403':
+          description: 'Forbidden: Request does not have necessary permissions'
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/403Error'
+        'default':
+          description: Error
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: Api Key value. First level of client identification and access control to proxy/gateway
+      in: header
+      name: api-key
+    AuthCode:
+            type: oauth2
+            flows:
+                authorizationCode:
+                    authorizationUrl: 'https://api.manulife.com/oauth/authorize'
+                    tokenUrl: 'https://api.manulife.com/oauth/token'
+                    refreshUrl: 'https://api.manulife.com/oauth/refresh'
+                    scopes:
+                        'actions:write': modify actions the end-user has access to
+                        'actions:read': read actions the end-user has access to
+  headers:
+    WWWAuthenticate:
+      description: Authentication Challenge Information
+      schema:
+        type: string
+        example: Bearer realm=manulife.com
+  parameters:
+    filter:
+      name: filter
+      description: schema for 'filter' query parameter
+      in: query
+      schema:
+        type: object
+      style: deepObject
+      explode: true
+  schemas:
+    MyResource:
+      allOf:
+        - $ref: '#/components/schemas/JsonAPIDataDocument'
+          
+    
+    
+    401Error:
+      type: object
+      required:
+        - errors
+      properties:
+        errors:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/JsonAPIErrorObject'
+              - type: object
+                description: 'Unauthorized: Invalid or Expired Authentication'
+                properties:
+                  status:
+                    type: string
+                    enum: 
+                      - "401"
+                  title:
+                    type: string
+                    enum:
+                      - "Unauthorized"
+    403Error:
+      type: object
+      required:
+        - errors
+      properties:
+        errors:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/JsonAPIErrorObject'
+              - type: object
+                description: 'Forbidden: Request does not have necessary permissions'
+                properties:
+                  status:
+                    type: string
+                    enum: 
+                      - "403"
+                  title:
+                    type: string
+                    enum:
+                      - "Forbidden"
+    
+    DefaultError:
+      type: object
+      required:
+        - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/JsonAPIErrorObject'
+    JsonAPIMetaDocument:
+      allOf:
+        - $ref: '#/components/schemas/JsonAPIDocumentObject'
+        - type: object
+          required:
+            - meta
+    JsonAPIDataDocument:
+      allOf:
+        - $ref: '#/components/schemas/JsonAPIDocumentObject'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/JsonAPIDataObject'
+            included:
+              type: array
+              items:
+                $ref: '#/components/schemas/JsonAPIResourceObject'
+
+    JsonAPIErrorObject:
+      type: object
+      description: JSON:API Error Object
+      properties:
+        id:
+          type: string
+          description: a unique identifier for this particular occurrence of the problem
+        links:
+          type: object
+          description: links that lead to further detail about the particular occurrence of the problem
+          properties:
+            about:
+              oneOf:
+                - type: string
+                - type: object
+                  required:
+                    - href
+                  properties:
+                    href:
+                      type: string
+                    meta:
+                      type: object
+                      additionalProperties: true
+        status:
+          type: string
+          description: the HTTP status code applicable to this problem
+        code:
+          type: string
+          description: an application-specific error code
+        title:
+          type: string
+          description:  a human-readable summary specific of the problem. Usually the http status friendly name.
+        detail:
+          type: string
+          description:  a human-readable explanation specific to this occurrence of the problem
+        source:
+          type: object
+          description: an object containing references to the source of the error
+          properties:
+            pointer:
+              description: a JSON Pointer [RFC6901] to the associated entity in the request document
+              oneOf:
+                - type: string
+                - type: array
+                  items:
+                    type: string
+            parameter:
+              description: a string indicating which URI query parameter caused the error
+              type: string
+        meta:
+          type: object
+          additionalProperties: true  
+    JsonAPILinkObject:
+      additionalProperties:
+        oneOf:
+          - type: string
+          - type: object
+            required:
+              - href
+            properties:
+              href:
+                type: string
+              meta:
+                type: object
+                additionalProperties: true
+    JsonAPIDocumentObject:
+      type: object
+      properties:
+        jsonapi:
+          type: object
+          properties:
+            version:
+              type: string
+              enum:
+                - "1.0"
+            meta:
+              type: object
+              additionalProperties: true
+        links:
+          $ref: '#/components/schemas/JsonAPILinkObject'
+        meta:
+          type: object
+          additionalProperties: true
+    JsonAPIIDentifierObject:
+      type: object
+      required:
+        - id
+        - type
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        meta:
+          type: object
+          additionalProperties: true
+    JsonAPIRelationshipObject:
+      additionalProperties:
+        type: object
+        properties:
+          links:
+            type: object
+            properties:
+              self: 
+                oneOf:
+                  - type: string
+                  - type: object
+                    required:
+                      - href
+                    properties:
+                      href:
+                        type: string
+                      meta:
+                        type: object
+                        additionalProperties: true
+              related: 
+                oneOf:
+                  - type: string
+                  - type: object
+                    required:
+                      - href
+                    properties:
+                      href:
+                        type: string
+                      meta:
+                        type: object
+                        additionalProperties: true
+          meta:
+            type: object
+            additionalProperties: true
+          data:
+            oneOf:
+              - type: object
+                required:
+                  - id
+                  - type
+                properties:
+                  id:
+                    type: string
+                  type:
+                    type: string
+              - type: array
+                items:
+                  type: object
+                  required:
+                    - id
+                    - type
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+    JsonAPIResourceObject:
+      allOf:
+        - $ref: '#/components/schemas/JsonAPIIDentifierObject'
+        - type: object
+          properties:
+            attributes:
+              type: object
+              additionalProperties: true
+            links:
+              $ref: '#/components/schemas/JsonAPILinkObject'
+            meta:
+              type: object
+              additionalProperties: true
+            relationships:
+              $ref: '#/components/schemas/JsonAPIRelationshipObject'
+    JsonAPIDataObject:
+      oneOf:
+        - $ref: '#/components/schemas/JsonAPIResourceObject'
+        - type: array
+          items:
+            $ref: '#/components/schemas/JsonAPIResourceObject'
+        - $ref: '#/components/schemas/JsonAPIIDentifierObject'
+        - type: array
+          items:
+            $ref: '#/components/schemas/JsonAPIIDentifierObject'          
