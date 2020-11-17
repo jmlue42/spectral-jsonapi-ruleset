@@ -66,6 +66,49 @@ paths:
             application/vnd.api+json:
               schema:
                 $ref: '#/components/schemas/DefaultError'
+    post:
+      tags:
+        - single
+      summary: Create Resource
+      description: A longer MEANINGFUL descripition. Do not copy summary.
+      security:
+        - ApiKeyAuth: []
+          AuthCode:
+            - 'actions:write'
+      requestBody:
+        content:
+          application/vnd.api+json:
+      responses:
+        '201':
+          description: Created
+          headers:
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/MyResourceSingle_Response'
+        '401':
+          description: 'Unauthorized: Invalid or Expired Authentication'
+          headers:
+            WWWAuthenticate:
+              $ref: '#/components/headers/WWWAuthenticate'
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/401Error'
+        '403':
+          description: 'Forbidden: Request does not have necessary permissions'
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/403Error'
+        'default':
+          description: Error
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
   /myResources/{id}:
     get:
       tags:
@@ -107,6 +150,80 @@ paths:
             application/vnd.api+json:
               schema:
                 $ref: '#/components/schemas/DefaultError'
+    patch:
+      tags:
+        - single
+      summary: Short Description
+      description: A longer MEANINGFUL descripition. Do not copy summary.
+      security:
+        - ApiKeyAuth: []
+          AuthCode:
+            - 'actions:write'
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/vnd.api+json:
+      responses:
+        '200':
+          description: Successful Operation.
+        '401':
+          description: 'Unauthorized: Invalid or Expired Authentication'
+          headers:
+            WWWAuthenticate:
+              $ref: '#/components/headers/WWWAuthenticate'
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/401Error'
+        '403':
+          description: 'Forbidden: Request does not have necessary permissions'
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/403Error'
+        'default':
+          description: Error
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
+    delete:
+      tags:
+        - single
+      summary: Short Description
+      description: A longer MEANINGFUL descripition. Do not copy summary.
+      security:
+        - ApiKeyAuth: []
+          AuthCode:
+            - 'actions:delete'
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          description: Successful Operation. No Content.
+        '401':
+          description: 'Unauthorized: Invalid or Expired Authentication'
+          headers:
+            WWWAuthenticate:
+              $ref: '#/components/headers/WWWAuthenticate'
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/401Error'
+        '403':
+          description: 'Forbidden: Request does not have necessary permissions'
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/403Error'
+        'default':
+          description: Error
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
+          
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -124,7 +241,13 @@ components:
                     scopes:
                         'actions:write': modify actions the end-user has access to
                         'actions:read': read actions the end-user has access to
+                        'actions:delete': delete actions the end-user has access to
   headers:
+    Location:
+      description: Location of the resource in question
+      schema:
+        type: string
+        example: http://api.domain.com/v1/{resource-colleciton-name}/{id}
     WWWAuthenticate:
       description: Authentication Challenge Information
       schema:
@@ -372,4 +495,4 @@ components:
               type: string
         meta:
           type: object
-          additionalProperties: true  
+          additionalProperties: true
