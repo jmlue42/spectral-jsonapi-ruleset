@@ -8,7 +8,9 @@ info:
     email: some_email@domain.com
     url: http://www.example.com
 tags:
-  - name: myTag
+  - name: collection
+    description: tag description
+  - name: single
     description: tag description
 servers:
   - url: https://api.domain.com/v1
@@ -27,7 +29,7 @@ paths:
   /myResources:
     get:
       tags:
-        - myTag
+        - collection
       summary: Short Description
       description: A longer MEANINGFUL descripition. Do not copy summary.
       security:
@@ -42,7 +44,48 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/JsonAPIDataDocument'
+                $ref: '#/components/schemas/MyResourceCollection_Response'
+        '401':
+          description: 'Unauthorized: Invalid or Expired Authentication'
+          headers:
+            WWWAuthenticate:
+              $ref: '#/components/headers/WWWAuthenticate'
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/401Error'
+        '403':
+          description: 'Forbidden: Request does not have necessary permissions'
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/403Error'
+        'default':
+          description: Error
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
+  /myResources/{id}:
+    get:
+      tags:
+        - single
+      summary: Short Description
+      description: A longer MEANINGFUL descripition. Do not copy summary.
+      security:
+        - ApiKeyAuth: []
+          AuthCode:
+            - 'actions:read'
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/fields'
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/MyResourceSingle_Response'
         '401':
           description: 'Unauthorized: Invalid or Expired Authentication'
           headers:
@@ -88,6 +131,15 @@ components:
         type: string
         example: Bearer realm=manulife.com
   parameters:
+    id:
+      name: id
+      description: resource reference id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '^([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[afA-F0-9]{4}-[a-fA-F0-9]{12}){1}$'
+        example: 4257c52f-6c78-4747-8106-e185c081436b
     filter:
       name: filter
       description: schema for 'filter' query parameter
@@ -95,13 +147,101 @@ components:
       schema:
         type: object
       style: deepObject
-      explode: true
+    fields:
+      name: fields
+      description: schema for 'fields' query parameter
+      in: query
+      schema:
+        type: object
+      style: deepObject
   schemas:
-    MyResource:
+    MyResourceSingle_Response:
       allOf:
-        - $ref: '#/components/schemas/JsonAPIDataDocument'
-          
-    
+        - type: object
+          required:
+            - links
+            - data
+          properties:
+            links:
+              type: object
+              properties:
+                self:
+                  allOf:
+                    - $ref: '#/components/schemas/Link'
+                    - example: https://api.domain.com/v1/myResources/{id}
+            data:
+              $ref: '#/components/schemas/MyResourceObject'
+    MyResourceCollection_Response:
+      allOf:
+        - type: object
+          required:
+            - links
+            - data
+          properties:
+            links:
+              type: object
+              properties:
+                self:
+                  allOf:
+                    - $ref: '#/components/schemas/Link'
+                    - example: https://api.domain.com/v1/myResources
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/MyResourceObject'
+    MyResourceObject:
+      allOf:
+        - $ref: '#/components/schemas/IdentifierObject'
+        - type: object
+          required:
+            - attributes
+            - relationships
+          properties:
+            type:
+              enum:
+                - resources
+            attributes:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  example: do-hickey
+                description:
+                  type: string
+                  example: thing that does stuff
+            relationships:
+              type: object
+              properties:
+                manufacturer:
+                  type: object
+                  required:
+                    - links
+                    - data
+                  properties:
+                    links:
+                      type: object
+                      required:
+                        - self
+                        - related
+                      properties:
+                        self:
+                          allOf:
+                            - $ref: '#/components/schemas/Link'
+                            - example: http://api.domain.com/v1/myResources/{id}/relationships/manufacturers
+                        related:
+                          allOf:
+                            - $ref: '#/components/schemas/Link'
+                            - example: http://api.domain.com/v1/manufacturers/{id}
+                    data:
+                      allOf:
+                        - $ref: '#/components/schemas/RelationshipDataObject'
+                        - type: object
+                          properties:
+                            type:
+                              enum:
+                                - manufacturers
     
     401Error:
       type: object
@@ -112,7 +252,7 @@ components:
           type: array
           items:
             allOf:
-              - $ref: '#/components/schemas/JsonAPIErrorObject'
+              - $ref: '#/components/schemas/BaseErrorObject'
               - type: object
                 description: 'Unauthorized: Invalid or Expired Authentication'
                 properties:
@@ -133,7 +273,7 @@ components:
           type: array
           items:
             allOf:
-              - $ref: '#/components/schemas/JsonAPIErrorObject'
+              - $ref: '#/components/schemas/BaseErrorObject'
               - type: object
                 description: 'Forbidden: Request does not have necessary permissions'
                 properties:
@@ -145,7 +285,6 @@ components:
                     type: string
                     enum:
                       - "Forbidden"
-    
     DefaultError:
       type: object
       required:
@@ -154,28 +293,35 @@ components:
         errors:
           type: array
           items:
-            $ref: '#/components/schemas/JsonAPIErrorObject'
-    JsonAPIMetaDocument:
-      allOf:
-        - $ref: '#/components/schemas/JsonAPIDocumentObject'
-        - type: object
-          required:
-            - meta
-    JsonAPIDataDocument:
-      allOf:
-        - $ref: '#/components/schemas/JsonAPIDocumentObject'
-        - type: object
-          required:
-            - data
-          properties:
-            data:
-              $ref: '#/components/schemas/JsonAPIDataObject'
-            included:
-              type: array
-              items:
-                $ref: '#/components/schemas/JsonAPIResourceObject'
+            $ref: '#/components/schemas/BaseErrorObject'
 
-    JsonAPIErrorObject:
+    Link:
+      type: string
+    IdentifierObject:
+      type: object
+      required:
+        - id
+        - type
+      properties:
+        id:
+          type: string
+          pattern: '^([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[afA-F0-9]{4}-[a-fA-F0-9]{12}){1}$'
+          example: 4257c52f-6c78-4747-8106-e185c081436b
+        type:
+          type: string
+    RelationshipDataObject:
+      type: object
+      required:
+        - id
+        - type
+      properties:
+        id:
+          type: string
+          pattern: '^([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[afA-F0-9]{4}-[a-fA-F0-9]{12}){1}$'
+          example: 2357c52f-6c78-4747-8106-e185c08143aa
+        type:
+          type: string
+    BaseErrorObject:
       type: object
       description: JSON:API Error Object
       properties:
@@ -227,128 +373,3 @@ components:
         meta:
           type: object
           additionalProperties: true  
-    JsonAPILinkObject:
-      additionalProperties:
-        oneOf:
-          - type: string
-          - type: object
-            required:
-              - href
-            properties:
-              href:
-                type: string
-              meta:
-                type: object
-                additionalProperties: true
-    JsonAPIDocumentObject:
-      type: object
-      properties:
-        jsonapi:
-          type: object
-          properties:
-            version:
-              type: string
-              enum:
-                - "1.0"
-            meta:
-              type: object
-              additionalProperties: true
-        links:
-          $ref: '#/components/schemas/JsonAPILinkObject'
-        meta:
-          type: object
-          additionalProperties: true
-    JsonAPIIDentifierObject:
-      type: object
-      required:
-        - id
-        - type
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-        meta:
-          type: object
-          additionalProperties: true
-    JsonAPIRelationshipObject:
-      additionalProperties:
-        type: object
-        properties:
-          links:
-            type: object
-            properties:
-              self: 
-                oneOf:
-                  - type: string
-                  - type: object
-                    required:
-                      - href
-                    properties:
-                      href:
-                        type: string
-                      meta:
-                        type: object
-                        additionalProperties: true
-              related: 
-                oneOf:
-                  - type: string
-                  - type: object
-                    required:
-                      - href
-                    properties:
-                      href:
-                        type: string
-                      meta:
-                        type: object
-                        additionalProperties: true
-          meta:
-            type: object
-            additionalProperties: true
-          data:
-            oneOf:
-              - type: object
-                required:
-                  - id
-                  - type
-                properties:
-                  id:
-                    type: string
-                  type:
-                    type: string
-              - type: array
-                items:
-                  type: object
-                  required:
-                    - id
-                    - type
-                  properties:
-                    id:
-                      type: string
-                    type:
-                      type: string
-    JsonAPIResourceObject:
-      allOf:
-        - $ref: '#/components/schemas/JsonAPIIDentifierObject'
-        - type: object
-          properties:
-            attributes:
-              type: object
-              additionalProperties: true
-            links:
-              $ref: '#/components/schemas/JsonAPILinkObject'
-            meta:
-              type: object
-              additionalProperties: true
-            relationships:
-              $ref: '#/components/schemas/JsonAPIRelationshipObject'
-    JsonAPIDataObject:
-      oneOf:
-        - $ref: '#/components/schemas/JsonAPIResourceObject'
-        - type: array
-          items:
-            $ref: '#/components/schemas/JsonAPIResourceObject'
-        - $ref: '#/components/schemas/JsonAPIIDentifierObject'
-        - type: array
-          items:
-            $ref: '#/components/schemas/JsonAPIIDentifierObject'          
