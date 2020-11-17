@@ -118,9 +118,9 @@ components:
             type: oauth2
             flows:
                 authorizationCode:
-                    authorizationUrl: 'https://api.manulife.com/oauth/authorize'
-                    tokenUrl: 'https://api.manulife.com/oauth/token'
-                    refreshUrl: 'https://api.manulife.com/oauth/refresh'
+                    authorizationUrl: 'https://api.domain.com/oauth/authorize'
+                    tokenUrl: 'https://api.domain.com/oauth/token'
+                    refreshUrl: 'https://api.domain.com/oauth/refresh'
                     scopes:
                         'actions:write': modify actions the end-user has access to
                         'actions:read': read actions the end-user has access to
@@ -129,7 +129,7 @@ components:
       description: Authentication Challenge Information
       schema:
         type: string
-        example: Bearer realm=manulife.com
+        example: Bearer realm=domain.com
   parameters:
     id:
       name: id
