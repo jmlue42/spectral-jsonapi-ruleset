@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.0.3
 info:
   title: Sample JSON:API OAS File
   description: Example file on how a JSON:API compliant API can be described in OAS v3+
