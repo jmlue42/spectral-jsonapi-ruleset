@@ -4,7 +4,7 @@
 # all rules in this file MUST have corresponding tests
 
 rules:
-  top-level-request-json-object:
+  top-level-json-object:
     description: "A JSON object MUST be at the root of every JSON:API request/response body containing data."
     documentationUrl: https://jsonapi.org/format/#document-top-level
     message: "{{path}} - {{description}}"
@@ -16,3 +16,20 @@ rules:
       functionOptions:
         values:
           - object
+  top-level-json-properties:
+    description: "Must follow top level JSON:API document properties."
+    documentationUrl: https://jsonapi.org/format/#document-top-level
+    message: "{{path}} - {{description}}"
+    severity: error
+    given: $.paths..content[?(@property === 'application/vnd.api+json')].schema.properties
+    then:
+      field: '@key'
+      function: enumeration
+      functionOptions:
+        values:
+          - data
+          - meta
+          - errors
+          - links
+          - included
+          - jsonapi
