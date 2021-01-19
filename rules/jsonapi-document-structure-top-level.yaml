@@ -33,3 +33,22 @@ rules:
           - links
           - included
           - jsonapi
+  top-level-json-properties-included:
+    description: "data property must exist if included is returned"
+    documentationUrl: https://jsonapi.org/format/#document-top-level
+    message: "{{path}} - {{description}}"
+    severity: error
+    given: $.paths..content[?(@property === 'application/vnd.api+json')].schema.properties[?(@property === 'included')]^
+    then:
+      field: 'data'
+      function: truthy
+  top-level-json-properties-errors:
+    description: "data property must not exist if errors is returned"
+    documentationUrl: https://jsonapi.org/format/#document-top-level
+    message: "{{path}} - {{description}}"
+    severity: error
+    given: $.paths..content[?(@property === 'application/vnd.api+json')].schema.properties[?(@property === 'errors')]^
+    then:
+      field: 'data'
+      function: falsy
+

@@ -136,6 +136,8 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
         .then(() => {
 
           delete spectral.rules['top-level-json-properties'];
+          delete spectral.rules['top-level-json-properties-included'];
+          delete spectral.rules['top-level-json-properties-errors'];
 
         })
         .then(() => {
@@ -199,6 +201,8 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
         .then(() => {
 
           delete spectral.rules['top-level-json-properties'];
+          delete spectral.rules['top-level-json-properties-included'];
+          delete spectral.rules['top-level-json-properties-errors'];
 
         })
         .then(() => {
@@ -329,6 +333,8 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
         .then(() => {
 
           delete spectral.rules['top-level-json-object'];
+          delete spectral.rules['top-level-json-properties-included'];
+          delete spectral.rules['top-level-json-properties-errors'];
 
         })
         .then(() => {
@@ -391,6 +397,8 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
         .then(() => {
 
           delete spectral.rules['top-level-json-object'];
+          delete spectral.rules['top-level-json-properties-included'];
+          delete spectral.rules['top-level-json-properties-errors'];
 
         })
         .then(() => {
@@ -408,5 +416,377 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
     });
 
   });
-  
+
+  describe('top-level-json-properties-included', function () {
+
+    it('the json path expression should find the correct paths from the given document', function (done) {
+      
+      const doc = {
+        'openapi': '3.0.2',
+        'paths': {
+          '/stuff': {
+            'get': {
+              'responses': {
+                '200': {
+                  'content': {
+                    'application/vnd.api+json': {
+                      'schema': {
+                        'type': 'object',
+                        'properties': {
+                          'data': {
+                            'type': 'object'
+                          },
+                          'links': {
+                            'type': 'object'
+                          },
+                          'included': {
+                            'type': 'array'
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            'patch': {
+              'requestBody': {
+                'content': {
+                  'application/vnd.api+json': {
+                    'schema': {
+                      'type': 'object',
+                      'properties': {
+                        'data': {
+                          'type': 'object'
+                        },
+                        'links': {
+                          'type': 'object'
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      };
+
+      const jsonPathExpression = "$.paths..content[?(@property === 'application/vnd.api+json')].schema.properties[?(@property === 'included')]^";
+      const expectedPaths = [
+        doc.paths['/stuff'].get.responses[200].content['application/vnd.api+json'].schema.properties
+      ];
+
+      const results = JSONPath(jsonPathExpression, doc);
+
+      expect(results.length).to.equal(1, 'Wrong number of results.');
+      expect(results).to.deep.equal(expectedPaths, 'Wrong paths');
+      done();
+
+    });
+
+    it('the rule should return "top-level-json-properties-included" errors if included property exists w/o data property', function (done) {
+
+      const badDocument = new Document(`
+              openapi: 3.0.2
+              paths:
+                /stuff:
+                  get:
+                    responses:
+                      '200':
+                        content:
+                          application/vnd.api+json:
+                            schema:
+                              type: object
+                              properties:
+                                links:
+                                  type: object
+                                meta:
+                                  type: object
+                                errors:
+                                  type: array
+                                included:
+                                  type: array
+                                jsonapi:
+                                  type: object
+                  patch:
+                    requestBody:
+                      content:
+                        application/vnd.api+json:
+                            schema:
+                              type: object
+                              properties:
+                                data:
+                                  type: object
+          `, Parsers.Yaml);
+
+      spectral.loadRuleset(RULESET_FILE)
+        //remove rule(s) we aren't testing
+        .then(() => {
+
+          delete spectral.rules['top-level-json-object'];
+          delete spectral.rules['top-level-json-properties'];
+          delete spectral.rules['top-level-json-properties-errors'];
+
+        })
+        .then(() => {
+
+          return spectral.run(badDocument);
+
+        })
+        .then((results) => {
+
+          expect(results.length).to.equal(1, 'Error count should be 1');
+          expect(results[0].code).to.equal('top-level-json-properties-included', 'Incorrect error');
+          expect(results[0].path.join('/')).to.equal('paths//stuff/get/responses/200/content/application/vnd.api+json/schema/properties', 'Wrong path');
+          done();
+
+        });
+
+    });
+
+    it('the rule should pass with NO errors', function (done) {
+
+      const cleanDocument = new Document(`
+              openapi: 3.0.2
+              paths:
+                /stuff:
+                  get:
+                    responses:
+                      '200':
+                        content:
+                          application/vnd.api+json:
+                            schema:
+                              type: object
+                              properties:
+                                data:
+                                  type: object
+                                links:
+                                  type: object
+                                meta:
+                                  type: object
+                                errors:
+                                  type: array
+                                included:
+                                  type: array
+                                jsonapi:
+                                  type: object
+                  patch:
+                    requestBody:
+                      content:
+                        application/vnd.api+json:
+                            schema:
+                              type: object
+                              properties:
+                                data:
+                                  type: object
+          `, Parsers.Yaml);
+
+      spectral.loadRuleset(RULESET_FILE)
+        //remove rule(s) we aren't testing
+        .then(() => {
+
+          delete spectral.rules['top-level-json-object'];
+          delete spectral.rules['top-level-json-properties'];
+          delete spectral.rules['top-level-json-properties-errors'];
+
+        })
+        .then(() => {
+
+          return spectral.run(cleanDocument);
+
+        })
+        .then((results) => {
+
+          expect(results.length).to.equal(0, 'Error(s) found');
+          done();
+
+        });
+    
+    });
+
+  });
+
+  describe('top-level-json-properties-errors', function () {
+
+    it('the json path expression should find the correct paths from the given document', function (done) {
+      
+      const doc = {
+        'openapi': '3.0.2',
+        'paths': {
+          '/stuff': {
+            'get': {
+              'responses': {
+                '200': {
+                  'content': {
+                    'application/vnd.api+json': {
+                      'schema': {
+                        'type': 'object',
+                        'properties': {
+                          'data': {
+                            'type': 'object'
+                          },
+                          'links': {
+                            'type': 'object'
+                          },
+                          'errors': {
+                            'type': 'array'
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            'patch': {
+              'requestBody': {
+                'content': {
+                  'application/vnd.api+json': {
+                    'schema': {
+                      'type': 'object',
+                      'properties': {
+                        'data': {
+                          'type': 'object'
+                        },
+                        'links': {
+                          'type': 'object'
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      };
+
+      const jsonPathExpression = "$.paths..content[?(@property === 'application/vnd.api+json')].schema.properties[?(@property === 'errors')]^";
+      const expectedPaths = [
+        doc.paths['/stuff'].get.responses[200].content['application/vnd.api+json'].schema.properties
+      ];
+
+      const results = JSONPath(jsonPathExpression, doc);
+
+      expect(results.length).to.equal(1, 'Wrong number of results.');
+      expect(results).to.deep.equal(expectedPaths, 'Wrong paths');
+      done();
+
+    });
+
+    it('the rule should return "top-level-json-properties-errors" errors if errors property exists w/ data property', function (done) {
+
+      const badDocument = new Document(`
+              openapi: 3.0.2
+              paths:
+                /stuff:
+                  get:
+                    responses:
+                      '200':
+                        content:
+                          application/vnd.api+json:
+                            schema:
+                              type: object
+                              properties:
+                                data:
+                                  type: object
+                                links:
+                                  type: object
+                                meta:
+                                  type: object
+                                errors:
+                                  type: array
+                                included:
+                                  type: array
+                                jsonapi:
+                                  type: object
+                  patch:
+                    requestBody:
+                      content:
+                        application/vnd.api+json:
+                            schema:
+                              type: object
+                              properties:
+                                data:
+                                  type: object
+          `, Parsers.Yaml);
+
+      spectral.loadRuleset(RULESET_FILE)
+        //remove rule(s) we aren't testing
+        .then(() => {
+
+          delete spectral.rules['top-level-json-object'];
+          delete spectral.rules['top-level-json-properties'];
+          delete spectral.rules['top-level-json-properties-included'];
+
+        })
+        .then(() => {
+
+          return spectral.run(badDocument);
+
+        })
+        .then((results) => {
+
+          expect(results.length).to.equal(1, 'Error count should be 1');
+          expect(results[0].code).to.equal('top-level-json-properties-errors', 'Incorrect error');
+          expect(results[0].path.join('/')).to.equal('paths//stuff/get/responses/200/content/application/vnd.api+json/schema/properties/data', 'Wrong path');
+          done();
+
+        });
+
+    });
+
+    it('the rule should pass with NO errors', function (done) {
+
+      const cleanDocument = new Document(`
+              openapi: 3.0.2
+              paths:
+                /stuff:
+                  get:
+                    responses:
+                      '200':
+                        content:
+                          application/vnd.api+json:
+                            schema:
+                              type: object
+                              properties:
+                                errors:
+                                  type: array
+                  patch:
+                    requestBody:
+                      content:
+                        application/vnd.api+json:
+                            schema:
+                              type: object
+                              properties:
+                                data:
+                                  type: object
+          `, Parsers.Yaml);
+
+      spectral.loadRuleset(RULESET_FILE)
+        //remove rule(s) we aren't testing
+        .then(() => {
+
+          delete spectral.rules['top-level-json-object'];
+          delete spectral.rules['top-level-json-properties'];
+          delete spectral.rules['top-level-json-properties-included'];
+
+        })
+        .then(() => {
+
+          return spectral.run(cleanDocument);
+
+        })
+        .then((results) => {
+
+          expect(results.length).to.equal(0, 'Error(s) found');
+          done();
+
+        });
+    
+    });
+
+  });
+
 });
