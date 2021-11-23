@@ -118,7 +118,7 @@ describe('jsonapi-document-structure-meta-information ruleset:', function () {
         //remove rule(s) we aren't testing
         .then(() => {
 
-          //delete spectral.rules[''];
+          // delete spectral.rules[''];
 
         })
         .then(() => {
