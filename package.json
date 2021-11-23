@@ -5,7 +5,9 @@
   "main": "json-ruleset.yaml",
   "scripts": {
     "test": "./node_modules/.bin/eslint test/ && ./node_modules/.bin/mocha test/",
-    "lint": "./node_modules/.bin/eslint test/"
+    "lint": "./node_modules/.bin/eslint test/",
+    "testwin": "C:/Spectral3/spectral-jsonapi-ruleset/node_modules/.bin/eslint test/ && C:/Spectral3/spectral-jsonapi-ruleset/node_modules/.bin/mocha test/",
+    "lintwin": "C:/Spectral3/spectral-jsonapi-ruleset/node_modules/.bin/eslint test/"
   },
   "repository": {
     "type": "git",
@@ -36,7 +38,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm test"
+      
     }
   }
 }
