@@ -115,7 +115,7 @@ describe('jsonapi-document-structure-meta-information ruleset:', function () {
           `, Parsers.Yaml);
 
       spectral.loadRuleset(RULESET_FILE)
-        //remove rule(s) we aren't testing
+        //remove rule(s) we aren't testing.
         .then(() => {
 
           //delete spectral.rules[''];
