@@ -224,7 +224,7 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
   describe('top-level-json-properties', function () {
 
     it('the json path expression should find the correct paths from the given document', function (done) {
-      
+
       const doc = {
         'openapi': '3.0.2',
         'paths': {
@@ -412,7 +412,7 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
           done();
 
         });
-    
+
     });
 
   });
@@ -420,7 +420,7 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
   describe('top-level-json-properties-included', function () {
 
     it('the json path expression should find the correct paths from the given document', function (done) {
-      
+
       const doc = {
         'openapi': '3.0.2',
         'paths': {
@@ -602,7 +602,7 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
           done();
 
         });
-    
+
     });
 
   });
@@ -610,7 +610,7 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
   describe('top-level-json-properties-errors', function () {
 
     it('the json path expression should find the correct paths from the given document', function (done) {
-      
+
       const doc = {
         'openapi': '3.0.2',
         'paths': {
@@ -784,7 +784,7 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
           done();
 
         });
-    
+
     });
 
   });
