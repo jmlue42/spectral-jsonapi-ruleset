@@ -789,7 +789,7 @@ describe('jsonapi-document-structure-links ruleset:', function () {
                             next:
                               type: string
                             related:
-                              type: string
+                              type: object
                               properties:
                                 href:
                                   type: string
