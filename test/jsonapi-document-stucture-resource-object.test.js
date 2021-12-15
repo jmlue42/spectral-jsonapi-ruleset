@@ -1,21 +1,6 @@
 'use strict';
 
-const {join} = require('path');
-const {expect} = require('chai');
-const {Spectral, Document, Parsers} = require('@stoplight/spectral');
-const {JSONPath} = require('jsonpath-plus');
-
-const RULESET_FILE = join(__dirname, '../rules/jsonapi-document-structure-resource-object.yaml');
-
 describe('jsonapi-document-structure-resource-object ruleset:', function () {
-
-  let spectral;
-
-  beforeEach(function () {
-
-    spectral = new Spectral();
-
-  });
 
   describe('jsonapi-document-structure-resource-object', function () {
 
@@ -98,7 +83,7 @@ describe('jsonapi-document-structure-resource-object ruleset:', function () {
                                 'type': 'object',
                                 'properties': {
                                   'type': {},
-                                  'attributes':{
+                                  'attributes': {
                                     'type': 'object',
                                     'properties': {
                                       'name': {},
@@ -128,6 +113,7 @@ describe('jsonapi-document-structure-resource-object ruleset:', function () {
         }
       };
 
+      done();
 
     });
 

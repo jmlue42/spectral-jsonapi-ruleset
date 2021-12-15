@@ -10,7 +10,7 @@ rules:
     message: "{{path}} - {{description}}"
     severity: error
     #Grab properties only of data and included (error objects and others from top level are not resource objects)
-    given: $.paths..content[?(@property === 'application/vnd.api+json')].schema.properties[data, included]..properties
+    given: $.paths..content[?(@property === 'application/vnd.api+json')].schema.properties[data, included][?(@property === 'type' && @ === 'object')]^.properties
     then:
       field: "@key"
       function: enumeration
@@ -23,14 +23,44 @@ rules:
           - links
           - meta
 
+  resource-object-properties:
+    description: "Must follow resource object properties"
+    documentationUrl: https://jsonapi.org/format/#document-resource-objects
+    message: "{{path}} - {{description}}"
+    severity: error
+    #Grab properties only of data and included (error objects and others from top level are not resource objects)
+    given: $.paths..content[?(@property === 'application/vnd.api+json')].schema.properties[data, included][?(@property === 'type' && @ === 'array')]^..allOf.*.properties
+    then:
+      field: "@key"
+      function: enumeration
+      functionOptions:
+        values:
+          - type
+          - id
+          - attributes
+          - relationships
+          - links
+          - meta
+  
   resource-object-properties-included:
     description: "A resource object must contain the top-level members type and id"
     documentationUrl: https://jsonapi.org/format/#document-resource-objects
     message: "{{path}} - {{description}}"
     severity: error
     #TODO: Exclude the case of post and requestBody in this one
-    #TODO: deal with data being either an array or a singular object, which would change where to retrieve required from
-    given: $.paths..content[?(@property === 'application/vnd.api+json')].schema.properties[data, included]..required[*]
+    given: $.paths..content[?(@property === 'application/vnd.api+json')].schema.properties[data, included][?(@property === 'type' && @ === 'object')]^.required[*]
+    then:
+      field: 'type'
+      function: truthy
+      field: 'id'
+      function: truthy
+  
+  resource-object-properties-included:
+    description: "A resource object must contain the top-level members type and id"
+    documentationUrl: https://jsonapi.org/format/#document-resource-objects
+    message: "{{path}} - {{description}}"
+    severity: error
+    given: $.paths..content[?(@property === 'application/vnd.api+json')].schema.properties[data, included][?(@property === 'type' && @ === 'array')]^..allOf.*.required[*]
     then:
       field: 'type'
       function: truthy
