@@ -1,7 +1,7 @@
 # Document Structure - Meta Information
 # https://jsonapi.org/format/#document-meta
 
-# all rules in this file MUST have corresponding tests  
+# all rules in this file MUST have corresponding tests
 
 rules:
   meta-object-schema:
