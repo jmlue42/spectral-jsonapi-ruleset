@@ -1,0 +1,3249 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Sample JSON:API OAS File",
+    "description": "Example file on how a JSON:API compliant API can be described in OAS v3+",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Jeff Marquez",
+      "email": "some_email@domain.com",
+      "url": "http://www.example.com"
+    }
+  },
+  "tags": [
+    {
+      "name": "collection",
+      "description": "tag description"
+    },
+    {
+      "name": "single",
+      "description": "tag description"
+    }
+  ],
+  "servers": [
+    {
+      "url": "https://api.domain.com/v1",
+      "description": "production"
+    },
+    {
+      "url": "https://api-sandbox.domain.com/v1",
+      "description": "production sandbox"
+    },
+    {
+      "url": "https://api.{environment}.domain.com/v1",
+      "description": "pre-production",
+      "variables": {
+        "environment": {
+          "enum": [
+            "dev",
+            "qa"
+          ],
+          "default": "dev"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/myResources": {
+      "get": {
+        "tags": [
+          "collection"
+        ],
+        "summary": "Short Description",
+        "description": "A longer MEANINGFUL descripition. Do not copy summary.",
+        "security": [
+          {
+            "ApiKeyAuth": [],
+            "AuthCode": [
+              "actions:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "filter",
+            "description": "schema for 'filter' query parameter",
+            "in": "query",
+            "schema": {
+              "type": "object"
+            },
+            "style": "deepObject",
+            "example": {
+              "attribute": "value",
+              "attribute_2": "value1,value2",
+              "relationship.attribute": "value"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "links",
+                    "data"
+                  ],
+                  "properties": {
+                    "links": {
+                      "type": "object",
+                      "properties": {
+                        "self": {
+                          "allOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "example": "https://api.domain.com/v1/myResources"
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "required": [
+                              "id",
+                              "type"
+                            ],
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "pattern": "^([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[afA-F0-9]{4}-[a-fA-F0-9]{12}){1}$",
+                                "example": "4257c52f-6c78-4747-8106-e185c081436b"
+                              },
+                              "type": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "required": [
+                              "attributes",
+                              "relationships"
+                            ],
+                            "properties": {
+                              "type": {
+                                "enum": [
+                                  "resources"
+                                ]
+                              },
+                              "attributes": {
+                                "type": "object",
+                                "required": [
+                                  "name"
+                                ],
+                                "properties": {
+                                  "name": {
+                                    "type": "string",
+                                    "example": "do-hickey"
+                                  },
+                                  "description": {
+                                    "type": "string",
+                                    "example": "thing that does stuff"
+                                  }
+                                }
+                              },
+                              "relationships": {
+                                "type": "object",
+                                "properties": {
+                                  "manufacturer": {
+                                    "type": "object",
+                                    "required": [
+                                      "links",
+                                      "data"
+                                    ],
+                                    "properties": {
+                                      "links": {
+                                        "type": "object",
+                                        "required": [
+                                          "self",
+                                          "related"
+                                        ],
+                                        "properties": {
+                                          "self": {
+                                            "allOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "example": "http://api.domain.com/v1/myResources/{id}/relationships/manufacturers"
+                                              }
+                                            ]
+                                          },
+                                          "related": {
+                                            "allOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "example": "http://api.domain.com/v1/manufacturers/{id}"
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "data": {
+                                        "allOf": [
+                                          {
+                                            "type": "object",
+                                            "required": [
+                                              "id",
+                                              "type"
+                                            ],
+                                            "properties": {
+                                              "id": {
+                                                "type": "string",
+                                                "pattern": "^([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[afA-F0-9]{4}-[a-fA-F0-9]{12}){1}$",
+                                                "example": "2357c52f-6c78-4747-8106-e185c08143aa"
+                                              },
+                                              "type": {
+                                                "type": "string"
+                                              }
+                                            }
+                                          },
+                                          {
+                                            "type": "object",
+                                            "properties": {
+                                              "type": {
+                                                "enum": [
+                                                  "manufacturers"
+                                                ]
+                                              }
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized: Invalid or Expired Authentication",
+            "headers": {
+              "WWWAuthenticate": {
+                "description": "Authentication Challenge Information",
+                "schema": {
+                  "type": "string",
+                  "example": "Bearer realm=domain.com"
+                }
+              }
+            },
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "description": "JSON:API Error Object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "description": "a unique identifier for this particular occurrence of the problem"
+                              },
+                              "links": {
+                                "type": "object",
+                                "description": "links that lead to further detail about the particular occurrence of the problem",
+                                "properties": {
+                                  "about": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "required": [
+                                          "href"
+                                        ],
+                                        "properties": {
+                                          "href": {
+                                            "type": "string"
+                                          },
+                                          "meta": {
+                                            "type": "object",
+                                            "additionalProperties": true
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              },
+                              "status": {
+                                "type": "string",
+                                "description": "the HTTP status code applicable to this problem"
+                              },
+                              "code": {
+                                "type": "string",
+                                "description": "an application-specific error code"
+                              },
+                              "title": {
+                                "type": "string",
+                                "description": "a human-readable summary specific of the problem. Usually the http status friendly name."
+                              },
+                              "detail": {
+                                "type": "string",
+                                "description": "a human-readable explanation specific to this occurrence of the problem"
+                              },
+                              "source": {
+                                "type": "object",
+                                "description": "an object containing references to the source of the error",
+                                "properties": {
+                                  "pointer": {
+                                    "description": "a JSON Pointer [RFC6901] to the associated entity in the request document",
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "parameter": {
+                                    "description": "a string indicating which URI query parameter caused the error",
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "meta": {
+                                "type": "object",
+                                "additionalProperties": true
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "description": "Unauthorized: Invalid or Expired Authentication",
+                            "properties": {
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "401"
+                                ]
+                              },
+                              "title": {
+                                "type": "string",
+                                "enum": [
+                                  "Unauthorized"
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                      "status": "401",
+                      "title": "Unauthorized"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden: Request does not have necessary permissions",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "description": "JSON:API Error Object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "description": "a unique identifier for this particular occurrence of the problem"
+                              },
+                              "links": {
+                                "type": "object",
+                                "description": "links that lead to further detail about the particular occurrence of the problem",
+                                "properties": {
+                                  "about": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "required": [
+                                          "href"
+                                        ],
+                                        "properties": {
+                                          "href": {
+                                            "type": "string"
+                                          },
+                                          "meta": {
+                                            "type": "object",
+                                            "additionalProperties": true
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              },
+                              "status": {
+                                "type": "string",
+                                "description": "the HTTP status code applicable to this problem"
+                              },
+                              "code": {
+                                "type": "string",
+                                "description": "an application-specific error code"
+                              },
+                              "title": {
+                                "type": "string",
+                                "description": "a human-readable summary specific of the problem. Usually the http status friendly name."
+                              },
+                              "detail": {
+                                "type": "string",
+                                "description": "a human-readable explanation specific to this occurrence of the problem"
+                              },
+                              "source": {
+                                "type": "object",
+                                "description": "an object containing references to the source of the error",
+                                "properties": {
+                                  "pointer": {
+                                    "description": "a JSON Pointer [RFC6901] to the associated entity in the request document",
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "parameter": {
+                                    "description": "a string indicating which URI query parameter caused the error",
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "meta": {
+                                "type": "object",
+                                "additionalProperties": true
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "description": "Forbidden: Request does not have necessary permissions",
+                            "properties": {
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "403"
+                                ]
+                              },
+                              "title": {
+                                "type": "string",
+                                "enum": [
+                                  "Forbidden"
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                      "status": "403",
+                      "title": "Forbidden"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "JSON:API Error Object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "a unique identifier for this particular occurrence of the problem"
+                          },
+                          "links": {
+                            "type": "object",
+                            "description": "links that lead to further detail about the particular occurrence of the problem",
+                            "properties": {
+                              "about": {
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "required": [
+                                      "href"
+                                    ],
+                                    "properties": {
+                                      "href": {
+                                        "type": "string"
+                                      },
+                                      "meta": {
+                                        "type": "object",
+                                        "additionalProperties": true
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "the HTTP status code applicable to this problem"
+                          },
+                          "code": {
+                            "type": "string",
+                            "description": "an application-specific error code"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "a human-readable summary specific of the problem. Usually the http status friendly name."
+                          },
+                          "detail": {
+                            "type": "string",
+                            "description": "a human-readable explanation specific to this occurrence of the problem"
+                          },
+                          "source": {
+                            "type": "object",
+                            "description": "an object containing references to the source of the error",
+                            "properties": {
+                              "pointer": {
+                                "description": "a JSON Pointer [RFC6901] to the associated entity in the request document",
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  }
+                                ]
+                              },
+                              "parameter": {
+                                "description": "a string indicating which URI query parameter caused the error",
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "meta": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "400 - Bad Request": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "404 - Not Found": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "404",
+                          "title": "Not Found"
+                        }
+                      ]
+                    }
+                  },
+                  "500 - Server Error": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "500",
+                          "title": "Internal Server Error"
+                        }
+                      ]
+                    }
+                  },
+                  "Multiple Errors": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        },
+                        {
+                          "id": "b6ad7d24-4dec-4ba0-931c-52731a9469e3",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "pointer": "/data/attributes/name"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "single"
+        ],
+        "summary": "Create Resource",
+        "description": "A longer MEANINGFUL descripition. Do not copy summary.",
+        "security": [
+          {
+            "ApiKeyAuth": [],
+            "AuthCode": [
+              "actions:write"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/vnd.api+json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "data"
+                ],
+                "properties": {
+                  "data": {
+                    "type": "object",
+                    "required": [
+                      "type",
+                      "attributes"
+                    ],
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "resources"
+                        ]
+                      },
+                      "attributes": {
+                        "type": "object",
+                        "required": [
+                          "name"
+                        ],
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "example": "do-hickey"
+                          },
+                          "description": {
+                            "type": "string",
+                            "example": "thing that does stuff"
+                          }
+                        }
+                      },
+                      "relationships": {
+                        "type": "object",
+                        "required": [
+                          "manufacturer"
+                        ],
+                        "properties": {
+                          "manufacturer": {
+                            "type": "object",
+                            "required": [
+                              "data"
+                            ],
+                            "properties": {
+                              "data": {
+                                "allOf": [
+                                  {
+                                    "type": "object",
+                                    "required": [
+                                      "id",
+                                      "type"
+                                    ],
+                                    "properties": {
+                                      "id": {
+                                        "type": "string",
+                                        "pattern": "^([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[afA-F0-9]{4}-[a-fA-F0-9]{12}){1}$",
+                                        "example": "2357c52f-6c78-4747-8106-e185c08143aa"
+                                      },
+                                      "type": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "type": {
+                                        "enum": [
+                                          "manufacturers"
+                                        ]
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Operation",
+            "headers": {
+              "Location": {
+                "description": "Location of the resource in question",
+                "schema": {
+                  "type": "string",
+                  "example": "http://api.domain.com/v1/{resource-colleciton-name}/{id}"
+                }
+              }
+            },
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "links",
+                    "data"
+                  ],
+                  "properties": {
+                    "links": {
+                      "type": "object",
+                      "properties": {
+                        "self": {
+                          "allOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "example": "https://api.domain.com/v1/myResources/{id}"
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "data": {
+                      "allOf": [
+                        {
+                          "type": "object",
+                          "required": [
+                            "id",
+                            "type"
+                          ],
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "pattern": "^([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[afA-F0-9]{4}-[a-fA-F0-9]{12}){1}$",
+                              "example": "4257c52f-6c78-4747-8106-e185c081436b"
+                            },
+                            "type": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "attributes",
+                            "relationships"
+                          ],
+                          "properties": {
+                            "type": {
+                              "enum": [
+                                "resources"
+                              ]
+                            },
+                            "attributes": {
+                              "type": "object",
+                              "required": [
+                                "name"
+                              ],
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "example": "do-hickey"
+                                },
+                                "description": {
+                                  "type": "string",
+                                  "example": "thing that does stuff"
+                                }
+                              }
+                            },
+                            "relationships": {
+                              "type": "object",
+                              "properties": {
+                                "manufacturer": {
+                                  "type": "object",
+                                  "required": [
+                                    "links",
+                                    "data"
+                                  ],
+                                  "properties": {
+                                    "links": {
+                                      "type": "object",
+                                      "required": [
+                                        "self",
+                                        "related"
+                                      ],
+                                      "properties": {
+                                        "self": {
+                                          "allOf": [
+                                            {
+                                              "type": "string"
+                                            },
+                                            {
+                                              "example": "http://api.domain.com/v1/myResources/{id}/relationships/manufacturers"
+                                            }
+                                          ]
+                                        },
+                                        "related": {
+                                          "allOf": [
+                                            {
+                                              "type": "string"
+                                            },
+                                            {
+                                              "example": "http://api.domain.com/v1/manufacturers/{id}"
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    },
+                                    "data": {
+                                      "allOf": [
+                                        {
+                                          "type": "object",
+                                          "required": [
+                                            "id",
+                                            "type"
+                                          ],
+                                          "properties": {
+                                            "id": {
+                                              "type": "string",
+                                              "pattern": "^([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[afA-F0-9]{4}-[a-fA-F0-9]{12}){1}$",
+                                              "example": "2357c52f-6c78-4747-8106-e185c08143aa"
+                                            },
+                                            "type": {
+                                              "type": "string"
+                                            }
+                                          }
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "type": {
+                                              "enum": [
+                                                "manufacturers"
+                                              ]
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized: Invalid or Expired Authentication",
+            "headers": {
+              "WWWAuthenticate": {
+                "description": "Authentication Challenge Information",
+                "schema": {
+                  "type": "string",
+                  "example": "Bearer realm=domain.com"
+                }
+              }
+            },
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "description": "JSON:API Error Object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "description": "a unique identifier for this particular occurrence of the problem"
+                              },
+                              "links": {
+                                "type": "object",
+                                "description": "links that lead to further detail about the particular occurrence of the problem",
+                                "properties": {
+                                  "about": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "required": [
+                                          "href"
+                                        ],
+                                        "properties": {
+                                          "href": {
+                                            "type": "string"
+                                          },
+                                          "meta": {
+                                            "type": "object",
+                                            "additionalProperties": true
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              },
+                              "status": {
+                                "type": "string",
+                                "description": "the HTTP status code applicable to this problem"
+                              },
+                              "code": {
+                                "type": "string",
+                                "description": "an application-specific error code"
+                              },
+                              "title": {
+                                "type": "string",
+                                "description": "a human-readable summary specific of the problem. Usually the http status friendly name."
+                              },
+                              "detail": {
+                                "type": "string",
+                                "description": "a human-readable explanation specific to this occurrence of the problem"
+                              },
+                              "source": {
+                                "type": "object",
+                                "description": "an object containing references to the source of the error",
+                                "properties": {
+                                  "pointer": {
+                                    "description": "a JSON Pointer [RFC6901] to the associated entity in the request document",
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "parameter": {
+                                    "description": "a string indicating which URI query parameter caused the error",
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "meta": {
+                                "type": "object",
+                                "additionalProperties": true
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "description": "Unauthorized: Invalid or Expired Authentication",
+                            "properties": {
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "401"
+                                ]
+                              },
+                              "title": {
+                                "type": "string",
+                                "enum": [
+                                  "Unauthorized"
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                      "status": "401",
+                      "title": "Unauthorized"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden: Request does not have necessary permissions",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "description": "JSON:API Error Object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "description": "a unique identifier for this particular occurrence of the problem"
+                              },
+                              "links": {
+                                "type": "object",
+                                "description": "links that lead to further detail about the particular occurrence of the problem",
+                                "properties": {
+                                  "about": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "required": [
+                                          "href"
+                                        ],
+                                        "properties": {
+                                          "href": {
+                                            "type": "string"
+                                          },
+                                          "meta": {
+                                            "type": "object",
+                                            "additionalProperties": true
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              },
+                              "status": {
+                                "type": "string",
+                                "description": "the HTTP status code applicable to this problem"
+                              },
+                              "code": {
+                                "type": "string",
+                                "description": "an application-specific error code"
+                              },
+                              "title": {
+                                "type": "string",
+                                "description": "a human-readable summary specific of the problem. Usually the http status friendly name."
+                              },
+                              "detail": {
+                                "type": "string",
+                                "description": "a human-readable explanation specific to this occurrence of the problem"
+                              },
+                              "source": {
+                                "type": "object",
+                                "description": "an object containing references to the source of the error",
+                                "properties": {
+                                  "pointer": {
+                                    "description": "a JSON Pointer [RFC6901] to the associated entity in the request document",
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "parameter": {
+                                    "description": "a string indicating which URI query parameter caused the error",
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "meta": {
+                                "type": "object",
+                                "additionalProperties": true
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "description": "Forbidden: Request does not have necessary permissions",
+                            "properties": {
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "403"
+                                ]
+                              },
+                              "title": {
+                                "type": "string",
+                                "enum": [
+                                  "Forbidden"
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                      "status": "403",
+                      "title": "Forbidden"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "JSON:API Error Object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "a unique identifier for this particular occurrence of the problem"
+                          },
+                          "links": {
+                            "type": "object",
+                            "description": "links that lead to further detail about the particular occurrence of the problem",
+                            "properties": {
+                              "about": {
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "required": [
+                                      "href"
+                                    ],
+                                    "properties": {
+                                      "href": {
+                                        "type": "string"
+                                      },
+                                      "meta": {
+                                        "type": "object",
+                                        "additionalProperties": true
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "the HTTP status code applicable to this problem"
+                          },
+                          "code": {
+                            "type": "string",
+                            "description": "an application-specific error code"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "a human-readable summary specific of the problem. Usually the http status friendly name."
+                          },
+                          "detail": {
+                            "type": "string",
+                            "description": "a human-readable explanation specific to this occurrence of the problem"
+                          },
+                          "source": {
+                            "type": "object",
+                            "description": "an object containing references to the source of the error",
+                            "properties": {
+                              "pointer": {
+                                "description": "a JSON Pointer [RFC6901] to the associated entity in the request document",
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  }
+                                ]
+                              },
+                              "parameter": {
+                                "description": "a string indicating which URI query parameter caused the error",
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "meta": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "400 - Bad Request": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "404 - Not Found": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "404",
+                          "title": "Not Found"
+                        }
+                      ]
+                    }
+                  },
+                  "500 - Server Error": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "500",
+                          "title": "Internal Server Error"
+                        }
+                      ]
+                    }
+                  },
+                  "Multiple Errors": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        },
+                        {
+                          "id": "b6ad7d24-4dec-4ba0-931c-52731a9469e3",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "pointer": "/data/attributes/name"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/myResources/{id}": {
+      "get": {
+        "tags": [
+          "single"
+        ],
+        "summary": "Short Description",
+        "description": "A longer MEANINGFUL descripition. Do not copy summary.",
+        "security": [
+          {
+            "ApiKeyAuth": [],
+            "AuthCode": [
+              "actions:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "resource reference id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[afA-F0-9]{4}-[a-fA-F0-9]{12}){1}$",
+              "example": "4257c52f-6c78-4747-8106-e185c081436b"
+            }
+          },
+          {
+            "name": "fields",
+            "description": "schema for 'fields' query parameter",
+            "in": "query",
+            "schema": {
+              "type": "object"
+            },
+            "style": "deepObject",
+            "example": {
+              "resourceType": "fieldName",
+              "resourceType2": "filedName1,fieldName2"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation",
+            "headers": {
+              "Location": {
+                "description": "Location of the resource in question",
+                "schema": {
+                  "type": "string",
+                  "example": "http://api.domain.com/v1/{resource-colleciton-name}/{id}"
+                }
+              }
+            },
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "links",
+                    "data"
+                  ],
+                  "properties": {
+                    "links": {
+                      "type": "object",
+                      "properties": {
+                        "self": {
+                          "allOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "example": "https://api.domain.com/v1/myResources/{id}"
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "data": {
+                      "allOf": [
+                        {
+                          "type": "object",
+                          "required": [
+                            "id",
+                            "type"
+                          ],
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "pattern": "^([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[afA-F0-9]{4}-[a-fA-F0-9]{12}){1}$",
+                              "example": "4257c52f-6c78-4747-8106-e185c081436b"
+                            },
+                            "type": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "attributes",
+                            "relationships"
+                          ],
+                          "properties": {
+                            "type": {
+                              "enum": [
+                                "resources"
+                              ]
+                            },
+                            "attributes": {
+                              "type": "object",
+                              "required": [
+                                "name"
+                              ],
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "example": "do-hickey"
+                                },
+                                "description": {
+                                  "type": "string",
+                                  "example": "thing that does stuff"
+                                }
+                              }
+                            },
+                            "relationships": {
+                              "type": "object",
+                              "properties": {
+                                "manufacturer": {
+                                  "type": "object",
+                                  "required": [
+                                    "links",
+                                    "data"
+                                  ],
+                                  "properties": {
+                                    "links": {
+                                      "type": "object",
+                                      "required": [
+                                        "self",
+                                        "related"
+                                      ],
+                                      "properties": {
+                                        "self": {
+                                          "allOf": [
+                                            {
+                                              "type": "string"
+                                            },
+                                            {
+                                              "example": "http://api.domain.com/v1/myResources/{id}/relationships/manufacturers"
+                                            }
+                                          ]
+                                        },
+                                        "related": {
+                                          "allOf": [
+                                            {
+                                              "type": "string"
+                                            },
+                                            {
+                                              "example": "http://api.domain.com/v1/manufacturers/{id}"
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    },
+                                    "data": {
+                                      "allOf": [
+                                        {
+                                          "type": "object",
+                                          "required": [
+                                            "id",
+                                            "type"
+                                          ],
+                                          "properties": {
+                                            "id": {
+                                              "type": "string",
+                                              "pattern": "^([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[afA-F0-9]{4}-[a-fA-F0-9]{12}){1}$",
+                                              "example": "2357c52f-6c78-4747-8106-e185c08143aa"
+                                            },
+                                            "type": {
+                                              "type": "string"
+                                            }
+                                          }
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "type": {
+                                              "enum": [
+                                                "manufacturers"
+                                              ]
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized: Invalid or Expired Authentication",
+            "headers": {
+              "WWWAuthenticate": {
+                "description": "Authentication Challenge Information",
+                "schema": {
+                  "type": "string",
+                  "example": "Bearer realm=domain.com"
+                }
+              }
+            },
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "description": "JSON:API Error Object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "description": "a unique identifier for this particular occurrence of the problem"
+                              },
+                              "links": {
+                                "type": "object",
+                                "description": "links that lead to further detail about the particular occurrence of the problem",
+                                "properties": {
+                                  "about": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "required": [
+                                          "href"
+                                        ],
+                                        "properties": {
+                                          "href": {
+                                            "type": "string"
+                                          },
+                                          "meta": {
+                                            "type": "object",
+                                            "additionalProperties": true
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              },
+                              "status": {
+                                "type": "string",
+                                "description": "the HTTP status code applicable to this problem"
+                              },
+                              "code": {
+                                "type": "string",
+                                "description": "an application-specific error code"
+                              },
+                              "title": {
+                                "type": "string",
+                                "description": "a human-readable summary specific of the problem. Usually the http status friendly name."
+                              },
+                              "detail": {
+                                "type": "string",
+                                "description": "a human-readable explanation specific to this occurrence of the problem"
+                              },
+                              "source": {
+                                "type": "object",
+                                "description": "an object containing references to the source of the error",
+                                "properties": {
+                                  "pointer": {
+                                    "description": "a JSON Pointer [RFC6901] to the associated entity in the request document",
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "parameter": {
+                                    "description": "a string indicating which URI query parameter caused the error",
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "meta": {
+                                "type": "object",
+                                "additionalProperties": true
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "description": "Unauthorized: Invalid or Expired Authentication",
+                            "properties": {
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "401"
+                                ]
+                              },
+                              "title": {
+                                "type": "string",
+                                "enum": [
+                                  "Unauthorized"
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                      "status": "401",
+                      "title": "Unauthorized"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden: Request does not have necessary permissions",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "description": "JSON:API Error Object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "description": "a unique identifier for this particular occurrence of the problem"
+                              },
+                              "links": {
+                                "type": "object",
+                                "description": "links that lead to further detail about the particular occurrence of the problem",
+                                "properties": {
+                                  "about": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "required": [
+                                          "href"
+                                        ],
+                                        "properties": {
+                                          "href": {
+                                            "type": "string"
+                                          },
+                                          "meta": {
+                                            "type": "object",
+                                            "additionalProperties": true
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              },
+                              "status": {
+                                "type": "string",
+                                "description": "the HTTP status code applicable to this problem"
+                              },
+                              "code": {
+                                "type": "string",
+                                "description": "an application-specific error code"
+                              },
+                              "title": {
+                                "type": "string",
+                                "description": "a human-readable summary specific of the problem. Usually the http status friendly name."
+                              },
+                              "detail": {
+                                "type": "string",
+                                "description": "a human-readable explanation specific to this occurrence of the problem"
+                              },
+                              "source": {
+                                "type": "object",
+                                "description": "an object containing references to the source of the error",
+                                "properties": {
+                                  "pointer": {
+                                    "description": "a JSON Pointer [RFC6901] to the associated entity in the request document",
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "parameter": {
+                                    "description": "a string indicating which URI query parameter caused the error",
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "meta": {
+                                "type": "object",
+                                "additionalProperties": true
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "description": "Forbidden: Request does not have necessary permissions",
+                            "properties": {
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "403"
+                                ]
+                              },
+                              "title": {
+                                "type": "string",
+                                "enum": [
+                                  "Forbidden"
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                      "status": "403",
+                      "title": "Forbidden"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "JSON:API Error Object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "a unique identifier for this particular occurrence of the problem"
+                          },
+                          "links": {
+                            "type": "object",
+                            "description": "links that lead to further detail about the particular occurrence of the problem",
+                            "properties": {
+                              "about": {
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "required": [
+                                      "href"
+                                    ],
+                                    "properties": {
+                                      "href": {
+                                        "type": "string"
+                                      },
+                                      "meta": {
+                                        "type": "object",
+                                        "additionalProperties": true
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "the HTTP status code applicable to this problem"
+                          },
+                          "code": {
+                            "type": "string",
+                            "description": "an application-specific error code"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "a human-readable summary specific of the problem. Usually the http status friendly name."
+                          },
+                          "detail": {
+                            "type": "string",
+                            "description": "a human-readable explanation specific to this occurrence of the problem"
+                          },
+                          "source": {
+                            "type": "object",
+                            "description": "an object containing references to the source of the error",
+                            "properties": {
+                              "pointer": {
+                                "description": "a JSON Pointer [RFC6901] to the associated entity in the request document",
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  }
+                                ]
+                              },
+                              "parameter": {
+                                "description": "a string indicating which URI query parameter caused the error",
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "meta": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "400 - Bad Request": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "404 - Not Found": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "404",
+                          "title": "Not Found"
+                        }
+                      ]
+                    }
+                  },
+                  "500 - Server Error": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "500",
+                          "title": "Internal Server Error"
+                        }
+                      ]
+                    }
+                  },
+                  "Multiple Errors": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        },
+                        {
+                          "id": "b6ad7d24-4dec-4ba0-931c-52731a9469e3",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "pointer": "/data/attributes/name"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "single"
+        ],
+        "summary": "Short Description",
+        "description": "A longer MEANINGFUL descripition. Do not copy summary.",
+        "security": [
+          {
+            "ApiKeyAuth": [],
+            "AuthCode": [
+              "actions:write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "resource reference id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[afA-F0-9]{4}-[a-fA-F0-9]{12}){1}$",
+              "example": "4257c52f-6c78-4747-8106-e185c081436b"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/vnd.api+json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "data"
+                ],
+                "properties": {
+                  "data": {
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "type"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "pattern": "^([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[afA-F0-9]{4}-[a-fA-F0-9]{12}){1}$",
+                            "example": "4257c52f-6c78-4747-8106-e185c081436b"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "required": [
+                          "attributes"
+                        ],
+                        "properties": {
+                          "type": {
+                            "enum": [
+                              "resources"
+                            ]
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "required": [
+                              "name"
+                            ],
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "example": "do-hickey"
+                              },
+                              "description": {
+                                "type": "string",
+                                "example": "thing that does stuff",
+                                "nullable": true
+                              }
+                            }
+                          },
+                          "relationships": {
+                            "type": "object",
+                            "required": [
+                              "manufacturer"
+                            ],
+                            "properties": {
+                              "manufacturer": {
+                                "type": "object",
+                                "required": [
+                                  "data"
+                                ],
+                                "properties": {
+                                  "data": {
+                                    "allOf": [
+                                      {
+                                        "type": "object",
+                                        "required": [
+                                          "id",
+                                          "type"
+                                        ],
+                                        "properties": {
+                                          "id": {
+                                            "type": "string",
+                                            "pattern": "^([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[afA-F0-9]{4}-[a-fA-F0-9]{12}){1}$",
+                                            "example": "2357c52f-6c78-4747-8106-e185c08143aa"
+                                          },
+                                          "type": {
+                                            "type": "string"
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "type": {
+                                            "enum": [
+                                              "manufacturers"
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    ],
+                                    "nullable": true
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Operation",
+            "headers": {
+              "Location": {
+                "description": "Location of the resource in question",
+                "schema": {
+                  "type": "string",
+                  "example": "http://api.domain.com/v1/{resource-colleciton-name}/{id}"
+                }
+              }
+            },
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "links",
+                    "data"
+                  ],
+                  "properties": {
+                    "links": {
+                      "type": "object",
+                      "properties": {
+                        "self": {
+                          "allOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "example": "https://api.domain.com/v1/myResources/{id}"
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "data": {
+                      "allOf": [
+                        {
+                          "type": "object",
+                          "required": [
+                            "id",
+                            "type"
+                          ],
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "pattern": "^([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[afA-F0-9]{4}-[a-fA-F0-9]{12}){1}$",
+                              "example": "4257c52f-6c78-4747-8106-e185c081436b"
+                            },
+                            "type": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "attributes",
+                            "relationships"
+                          ],
+                          "properties": {
+                            "type": {
+                              "enum": [
+                                "resources"
+                              ]
+                            },
+                            "attributes": {
+                              "type": "object",
+                              "required": [
+                                "name"
+                              ],
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "example": "do-hickey"
+                                },
+                                "description": {
+                                  "type": "string",
+                                  "example": "thing that does stuff"
+                                }
+                              }
+                            },
+                            "relationships": {
+                              "type": "object",
+                              "properties": {
+                                "manufacturer": {
+                                  "type": "object",
+                                  "required": [
+                                    "links",
+                                    "data"
+                                  ],
+                                  "properties": {
+                                    "links": {
+                                      "type": "object",
+                                      "required": [
+                                        "self",
+                                        "related"
+                                      ],
+                                      "properties": {
+                                        "self": {
+                                          "allOf": [
+                                            {
+                                              "type": "string"
+                                            },
+                                            {
+                                              "example": "http://api.domain.com/v1/myResources/{id}/relationships/manufacturers"
+                                            }
+                                          ]
+                                        },
+                                        "related": {
+                                          "allOf": [
+                                            {
+                                              "type": "string"
+                                            },
+                                            {
+                                              "example": "http://api.domain.com/v1/manufacturers/{id}"
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    },
+                                    "data": {
+                                      "allOf": [
+                                        {
+                                          "type": "object",
+                                          "required": [
+                                            "id",
+                                            "type"
+                                          ],
+                                          "properties": {
+                                            "id": {
+                                              "type": "string",
+                                              "pattern": "^([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[afA-F0-9]{4}-[a-fA-F0-9]{12}){1}$",
+                                              "example": "2357c52f-6c78-4747-8106-e185c08143aa"
+                                            },
+                                            "type": {
+                                              "type": "string"
+                                            }
+                                          }
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "type": {
+                                              "enum": [
+                                                "manufacturers"
+                                              ]
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized: Invalid or Expired Authentication",
+            "headers": {
+              "WWWAuthenticate": {
+                "description": "Authentication Challenge Information",
+                "schema": {
+                  "type": "string",
+                  "example": "Bearer realm=domain.com"
+                }
+              }
+            },
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "description": "JSON:API Error Object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "description": "a unique identifier for this particular occurrence of the problem"
+                              },
+                              "links": {
+                                "type": "object",
+                                "description": "links that lead to further detail about the particular occurrence of the problem",
+                                "properties": {
+                                  "about": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "required": [
+                                          "href"
+                                        ],
+                                        "properties": {
+                                          "href": {
+                                            "type": "string"
+                                          },
+                                          "meta": {
+                                            "type": "object",
+                                            "additionalProperties": true
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              },
+                              "status": {
+                                "type": "string",
+                                "description": "the HTTP status code applicable to this problem"
+                              },
+                              "code": {
+                                "type": "string",
+                                "description": "an application-specific error code"
+                              },
+                              "title": {
+                                "type": "string",
+                                "description": "a human-readable summary specific of the problem. Usually the http status friendly name."
+                              },
+                              "detail": {
+                                "type": "string",
+                                "description": "a human-readable explanation specific to this occurrence of the problem"
+                              },
+                              "source": {
+                                "type": "object",
+                                "description": "an object containing references to the source of the error",
+                                "properties": {
+                                  "pointer": {
+                                    "description": "a JSON Pointer [RFC6901] to the associated entity in the request document",
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "parameter": {
+                                    "description": "a string indicating which URI query parameter caused the error",
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "meta": {
+                                "type": "object",
+                                "additionalProperties": true
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "description": "Unauthorized: Invalid or Expired Authentication",
+                            "properties": {
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "401"
+                                ]
+                              },
+                              "title": {
+                                "type": "string",
+                                "enum": [
+                                  "Unauthorized"
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                      "status": "401",
+                      "title": "Unauthorized"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden: Request does not have necessary permissions",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "description": "JSON:API Error Object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "description": "a unique identifier for this particular occurrence of the problem"
+                              },
+                              "links": {
+                                "type": "object",
+                                "description": "links that lead to further detail about the particular occurrence of the problem",
+                                "properties": {
+                                  "about": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "required": [
+                                          "href"
+                                        ],
+                                        "properties": {
+                                          "href": {
+                                            "type": "string"
+                                          },
+                                          "meta": {
+                                            "type": "object",
+                                            "additionalProperties": true
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              },
+                              "status": {
+                                "type": "string",
+                                "description": "the HTTP status code applicable to this problem"
+                              },
+                              "code": {
+                                "type": "string",
+                                "description": "an application-specific error code"
+                              },
+                              "title": {
+                                "type": "string",
+                                "description": "a human-readable summary specific of the problem. Usually the http status friendly name."
+                              },
+                              "detail": {
+                                "type": "string",
+                                "description": "a human-readable explanation specific to this occurrence of the problem"
+                              },
+                              "source": {
+                                "type": "object",
+                                "description": "an object containing references to the source of the error",
+                                "properties": {
+                                  "pointer": {
+                                    "description": "a JSON Pointer [RFC6901] to the associated entity in the request document",
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "parameter": {
+                                    "description": "a string indicating which URI query parameter caused the error",
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "meta": {
+                                "type": "object",
+                                "additionalProperties": true
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "description": "Forbidden: Request does not have necessary permissions",
+                            "properties": {
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "403"
+                                ]
+                              },
+                              "title": {
+                                "type": "string",
+                                "enum": [
+                                  "Forbidden"
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                      "status": "403",
+                      "title": "Forbidden"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "JSON:API Error Object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "a unique identifier for this particular occurrence of the problem"
+                          },
+                          "links": {
+                            "type": "object",
+                            "description": "links that lead to further detail about the particular occurrence of the problem",
+                            "properties": {
+                              "about": {
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "required": [
+                                      "href"
+                                    ],
+                                    "properties": {
+                                      "href": {
+                                        "type": "string"
+                                      },
+                                      "meta": {
+                                        "type": "object",
+                                        "additionalProperties": true
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "the HTTP status code applicable to this problem"
+                          },
+                          "code": {
+                            "type": "string",
+                            "description": "an application-specific error code"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "a human-readable summary specific of the problem. Usually the http status friendly name."
+                          },
+                          "detail": {
+                            "type": "string",
+                            "description": "a human-readable explanation specific to this occurrence of the problem"
+                          },
+                          "source": {
+                            "type": "object",
+                            "description": "an object containing references to the source of the error",
+                            "properties": {
+                              "pointer": {
+                                "description": "a JSON Pointer [RFC6901] to the associated entity in the request document",
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  }
+                                ]
+                              },
+                              "parameter": {
+                                "description": "a string indicating which URI query parameter caused the error",
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "meta": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "400 - Bad Request": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "404 - Not Found": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "404",
+                          "title": "Not Found"
+                        }
+                      ]
+                    }
+                  },
+                  "500 - Server Error": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "500",
+                          "title": "Internal Server Error"
+                        }
+                      ]
+                    }
+                  },
+                  "Multiple Errors": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        },
+                        {
+                          "id": "b6ad7d24-4dec-4ba0-931c-52731a9469e3",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "pointer": "/data/attributes/name"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "single"
+        ],
+        "summary": "Short Description",
+        "description": "A longer MEANINGFUL descripition. Do not copy summary.",
+        "security": [
+          {
+            "ApiKeyAuth": [],
+            "AuthCode": [
+              "actions:delete"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "resource reference id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[afA-F0-9]{4}-[a-fA-F0-9]{12}){1}$",
+              "example": "4257c52f-6c78-4747-8106-e185c081436b"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Operation. No Content."
+          },
+          "401": {
+            "description": "Unauthorized: Invalid or Expired Authentication",
+            "headers": {
+              "WWWAuthenticate": {
+                "description": "Authentication Challenge Information",
+                "schema": {
+                  "type": "string",
+                  "example": "Bearer realm=domain.com"
+                }
+              }
+            },
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "description": "JSON:API Error Object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "description": "a unique identifier for this particular occurrence of the problem"
+                              },
+                              "links": {
+                                "type": "object",
+                                "description": "links that lead to further detail about the particular occurrence of the problem",
+                                "properties": {
+                                  "about": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "required": [
+                                          "href"
+                                        ],
+                                        "properties": {
+                                          "href": {
+                                            "type": "string"
+                                          },
+                                          "meta": {
+                                            "type": "object",
+                                            "additionalProperties": true
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              },
+                              "status": {
+                                "type": "string",
+                                "description": "the HTTP status code applicable to this problem"
+                              },
+                              "code": {
+                                "type": "string",
+                                "description": "an application-specific error code"
+                              },
+                              "title": {
+                                "type": "string",
+                                "description": "a human-readable summary specific of the problem. Usually the http status friendly name."
+                              },
+                              "detail": {
+                                "type": "string",
+                                "description": "a human-readable explanation specific to this occurrence of the problem"
+                              },
+                              "source": {
+                                "type": "object",
+                                "description": "an object containing references to the source of the error",
+                                "properties": {
+                                  "pointer": {
+                                    "description": "a JSON Pointer [RFC6901] to the associated entity in the request document",
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "parameter": {
+                                    "description": "a string indicating which URI query parameter caused the error",
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "meta": {
+                                "type": "object",
+                                "additionalProperties": true
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "description": "Unauthorized: Invalid or Expired Authentication",
+                            "properties": {
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "401"
+                                ]
+                              },
+                              "title": {
+                                "type": "string",
+                                "enum": [
+                                  "Unauthorized"
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                      "status": "401",
+                      "title": "Unauthorized"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden: Request does not have necessary permissions",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "description": "JSON:API Error Object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "description": "a unique identifier for this particular occurrence of the problem"
+                              },
+                              "links": {
+                                "type": "object",
+                                "description": "links that lead to further detail about the particular occurrence of the problem",
+                                "properties": {
+                                  "about": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "required": [
+                                          "href"
+                                        ],
+                                        "properties": {
+                                          "href": {
+                                            "type": "string"
+                                          },
+                                          "meta": {
+                                            "type": "object",
+                                            "additionalProperties": true
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              },
+                              "status": {
+                                "type": "string",
+                                "description": "the HTTP status code applicable to this problem"
+                              },
+                              "code": {
+                                "type": "string",
+                                "description": "an application-specific error code"
+                              },
+                              "title": {
+                                "type": "string",
+                                "description": "a human-readable summary specific of the problem. Usually the http status friendly name."
+                              },
+                              "detail": {
+                                "type": "string",
+                                "description": "a human-readable explanation specific to this occurrence of the problem"
+                              },
+                              "source": {
+                                "type": "object",
+                                "description": "an object containing references to the source of the error",
+                                "properties": {
+                                  "pointer": {
+                                    "description": "a JSON Pointer [RFC6901] to the associated entity in the request document",
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "parameter": {
+                                    "description": "a string indicating which URI query parameter caused the error",
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "meta": {
+                                "type": "object",
+                                "additionalProperties": true
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "description": "Forbidden: Request does not have necessary permissions",
+                            "properties": {
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "403"
+                                ]
+                              },
+                              "title": {
+                                "type": "string",
+                                "enum": [
+                                  "Forbidden"
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                      "status": "403",
+                      "title": "Forbidden"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "JSON:API Error Object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "a unique identifier for this particular occurrence of the problem"
+                          },
+                          "links": {
+                            "type": "object",
+                            "description": "links that lead to further detail about the particular occurrence of the problem",
+                            "properties": {
+                              "about": {
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "required": [
+                                      "href"
+                                    ],
+                                    "properties": {
+                                      "href": {
+                                        "type": "string"
+                                      },
+                                      "meta": {
+                                        "type": "object",
+                                        "additionalProperties": true
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "the HTTP status code applicable to this problem"
+                          },
+                          "code": {
+                            "type": "string",
+                            "description": "an application-specific error code"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "a human-readable summary specific of the problem. Usually the http status friendly name."
+                          },
+                          "detail": {
+                            "type": "string",
+                            "description": "a human-readable explanation specific to this occurrence of the problem"
+                          },
+                          "source": {
+                            "type": "object",
+                            "description": "an object containing references to the source of the error",
+                            "properties": {
+                              "pointer": {
+                                "description": "a JSON Pointer [RFC6901] to the associated entity in the request document",
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  }
+                                ]
+                              },
+                              "parameter": {
+                                "description": "a string indicating which URI query parameter caused the error",
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "meta": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "400 - Bad Request": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "404 - Not Found": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "404",
+                          "title": "Not Found"
+                        }
+                      ]
+                    }
+                  },
+                  "500 - Server Error": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "500",
+                          "title": "Internal Server Error"
+                        }
+                      ]
+                    }
+                  },
+                  "Multiple Errors": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        },
+                        {
+                          "id": "b6ad7d24-4dec-4ba0-931c-52731a9469e3",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "pointer": "/data/attributes/name"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "description": "Api Key value. First level of client identification and access control to proxy/gateway",
+        "in": "header",
+        "name": "api-key"
+      },
+      "AuthCode": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://api.domain.com/oauth/authorize",
+            "tokenUrl": "https://api.domain.com/oauth/token",
+            "refreshUrl": "https://api.domain.com/oauth/refresh",
+            "scopes": {
+              "actions:write": "modify actions the end-user has access to",
+              "actions:read": "read actions the end-user has access to",
+              "actions:delete": "delete actions the end-user has access to"
+            }
+          }
+        }
+      }
+    }
+  }
+}
