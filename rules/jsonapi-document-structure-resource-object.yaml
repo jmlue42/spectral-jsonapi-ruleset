@@ -4,7 +4,7 @@
 # all rules in this file MUST have corresponding tests
 
 rules:
-  resource-object-properties:
+  resource-object-properties-object:
     description: "Must follow resource object properties"
     documentationUrl: https://jsonapi.org/format/#document-resource-objects
     message: "{{path}} - {{description}}"
@@ -23,7 +23,7 @@ rules:
           - links
           - meta
 
-  resource-object-properties:
+  resource-object-properties-array:
     description: "Must follow resource object properties"
     documentationUrl: https://jsonapi.org/format/#document-resource-objects
     message: "{{path}} - {{description}}"
@@ -42,7 +42,7 @@ rules:
           - links
           - meta
   
-  resource-object-properties-included:
+  resource-object-properties-included-object:
     description: "A resource object must contain the top-level members type and id"
     documentationUrl: https://jsonapi.org/format/#document-resource-objects
     message: "{{path}} - {{description}}"
@@ -55,7 +55,7 @@ rules:
       field: 'id'
       function: truthy
   
-  resource-object-properties-included:
+  resource-object-properties-included-array:
     description: "A resource object must contain the top-level members type and id"
     documentationUrl: https://jsonapi.org/format/#document-resource-objects
     message: "{{path}} - {{description}}"
@@ -67,12 +67,23 @@ rules:
       field: 'id'
       function: truthy
   
-  resource-object-id-exception:
+
+  resource-object-id-exception-object:
     description: "The id member is not required when the resource object originates at the client and represents a new resource to be created on the server"
     documentationUrl: https://jsonapi.org/format/#document-resource-objects
     message: "{{path}} - {{description}}"
     severity: error
-    given: $.paths..[?(@property === 'post')][?(@property === 'requestBody')]..schema.properties[?(@property === 'data')].required
+    given: $.paths..[?(@property === 'post')][?(@property === 'requestBody')]..schema.properties[data][?(@property === 'type' && @ === 'object')]^.required[*]
+    then:
+      field: 'type'
+      function: truthy
+
+  resource-object-id-exception-array:
+    description: "The id member is not required when the resource object originates at the client and represents a new resource to be created on the server"
+    documentationUrl: https://jsonapi.org/format/#document-resource-objects
+    message: "{{path}} - {{description}}"
+    severity: error
+    given: $.paths..[?(@property === 'post')][?(@property === 'requestBody')]..schema.properties[data][?(@property === 'type' && @ === 'array')]^..allOf.*.required[*]
     then:
       field: 'type'
       function: truthy

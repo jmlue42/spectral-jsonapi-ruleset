@@ -22,6 +22,7 @@ describe('jsonapi-document-structure-resource-object ruleset:', function () {
                             'type': 'object',
                             'properties': {
                               'type': {},
+                              'id': 'string',
                               'attributes': {
                                 'type': 'object',
                                 'properties': {
