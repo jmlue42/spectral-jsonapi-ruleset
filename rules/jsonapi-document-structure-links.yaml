@@ -11,7 +11,7 @@ rules:
     severity: error
     given: $..properties[?(@property === 'links')]
     then:
-      field: 'type'
+      field: "type"
       function: enumeration
       functionOptions:
         values:
@@ -23,7 +23,7 @@ rules:
     severity: error
     given: $..properties[?(@property === 'links')].properties.'*'
     then:
-      field: 'type'
+      field: "type"
       function: enumeration
       functionOptions:
         values:
@@ -36,7 +36,7 @@ rules:
     severity: error
     given: $..properties[?(@property === 'links')].properties.'*'.properties
     then:
-      field: '@key'
+      field: "@key"
       function: enumeration
       functionOptions:
         values:
@@ -49,7 +49,7 @@ rules:
     severity: error
     given: $..properties[?(@property === 'links')].properties.'*'.properties[?(@property === 'href')]
     then:
-      field: 'type'
+      field: "type"
       function: enumeration
       functionOptions:
         values:
