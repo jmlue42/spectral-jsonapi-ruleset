@@ -38,11 +38,11 @@ rules:
           - meta
 
   error-object-members-type-object:
-    description: "Links and meta (if included) must be an object"
+    description: "Links, source, and meta (if included) must be an object"
     documentationUrl: https://jsonapi.org/format/#error-objects
     message: "{{path}} - {{description}}"
     severity: error
-    given: $.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[?(@property === 'links' || @property === 'meta')]
+    given: $.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[?(@property === 'links' || @property === 'meta' || @property === 'source')]
     then:
       field: "type"
       function: enumeration
@@ -69,7 +69,7 @@ rules:
     documentationUrl: https://jsonapi.org/format/#error-objects
     message: "{{path}} - {{description}}"
     severity: error
-    given: $.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[links]
+    given: $.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[links].properties
     then:
       field: "about"
       function: truthy
@@ -79,7 +79,7 @@ rules:
     documentationUrl: https://jsonapi.org/format/#error-objects
     message: "{{path}} - {{description}}"
     severity: error
-    given: $.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[source]
+    given: $.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[source].properties
     then:
       field: "@key"
       function: enumeration
