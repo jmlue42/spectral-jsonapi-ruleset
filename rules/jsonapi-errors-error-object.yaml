@@ -36,3 +36,133 @@ rules:
           - detail
           - source
           - meta
+
+  error-object-links-type:
+    description: "Links (if included) must be an object"
+    documentationUrl: https://jsonapi.org/format/#error-objects
+    message: "{{path}} - {{description}}"
+    severity: error
+    given: $.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[links]
+    then:
+      field: "type"
+      function: enumeration
+      functionOptions:
+        values:
+          - object
+  
+  error-object-links-property:
+    description: "Links object inside an error object must include an "about" member "
+    documentationUrl: https://jsonapi.org/format/#error-objects
+    message: "{{path}} - {{description}}"
+    severity: error
+    given: $.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[links].properties
+    then:
+      field: "about"
+      function: truthy
+
+  #TODO: Check that title and detail can only be strings
+  error-object-member-types:
+    description: "Status, code, title, detail, and source members (if included) must be strings"
+    documentationUrl: https://jsonapi.org/format/#error-objects
+    message: "{{path}} - {{description}}"
+    severity: error
+    given: $$.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[?(@property === 'status' || @property === 'code' || @property === 'title' || @property === 'detail')]
+    then:
+      field: "type"
+      function: enumeration
+      functionOptions:
+        values:
+          - string
+  
+  # error-object-status-type:
+  #   description: "Status (if included) must be a string"
+  #   documentationUrl: https://jsonapi.org/format/#error-objects
+  #   message: "{{path}} - {{description}}"
+  #   severity: error
+  #   given: $.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[status]
+  #   then:
+  #     field: "type"
+  #     function: enumeration
+  #     functionOptions:
+  #       values:
+  #         - string
+
+  # error-object-code-type:
+  #   description: "Code (if included) must be a string"
+  #   documentationUrl: https://jsonapi.org/format/#error-objects
+  #   message: "{{path}} - {{description}}"
+  #   severity: error
+  #   given: $.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[code]
+  #   then:
+  #     field: "type"
+  #     function: enumeration
+  #     functionOptions:
+  #       values:
+  #         - string
+
+  # #TODO: Check that title and detail can only be strings
+  # error-object-title-type:
+  #   description: "Title (if included) must be a string"
+  #   documentationUrl: https://jsonapi.org/format/#error-objects
+  #   message: "{{path}} - {{description}}"
+  #   severity: error
+  #   given: $.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[title]
+  #   then:
+  #     field: "type"
+  #     function: enumeration
+  #     functionOptions:
+  #       values:
+  #         - string
+  
+  # error-object-detail-type:
+  #   description: "Detail (if included) must be a string"
+  #   documentationUrl: https://jsonapi.org/format/#error-objects
+  #   message: "{{path}} - {{description}}"
+  #   severity: error
+  #   given: $.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[detail]
+  #   then:
+  #     field: "type"
+  #     function: enumeration
+  #     functionOptions:
+  #       values:
+  #         - string
+  
+  # error-object-source-type:
+  #   description: "Source (if included) must be an object"
+  #   documentationUrl: https://jsonapi.org/format/#error-objects
+  #   message: "{{path}} - {{description}}"
+  #   severity: error
+  #   given: $.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[source]
+  #   then:
+  #     field: "type"
+  #     function: enumeration
+  #     functionOptions:
+  #       values:
+  #         - object
+
+  error-object-source-properties:
+    description: "Must follow source object properties"
+    documentationUrl: https://jsonapi.org/format/#error-objects
+    message: "{{path}} - {{description}}"
+    severity: error
+    given: $.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[source]
+    then:
+      field: "@key"
+      function: enumeration
+      functionOptions:
+        values:
+          - pointer
+          - parameter
+
+  error-object-meta-type:
+    description: "Meta (if included) must be an object"
+    documentationUrl: https://jsonapi.org/format/#error-objects
+    message: "{{path}} - {{description}}"
+    severity: error
+    given: $.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[meta]
+    then:
+      field: "type"
+      function: enumeration
+      functionOptions:
+        values:
+          - object
