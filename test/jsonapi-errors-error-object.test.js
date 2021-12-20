@@ -85,6 +85,7 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           delete spectral.rules['error-object-links-properties'];
           delete spectral.rules['error-object-members-type-string'];
           delete spectral.rules['error-object-source-properties'];
+          delete spectral.rules['error-object-source-parameter-type'];
 
         })
         .then(() => {
@@ -130,6 +131,7 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           delete spectral.rules['error-object-links-properties'];
           delete spectral.rules['error-object-members-type-string'];
           delete spectral.rules['error-object-source-properties'];
+          delete spectral.rules['error-object-source-parameter-type'];
 
         })
         .then(() => {
@@ -255,6 +257,7 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           delete spectral.rules['error-object-links-properties'];
           delete spectral.rules['error-object-members-type-string'];
           delete spectral.rules['error-object-source-properties'];
+          delete spectral.rules['error-object-source-parameter-type'];
 
         })
         .then(() => {
@@ -318,6 +321,7 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           delete spectral.rules['error-object-links-properties'];
           delete spectral.rules['error-object-members-type-string'];
           delete spectral.rules['error-object-source-properties'];
+          delete spectral.rules['error-object-source-parameter-type'];
 
         })
         .then(() => {
@@ -446,6 +450,7 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           delete spectral.rules['error-object-links-properties'];
           delete spectral.rules['error-object-members-type-string'];
           delete spectral.rules['error-object-source-properties'];
+          delete spectral.rules['error-object-source-parameter-type'];
 
         })
         .then(() => {
@@ -510,6 +515,7 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           delete spectral.rules['error-object-links-properties'];
           delete spectral.rules['error-object-members-type-string'];
           delete spectral.rules['error-object-source-properties'];
+          delete spectral.rules['error-object-source-parameter-type'];
 
         })
         .then(() => {
@@ -641,6 +647,7 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           delete spectral.rules['error-object-links-properties'];
           delete spectral.rules['error-object-members-type-object'];
           delete spectral.rules['error-object-source-properties'];
+          delete spectral.rules['error-object-source-parameter-type'];
 
         })
         .then(() => {
@@ -832,6 +839,7 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           delete spectral.rules['error-object-members-type-object'];
           delete spectral.rules['error-object-members-type-string'];
           delete spectral.rules['error-object-source-properties'];
+          delete spectral.rules['error-object-source-parameter-type'];
 
         })
         .then(() => {
@@ -897,6 +905,7 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           delete spectral.rules['error-object-members-type-object'];
           delete spectral.rules['error-object-members-type-string'];
           delete spectral.rules['error-object-source-properties'];
+          delete spectral.rules['error-object-source-parameter-type'];
 
         })
         .then(() => {
@@ -1027,6 +1036,7 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           delete spectral.rules['error-object-members-type-object'];
           delete spectral.rules['error-object-members-type-string'];
           delete spectral.rules['error-object-links-properties'];
+          delete spectral.rules['error-object-source-parameter-type'];
 
         })
         .then(() => {
@@ -1091,6 +1101,207 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           delete spectral.rules['error-object-members-type-object'];
           delete spectral.rules['error-object-members-type-string'];
           delete spectral.rules['error-object-links-properties'];
+          delete spectral.rules['error-object-source-parameter-type'];
+
+        })
+        .then(() => {
+
+          return spectral.run(cleanDocument);
+
+        })
+        .then((results) => {
+
+          expect(results.length).to.equal(0, 'Error(s) found');
+          done();
+
+        });
+
+    });
+
+  });
+
+  describe('jsonapi-errors-error-object-source-parameter-type', function () {
+
+    it('the json path expression should find the correct paths from the given document', function (done) {
+
+      const doc = {
+        'openapi': '3.0.2',
+        'paths': {
+          '/stuff': {
+            'get': {
+              'responses': {
+                '200': {
+                  'content': {
+                    'application/vnd.api+json': {
+                      'schema': {
+                        'type': 'object',
+                        'properties': {
+                          'jsonapi': {},
+                          'errors': {
+                            'type': 'array',
+                            'items': {
+                              'allOf': [
+                                {
+                                  'type': 'object',
+                                  'properties': {
+                                    'source': {
+                                      'properties': {
+                                        'pointer': {},
+                                        'parameter': {}
+                                      }
+                                    }
+                                  }
+                                },
+                                {
+                                  'type': 'object',
+                                  'properties': {
+                                    'source': {
+                                      'properties': {
+                                        'parameter': {}
+                                      }
+                                    },
+                                    'detail': {}
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      };
+      const jsonPathExpression = '$.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[source].properties[parameter]';
+      const expectedPaths = [
+        doc.paths['/stuff'].get.responses[200].content['application/vnd.api+json'].schema.properties.errors.items.allOf[0].properties.source.properties.parameter,
+        doc.paths['/stuff'].get.responses[200].content['application/vnd.api+json'].schema.properties.errors.items.allOf[1].properties.source.properties.parameter
+      ];
+
+      const results = JSONPath(jsonPathExpression, doc);
+
+      expect(results.length).to.equal(2, 'Wrong number of results.');
+      expect(results).to.deep.equal(expectedPaths, 'Wrong paths');
+      done();
+
+    });
+
+    it('the rule should return parameter property errors', function (done) {
+
+      const badDocument = new Document(`
+        openapi: 3.0.2
+        paths:
+          /stuff:
+            get:
+              responses:
+                '200':
+                  content:
+                    application/vnd.api+json:
+                      schema:
+                        type: object
+                        properties:
+                          errors:
+                            type: array
+                            items:
+                              allOf:
+                                - type: object
+                                  properties:
+                                    status:
+                                      type: string
+                                    source:
+                                      type: object
+                                      properties:
+                                        pointer:
+                                          type: string
+                                        parameter:
+                                          type: object
+                                - type: object
+                                  properties:
+                                    source:
+                                      type: object
+                                      properties:
+                                        pointer:
+                                          type: string
+        `, Parsers.Yaml);
+
+      spectral.loadRuleset(RULESET_FILE)
+        .then(() => {
+
+          delete spectral.rules['error-object-type'];
+          delete spectral.rules['error-object-properties'];
+          delete spectral.rules['error-object-members-type-object'];
+          delete spectral.rules['error-object-members-type-string'];
+          delete spectral.rules['error-object-links-properties'];
+          delete spectral.rules['error-object-source-properties'];
+
+        })
+        .then(() => {
+
+          return spectral.run(badDocument);
+
+        })
+        .then((results) => {
+
+          expect(results.length).to.equal(1, 'Error count should be 1');
+          expect(results[0].code).to.equal('error-object-source-parameter-type', 'Incorrect error');
+          expect(results[0].path.join('/')).to.equal('paths//stuff/get/responses/200/content/application/vnd.api+json/schema/properties/errors/items/allOf/0/properties/source/properties/parameter/type', 'Wrong path');
+          done();
+
+        });
+
+    });
+
+    it('the rule should return no property errors', function (done) {
+
+      const cleanDocument = new Document(`
+        openapi: 3.0.2
+        paths:
+          /stuff:
+            get:
+              responses:
+                '200':
+                  content:
+                    application/vnd.api+json:
+                      schema:
+                        type: object
+                        properties:
+                          errors:
+                            type: array
+                            items:
+                              allOf:
+                                - type: object
+                                  properties:
+                                    status:
+                                      type: string
+                                    source:
+                                      type: object
+                                      properties:
+                                        pointer:
+                                          type: object
+                                        parameter:
+                                          type: string
+                                - type: object
+                                  properties:
+                                    source:
+                                      type: object
+                                      properties:
+                                        parameter:
+                                          type: string
+        `, Parsers.Yaml);
+
+      spectral.loadRuleset(RULESET_FILE)
+        .then(() => {
+
+          delete spectral.rules['error-object-type'];
+          delete spectral.rules['error-object-properties'];
+          delete spectral.rules['error-object-members-type-object'];
+          delete spectral.rules['error-object-members-type-string'];
+          delete spectral.rules['error-object-links-properties'];
+          delete spectral.rules['error-object-source-properties'];
 
         })
         .then(() => {
