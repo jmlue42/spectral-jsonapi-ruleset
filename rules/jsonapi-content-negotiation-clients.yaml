@@ -11,7 +11,7 @@ rules:
     severity: error
     given: $.paths[*].*.requestBody.content
     then:
-      field: '@key'
+      field: "@key"
       function: enumeration
       functionOptions:
         values:

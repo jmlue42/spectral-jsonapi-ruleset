@@ -1,8 +1,11 @@
 'use strict';
 
+const {expect} = require('chai');
+const {JSONPath} = require('jsonpath-plus');
+
 describe('jsonapi-document-structure-resource-object ruleset:', function () {
 
-  describe('jsonapi-document-structure-resource-object', function () {
+  describe('jsonapi-document-structure-resource-object-properties-object', function () {
 
     it('the json path expression should find the correct paths from the given document', function (done) {
 
@@ -69,7 +72,7 @@ describe('jsonapi-document-structure-resource-object ruleset:', function () {
                     'schema': {
                       'type': 'object',
                       'properties': {
-                        'data:': {
+                        'data': {
                           'type': 'array',
                           'items': {
                             'allOf': [
@@ -96,7 +99,7 @@ describe('jsonapi-document-structure-resource-object ruleset:', function () {
                             ]
                           }
                         },
-                        'included:': {
+                        'included': {
                           'type': 'object',
                           'properties': {
                             'type': 'string',
@@ -114,6 +117,16 @@ describe('jsonapi-document-structure-resource-object ruleset:', function () {
         }
       };
 
+      const jsonPathExpression = "$.paths..content[?(@property === 'application/vnd.api+json')].schema.properties[?(@property === 'data' || @property === 'included')][?(@property === 'type' && @ === 'object')]^.properties";
+      const expectedPaths = [
+        doc.paths['/stuff'].get.responses[200].content['application/vnd.api+json'].schema.properties.data.properties,
+        doc.paths['/stuff'].patch.requestBody.content['application/vnd.api+json'].schema.properties.included.properties
+      ];
+
+      const results = JSONPath(jsonPathExpression, doc);
+
+      expect(results.length).to.equal(2, 'Wrong number of results.');
+      expect(results).to.deep.equal(expectedPaths, 'Wrong paths');
       done();
 
     });

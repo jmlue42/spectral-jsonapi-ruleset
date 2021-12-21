@@ -48,8 +48,7 @@ rules:
                       additionalProperties:
                         type: boolean
               additionalProperties:
-                        type: boolean
+                type: boolean
 
-      - field: 'additionalProperties'
+      - field: "additionalProperties"
         function: falsy
-    
