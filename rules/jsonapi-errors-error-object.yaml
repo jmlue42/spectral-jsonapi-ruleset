@@ -50,7 +50,6 @@ rules:
         values:
           - object
 
-  #TODO: Check that title and detail can only be strings
   error-object-members-type-string:
     description: "Status, code, title, detail, and source members (if included) must be strings"
     documentationUrl: https://jsonapi.org/format/#error-objects
