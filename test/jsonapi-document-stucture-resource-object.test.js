@@ -511,6 +511,263 @@ describe('jsonapi-document-structure-resource-object ruleset:', function () {
 
     });
 
+  });
+
+  describe('jsonapi-document-structure-resource-object-properties-included-object', function () {
+
+    it('the json path expression should find the correct paths from the given document', function (done) {
+
+      const doc = {
+        'openapi': '3.0.2',
+        'paths': {
+          '/stuff': {
+            'get': {
+              'responses': {
+                '200': {
+                  'content': {
+                    'application/vnd.api+json': {
+                      'schema': {
+                        'type': 'object',
+                        'properties': {
+                          'data': {
+                            'type': 'object',
+                            'properties': {}
+                          },
+                          'links': {
+                            'type': 'object'
+                          },
+                          'included': {
+                            'type': 'object',
+                            'properties': {}
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            'post': {
+              'requestBody': {
+                'content': {
+                  'application/vnd.api+json': {
+                    'schema': {
+                      'type': 'object',
+                      'properties': {
+                        'data': {
+                          'type': 'object',
+                          'properties': {}
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              'responses': {
+                '200': {
+                  'content': {
+                    'application/vnd.api+json': {
+                      'schema': {
+                        'type': 'object',
+                        'properties': {
+                          'data': {
+                            'type': 'object',
+                            'properties': {}
+                          },
+                          'links': {
+                            'type': 'object'
+                          },
+                          'included': {
+                            'type': 'array',
+                            'items': {}
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      };
+
+      const jsonPathExpression = "$.paths.*.[?(@property === 'requestBody' && @parentProperty !== 'post' || @property === 'responses')]..content[?(@property === 'application/vnd.api+json')].schema.properties[?(@property === 'data' || @property === 'included')][?(@property === 'type' && @ === 'object')]^.properties";
+      const expectedPaths = [
+        doc.paths['/stuff'].get.responses[200].content['application/vnd.api+json'].schema.properties.data.properties,
+        doc.paths['/stuff'].get.responses[200].content['application/vnd.api+json'].schema.properties.included.properties,
+        doc.paths['/stuff'].post.responses[200].content['application/vnd.api+json'].schema.properties.data.properties
+      ];
+
+      const results = JSONPath(jsonPathExpression, doc);
+
+      expect(results.length).to.equal(3, 'Wrong number of results.');
+      expect(results).to.deep.equal(expectedPaths, 'Wrong paths');
+      done();
+
+    });
+
+    it('the rule should return "resource object properties included" errors for object type', function (done) {
+
+      const badDocument = new Document(`
+      openapi: 3.0.2
+      paths:
+        /stuff:
+          get:
+            responses:
+              '200':
+                content:
+                  application/vnd.api+json:
+                    schema:
+                      type: object
+                      properties:
+                        data:
+                          type: object
+                          properties:
+                            type: {}
+                        included:
+                          type: array
+                          allOf:
+                            - type: object
+                              properties: {}
+          post:
+            requestBody:
+              content:
+              application/vnd.api+json:
+                  schema:
+                    type: array
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          type: {}
+            responses:
+              '200':
+                content:
+                  application/vnd.api+json:
+                      schema:
+                        type: array
+                        properties:
+                          data:
+                            type: object
+                            properties:
+                              type: {}
+                          included:
+                            type: object
+                            properties:
+                              id: {}
+          `, Parsers.Yaml);
+
+      spectral.loadRuleset(RULESET_FILE)
+        //remove rule(s) we aren't testing
+        .then(() => {
+
+          delete spectral.rules['resource-object-properties-object'];
+          delete spectral.rules['resource-object-properties-array'];
+          delete spectral.rules['resource-object-properties-included-array'];
+          delete spectral.rules['resource-object-id-exception-object'];
+          delete spectral.rules['resource-object-id-exception-array'];
+
+        })
+        .then(() => {
+
+          return spectral.run(badDocument);
+
+        })
+        .then((results) => {
+
+          expect(results.length).to.equal(3, 'Error count should be 3');
+          expect(results[0].code).to.equal('resource-object-properties-included-object', 'Incorrect error');
+          expect(results[1].code).to.equal('resource-object-properties-included-object', 'Incorrect error');
+          expect(results[2].code).to.equal('resource-object-properties-included-object', 'Incorrect error');
+          expect(results[0].path.join('/')).to.equal('paths//stuff/get/responses/200/content/application/vnd.api+json/schema/properties/data/properties', 'Wrong path');
+          expect(results[1].path.join('/')).to.equal('paths//stuff/post/responses/200/content/application/vnd.api+json/schema/properties/data/properties', 'Wrong path');
+          expect(results[2].path.join('/')).to.equal('paths//stuff/post/responses/200/content/application/vnd.api+json/schema/properties/included/properties', 'Wrong path');
+          done();
+
+        });
+
+    });
+
+    it('the rule should pass with NO errors', function (done) {
+
+      const cleanDocument = new Document(`
+      openapi: 3.0.2
+      paths:
+        /stuff:
+          get:
+            responses:
+              '200':
+                content:
+                  application/vnd.api+json:
+                    schema:
+                      type: object
+                      properties:
+                        data:
+                          type: object
+                          properties:
+                            id: {}
+                            type: {}
+
+                        included:
+                          type: array
+                          allOf:
+                            - type: object
+                              properties: {}
+          post:
+            requestBody:
+              content:
+              application/vnd.api+json:
+                  schema:
+                    type: array
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          type: {}
+            responses:
+              '200':
+                content:
+                  application/vnd.api+json:
+                      schema:
+                        type: array
+                        properties:
+                          data:
+                            type: object
+                            properties:
+                              id: {}
+                              type: {}
+                          included:
+                            type: object
+                            properties:
+                              type: {}
+                              id: {}
+          `, Parsers.Yaml);
+
+      spectral.loadRuleset(RULESET_FILE)
+        //remove rule(s) we aren't testing
+        .then(() => {
+
+          delete spectral.rules['resource-object-properties-object'];
+          delete spectral.rules['resource-object-properties-array'];
+          delete spectral.rules['resource-object-properties-included-array'];
+          delete spectral.rules['resource-object-id-exception-object'];
+          delete spectral.rules['resource-object-id-exception-array'];
+
+        })
+        .then(() => {
+
+          return spectral.run(cleanDocument);
+
+        })
+        .then((results) => {
+
+          expect(results.length).to.equal(0, 'Error(s) found');
+          done();
+
+        });
+
+    });
 
   });
 
