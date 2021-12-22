@@ -22,6 +22,8 @@ rules:
           - links
           - meta
 
+  #TODO: Confirm structure/location for allOf, and whether type always specified in data and included
+  #TODO: Create/go throough tests for the array type rules
   resource-object-properties-array:
     description: "Must follow resource object properties"
     documentationUrl: https://jsonapi.org/format/#document-resource-objects
