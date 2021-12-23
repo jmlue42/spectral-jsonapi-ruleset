@@ -67,22 +67,14 @@ rules:
         function: truthy
   
 
-  resource-object-id-exception-object:
+  #TODO: According to https://jsonapi.org/format/#crud, this requestBody should only be a single resource object
+  resource-object-id-exception:
     description: "The id member is not required when the resource object originates at the client and represents a new resource to be created on the server"
     documentationUrl: https://jsonapi.org/format/#document-resource-objects
     message: "{{path}} - {{description}}"
     severity: error
-    given: $.paths..[?(@property === 'post')][?(@property === 'requestBody')]..schema.properties[data][?(@property === 'type' && @ === 'object')]^.properties
+    given: $.paths..[?(@property === 'post')][?(@property === 'requestBody')]..schema.properties[data].properties
     then:
       field: 'type'
       function: truthy
 
-  resource-object-id-exception-array:
-    description: "The id member is not required when the resource object originates at the client and represents a new resource to be created on the server"
-    documentationUrl: https://jsonapi.org/format/#document-resource-objects
-    message: "{{path}} - {{description}}"
-    severity: error
-    given: $.paths..[?(@property === 'post')][?(@property === 'requestBody')]..schema.properties[data][?(@property === 'type' && @ === 'array')]^..allOf.*.properties
-    then:
-      field: 'type'
-      function: truthy

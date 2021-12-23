@@ -164,8 +164,7 @@ describe('jsonapi-document-structure-resource-object ruleset:', function () {
           delete spectral.rules['resource-object-properties-array'];
           delete spectral.rules['resource-object-properties-included-object'];
           delete spectral.rules['resource-object-properties-included-array'];
-          delete spectral.rules['resource-object-id-exception-object'];
-          delete spectral.rules['resource-object-id-exception-array'];
+          delete spectral.rules['resource-object-id-exception'];
 
         })
         .then(() => {
@@ -239,8 +238,7 @@ describe('jsonapi-document-structure-resource-object ruleset:', function () {
           delete spectral.rules['resource-object-properties-array'];
           delete spectral.rules['resource-object-properties-included-object'];
           delete spectral.rules['resource-object-properties-included-array'];
-          delete spectral.rules['resource-object-id-exception-object'];
-          delete spectral.rules['resource-object-id-exception-array'];
+          delete spectral.rules['resource-object-id-exception'];
 
         })
         .then(() => {
@@ -413,8 +411,7 @@ describe('jsonapi-document-structure-resource-object ruleset:', function () {
           delete spectral.rules['resource-object-properties-object'];
           delete spectral.rules['resource-object-properties-included-object'];
           delete spectral.rules['resource-object-properties-included-array'];
-          delete spectral.rules['resource-object-id-exception-object'];
-          delete spectral.rules['resource-object-id-exception-array'];
+          delete spectral.rules['resource-object-id-exception'];
 
         })
         .then(() => {
@@ -493,8 +490,7 @@ describe('jsonapi-document-structure-resource-object ruleset:', function () {
           delete spectral.rules['resource-object-properties-object'];
           delete spectral.rules['resource-object-properties-included-object'];
           delete spectral.rules['resource-object-properties-included-array'];
-          delete spectral.rules['resource-object-id-exception-object'];
-          delete spectral.rules['resource-object-id-exception-array'];
+          delete spectral.rules['resource-object-id-exception'];
 
         })
         .then(() => {
@@ -665,8 +661,7 @@ describe('jsonapi-document-structure-resource-object ruleset:', function () {
           delete spectral.rules['resource-object-properties-object'];
           delete spectral.rules['resource-object-properties-array'];
           delete spectral.rules['resource-object-properties-included-array'];
-          delete spectral.rules['resource-object-id-exception-object'];
-          delete spectral.rules['resource-object-id-exception-array'];
+          delete spectral.rules['resource-object-id-exception'];
 
         })
         .then(() => {
@@ -751,8 +746,7 @@ describe('jsonapi-document-structure-resource-object ruleset:', function () {
           delete spectral.rules['resource-object-properties-object'];
           delete spectral.rules['resource-object-properties-array'];
           delete spectral.rules['resource-object-properties-included-array'];
-          delete spectral.rules['resource-object-id-exception-object'];
-          delete spectral.rules['resource-object-id-exception-array'];
+          delete spectral.rules['resource-object-id-exception'];
 
         })
         .then(() => {
@@ -771,7 +765,7 @@ describe('jsonapi-document-structure-resource-object ruleset:', function () {
 
   });
 
-  describe('jsonapi-document-structure-resource-object-id-exception-object', function () {
+  describe('jsonapi-document-structure-resource-object-id-exception', function () {
 
     it('the json path expression should find the correct paths from the given document', function (done) {
 
@@ -839,7 +833,7 @@ describe('jsonapi-document-structure-resource-object ruleset:', function () {
 
     });
 
-    it('the rule should return "resource object id exception" errors for object type', function (done) {
+    it('the rule should return "resource object id exception" errors', function (done) {
 
       const badDocument = new Document(`
       openapi: 3.0.2
@@ -882,7 +876,6 @@ describe('jsonapi-document-structure-resource-object ruleset:', function () {
           delete spectral.rules['resource-object-properties-array'];
           delete spectral.rules['resource-object-properties-included-object'];
           delete spectral.rules['resource-object-properties-included-array'];
-          delete spectral.rules['resource-object-id-exception-array'];
 
         })
         .then(() => {
@@ -893,7 +886,7 @@ describe('jsonapi-document-structure-resource-object ruleset:', function () {
         .then((results) => {
 
           expect(results.length).to.equal(1, 'Error count should be 1');
-          expect(results[0].code).to.equal('resource-object-id-exception-object', 'Incorrect error');
+          expect(results[0].code).to.equal('resource-object-id-exception', 'Incorrect error');
           expect(results[0].path.join('/')).to.equal('paths//stuff/post/requestBody/content/application/vnd.api+json/schema/properties/data/properties', 'Wrong path');
           done();
 
@@ -946,7 +939,6 @@ describe('jsonapi-document-structure-resource-object ruleset:', function () {
           delete spectral.rules['resource-object-properties-array'];
           delete spectral.rules['resource-object-properties-included-object'];
           delete spectral.rules['resource-object-properties-included-array'];
-          delete spectral.rules['resource-object-id-exception-array'];
 
         })
         .then(() => {
