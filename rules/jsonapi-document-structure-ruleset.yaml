@@ -7,3 +7,4 @@
 extends:
   - jsonapi-document-structure-top-level.yaml
   - jsonapi-document-structure-jsonapi-object.yaml
+  - jsonapi-document-structure-resource-attributes.yaml
