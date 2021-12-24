@@ -18,6 +18,7 @@ rules:
           - object
 
   #TODO: Should this recursively check properties inside each member as well?
+  
   attributes-object-properties:
     description: "Any object that constitutes or is contained in an attribute MUST NOT contain a relationships or links member."
     documentationUrl: https://jsonapi.org/format/#document-resource-object-attributes
