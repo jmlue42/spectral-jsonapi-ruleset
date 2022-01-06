@@ -275,7 +275,13 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
                           'type': 'object',
                           'properties': {
                             'attributes': {
-                              'properties': {}
+                              'properties': {
+                                'property1': {
+                                  'type': 'object',
+                                  'properties': {
+                                  }
+                                }
+                              }
                             }
                           }
                         }
@@ -288,16 +294,17 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
           }
         }
       };
-      const jsonPathExpression = "$..properties[?(@property === 'attributes')].properties";
+      const jsonPathExpression = "$..properties[?(@property === 'attributes')]..properties";
       const expectedPaths = [
         doc.paths['/stuff'].get.responses[200].content['application/vnd.api+json'].schema.properties.data.properties.attributes.properties,
         doc.paths['/stuff'].patch.requestBody.content['application/vnd.api+json'].schema.properties.data.properties.attributes.properties,
-        doc.paths['/stuff'].patch.requestBody.content['application/vnd.api+json'].schema.properties.included.properties.attributes.properties
+        doc.paths['/stuff'].patch.requestBody.content['application/vnd.api+json'].schema.properties.included.properties.attributes.properties,
+        doc.paths['/stuff'].patch.requestBody.content['application/vnd.api+json'].schema.properties.included.properties.attributes.properties.property1.properties
       ];
 
       const results = JSONPath(jsonPathExpression, doc);
 
-      expect(results.length).to.equal(3, 'Wrong number of results.');
+      expect(results.length).to.equal(4, 'Wrong number of results.');
       expect(results).to.deep.equal(expectedPaths, 'Wrong paths');
       done();
 
@@ -337,7 +344,9 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
                                 attributes:
                                   type: object
                                   properties:
-                                    name: {}
+                                    name: 
+                                      properties: 
+                                        relationships: {}
                                     links: {}
             /junk:
               patch:
@@ -371,11 +380,13 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
         })
         .then((results) => {
 
-          expect(results.length).to.equal(2, 'Error count should be 2');
+          expect(results.length).to.equal(3, 'Error count should be 3');
           expect(results[0].code).to.equal('attributes-object-properties', 'Incorrect error');
           expect(results[1].code).to.equal('attributes-object-properties', 'Incorrect error');
+          expect(results[2].code).to.equal('attributes-object-properties', 'Incorrect error');
           expect(results[0].path.join('/')).to.include('paths//stuff/get/responses/200/content/application/vnd.api+json/schema/properties/data/properties/attributes/properties/relationships', 'Wrong path');
-          expect(results[1].path.join('/')).to.include('paths//stuff/patch/requestBody/content/application/vnd.api+json/schema/properties/included/properties/attributes/properties/links', 'Wrong path');
+          expect(results[1].path.join('/')).to.include('paths//stuff/patch/requestBody/content/application/vnd.api+json/schema/properties/included/properties/attributes/properties/name/properties/relationships', 'Wrong path');
+          expect(results[2].path.join('/')).to.include('paths//stuff/patch/requestBody/content/application/vnd.api+json/schema/properties/included/properties/attributes/properties/links', 'Wrong path');
           done();
 
         });

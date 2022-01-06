@@ -24,7 +24,7 @@ rules:
     documentationUrl: https://jsonapi.org/format/#document-resource-object-attributes
     message: "{{path}} - {{description}}"
     severity: error
-    given: $..properties[?(@property === 'attributes')].properties
+    given: $..properties[?(@property === 'attributes')]..properties
     then:
       - field: 'relationships'
         function: falsy
