@@ -9,7 +9,7 @@ rules:
     documentationUrl: https://jsonapi.org/format/#error-objects
     message: "{{path}} - {{description}}"
     severity: error
-    given: $.paths..content[application/vnd.api+json'].schema.properties[errors]
+    given: $.paths..responses[?(@property >= '400' && @property <= '599')].content[application/vnd.api+json].schema.properties[errors]
     then:
       field: "type"
       function: enumeration
@@ -22,7 +22,7 @@ rules:
     documentationUrl: https://jsonapi.org/format/#error-objects
     message: "{{path}} - {{description}}"
     severity: error
-    given: $.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties
+    given: $.paths..responses[?(@property >= '400' && @property <= '599')].content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties
     then:
       field: "@key"
       function: enumeration
@@ -42,7 +42,7 @@ rules:
     documentationUrl: https://jsonapi.org/format/#error-objects
     message: "{{path}} - {{description}}"
     severity: error
-    given: $.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[?(@property === 'links' || @property === 'meta' || @property === 'source')]
+    given: $.paths..responses[?(@property >= '400' && @property <= '599')].content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[?(@property === 'links' || @property === 'meta' || @property === 'source')]
     then:
       field: "type"
       function: enumeration
@@ -55,7 +55,7 @@ rules:
     documentationUrl: https://jsonapi.org/format/#error-objects
     message: "{{path}} - {{description}}"
     severity: error
-    given: $.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[?(@property === 'status' || @property === 'code' || @property === 'title' || @property === 'detail')]
+    given: $.paths..responses[?(@property >= '400' && @property <= '599')].content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[?(@property === 'status' || @property === 'code' || @property === 'title' || @property === 'detail')]
     then:
       field: "type"
       function: enumeration
@@ -68,7 +68,7 @@ rules:
     documentationUrl: https://jsonapi.org/format/#error-objects
     message: "{{path}} - {{description}}"
     severity: error
-    given: $.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[links].properties
+    given: $.paths..responses[?(@property >= '400' && @property <= '599')].content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[links].properties
     then:
       field: "about"
       function: truthy
@@ -78,7 +78,7 @@ rules:
     documentationUrl: https://jsonapi.org/format/#error-objects
     message: "{{path}} - {{description}}"
     severity: error
-    given: $.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[source].properties
+    given: $.paths..responses[?(@property >= '400' && @property <= '599')].content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[source].properties
     then:
       field: "@key"
       function: enumeration
@@ -92,7 +92,7 @@ rules:
     documentationUrl: https://jsonapi.org/format/#error-objects
     message: "{{path}} - {{description}}"
     severity: error
-    given: $.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[source].properties[parameter]
+    given: $.paths..responses[?(@property >= '400' && @property <= '599')].content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[source].properties[parameter]
     then:
       field: "type"
       function: enumeration
@@ -105,7 +105,7 @@ rules:
     documentationUrl: https://jsonapi.org/format/#error-objects
     message: "{{path}} - {{description}}"
     severity: error
-    given: $.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[source].properties[pointer]
+    given: $.paths..responses[?(@property >= '400' && @property <= '599')].content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[source].properties[pointer]
     then:
       field: "type"
       function: enumeration

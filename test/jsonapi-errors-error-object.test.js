@@ -27,6 +27,7 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           '/stuff': {
             'get': {
               'responses': {
+                '200': {},
                 '401': {
                   'content': {
                     'application/vnd.api+json': {
@@ -45,7 +46,7 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           }
         }
       };
-      const jsonPathExpression = '$.paths..content[application/vnd.api+json].schema.properties[errors]';
+      const jsonPathExpression = "$.paths..responses[?(@property >= '400' && @property <= '599')].content[application/vnd.api+json].schema.properties[errors]";
       const expectedPaths = [
         doc.paths['/stuff'].get.responses[401].content['application/vnd.api+json'].schema.properties.errors
       ];
@@ -161,6 +162,7 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           '/stuff': {
             'get': {
               'responses': {
+                '200': {},
                 '401': {
                   'content': {
                     'application/vnd.api+json': {
@@ -202,7 +204,7 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           }
         }
       };
-      const jsonPathExpression = '$.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties';
+      const jsonPathExpression = "paths..responses[?(@property >= '400' && @property <= '599')].content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties";
       const expectedPaths = [
         doc.paths['/stuff'].get.responses[401].content['application/vnd.api+json'].schema.properties.errors.items.allOf[0].properties,
         doc.paths['/stuff'].get.responses[401].content['application/vnd.api+json'].schema.properties.errors.items.allOf[1].properties
@@ -353,6 +355,7 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           '/stuff': {
             'get': {
               'responses': {
+                '302': {},
                 '401': {
                   'content': {
                     'application/vnd.api+json': {
@@ -393,7 +396,7 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           }
         }
       };
-      const jsonPathExpression = '$.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[?(@property === "links" || @property === "meta" || @property === "source")]';
+      const jsonPathExpression = "$.paths..responses[?(@property >= '400' && @property <= '599')].content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[?(@property === 'links' || @property === 'meta' || @property === 'source')]";
       const expectedPaths = [
         doc.paths['/stuff'].get.responses[401].content['application/vnd.api+json'].schema.properties.errors.items.allOf[0].properties.links,
         doc.paths['/stuff'].get.responses[401].content['application/vnd.api+json'].schema.properties.errors.items.allOf[1].properties.links,
@@ -549,6 +552,7 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           '/stuff': {
             'get': {
               'responses': {
+                '202': {},
                 '401': {
                   'content': {
                     'application/vnd.api+json': {
@@ -592,7 +596,7 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           }
         }
       };
-      const jsonPathExpression = '$.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[?(@property === "status" || @property === "code" || @property === "title" || @property === "detail")]';
+      const jsonPathExpression = "$.paths..responses[?(@property >= '400' && @property <= '599')].content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[?(@property === 'status' || @property === 'code' || @property === 'title' || @property === 'detail')]";
       const expectedPaths = [
         doc.paths['/stuff'].get.responses[401].content['application/vnd.api+json'].schema.properties.errors.items.allOf[0].properties.status,
         doc.paths['/stuff'].get.responses[401].content['application/vnd.api+json'].schema.properties.errors.items.allOf[0].properties.code,
@@ -746,6 +750,7 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           '/stuff': {
             'get': {
               'responses': {
+                '200': {},
                 '401': {
                   'content': {
                     'application/vnd.api+json': {
@@ -788,7 +793,7 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           }
         }
       };
-      const jsonPathExpression = '$.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[links].properties';
+      const jsonPathExpression = "$.paths..responses[?(@property >= '400' && @property <= '599')].content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[links].properties";
       const expectedPaths = [
         doc.paths['/stuff'].get.responses[401].content['application/vnd.api+json'].schema.properties.errors.items.allOf[0].properties.links.properties,
         doc.paths['/stuff'].get.responses[401].content['application/vnd.api+json'].schema.properties.errors.items.allOf[1].properties.links.properties
@@ -943,6 +948,7 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           '/stuff': {
             'get': {
               'responses': {
+                '201': {},
                 '401': {
                   'content': {
                     'application/vnd.api+json': {
@@ -985,7 +991,7 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           }
         }
       };
-      const jsonPathExpression = '$.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[source].properties';
+      const jsonPathExpression = "$.paths..responses[?(@property >= '400' && @property <= '599')].content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[source].properties";
       const expectedPaths = [
         doc.paths['/stuff'].get.responses[401].content['application/vnd.api+json'].schema.properties.errors.items.allOf[0].properties.source.properties,
         doc.paths['/stuff'].get.responses[401].content['application/vnd.api+json'].schema.properties.errors.items.allOf[1].properties.source.properties
@@ -1187,7 +1193,7 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           }
         }
       };
-      const jsonPathExpression = '$.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[source].properties[parameter]';
+      const jsonPathExpression = "$.paths..responses[?(@property >= '400' && @property <= '599')].content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[source].properties[parameter]";
       const expectedPaths = [
         doc.paths['/stuff'].get.responses[401].content['application/vnd.api+json'].schema.properties.errors.items.allOf[0].properties.source.properties.parameter,
         doc.paths['/stuff'].get.responses[401].content['application/vnd.api+json'].schema.properties.errors.items.allOf[1].properties.source.properties.parameter
@@ -1343,6 +1349,7 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           '/stuff': {
             'get': {
               'responses': {
+                '200': {},
                 '401': {
                   'content': {
                     'application/vnd.api+json': {
@@ -1389,7 +1396,7 @@ describe('jsonapi-errors-error-object ruleset:', function () {
           }
         }
       };
-      const jsonPathExpression = '$.paths..content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[source].properties[pointer]';
+      const jsonPathExpression = "$.paths..responses[?(@property >= '400' && @property <= '599')].content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[source].properties[pointer]";
       const expectedPaths = [
         doc.paths['/stuff'].get.responses[401].content['application/vnd.api+json'].schema.properties.errors.items.allOf[0].properties.source.properties.pointer,
         doc.paths['/stuff'].get.responses[401].content['application/vnd.api+json'].schema.properties.errors.items.allOf[1].properties.source.properties.pointer
