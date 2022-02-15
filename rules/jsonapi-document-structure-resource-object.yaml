@@ -41,7 +41,7 @@ rules:
           - meta
     
   resource-object-properties-type-object:
-    description: "Top level members of resource object "
+    description: "Top level members of resource object must be of type object"
     documentationUrl: https://jsonapi.org/format/#document-resource-objects
     message: "{{path}} - {{description}}"
     severity: error
@@ -54,7 +54,7 @@ rules:
           - object
   
   resource-object-properties-type-array:
-    description: "Top level members of resource object "
+    description: "Top level members of resource object must be of type object"
     documentationUrl: https://jsonapi.org/format/#document-resource-objects
     message: "{{path}} - {{description}}"
     severity: error
