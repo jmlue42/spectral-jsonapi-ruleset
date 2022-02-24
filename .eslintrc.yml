@@ -1,7 +1,7 @@
 env:
   node: true
   es6: true
-extends: 'eslint:recommended'
+extends: "eslint:recommended"
 parserOptions:
   ecmaFeatures:
     jsx: false
@@ -15,7 +15,7 @@ rules:
   array-element-newline:
     - error
     - consistent
-  arrow-body-style: 
+  arrow-body-style:
     - error
     - always
   arrow-parens:
@@ -29,7 +29,7 @@ rules:
   block-spacing: error
   brace-style: error
   callback-return: error
-  camelcase: 
+  camelcase:
     - error
     - properties: never
   capitalized-comments:
@@ -44,7 +44,7 @@ rules:
   comma-style:
     - error
     - last
-  complexity: 
+  complexity:
     - error
     - max: 5
   computed-property-spacing:
@@ -52,7 +52,7 @@ rules:
     - never
   consistent-return:
     - warn
-  consistent-this: 
+  consistent-this:
     - error
     - self
   curly: error
@@ -89,10 +89,10 @@ rules:
     - error
     - beside
   indent:
-      - error
-      - 2
-  indent-legacy: 'off'
-  init-declarations: 'off'
+    - error
+    - 2
+  indent-legacy: "off"
+  init-declarations: "off"
   jsx-quotes: error
   key-spacing: error
   keyword-spacing: error
@@ -105,12 +105,12 @@ rules:
   lines-between-class-members: error
   max-classes-per-file: error
   max-depth: error
-  max-len: 'off'
-  max-lines: 'off'
-  max-lines-per-function: 'off'
+  max-len: "off"
+  max-lines: "off"
+  max-lines-per-function: "off"
   max-nested-callbacks:
-      - error
-      - max: 5
+    - error
+    - max: 5
   max-params: error
   max-statements: error
   max-statements-per-line: error
@@ -159,7 +159,7 @@ rules:
   no-lonely-if: error
   no-loop-func: error
   no-loss-of-precision: error
-  no-magic-numbers: 'off'
+  no-magic-numbers: "off"
   no-mixed-operators: error
   no-mixed-requires: error
   no-multi-assign: error
@@ -199,9 +199,9 @@ rules:
   no-sync: error
   no-tabs: error
   no-template-curly-in-string: error
-  no-ternary: 'off'
+  no-ternary: "off"
   no-throw-literal: error
-  no-trailing-spaces: 'off'
+  no-trailing-spaces: "off"
   no-undef-init: error
   no-undefined: error
   no-underscore-dangle: error
@@ -236,7 +236,7 @@ rules:
   operator-linebreak: error
   padded-blocks: error
   padding-line-between-statements: error
-  prefer-arrow-callback: 'off'
+  prefer-arrow-callback: "off"
   prefer-const: error
   prefer-destructuring: error
   prefer-exponentiation-operator: error
@@ -244,12 +244,12 @@ rules:
   prefer-numeric-literals: error
   prefer-object-spread: error
   prefer-promise-reject-errors: error
-  prefer-reflect: 'off'
+  prefer-reflect: "off"
   prefer-regex-literals: error
   prefer-rest-params: error
   prefer-spread: error
   prefer-template: error
-  quote-props: 'off'
+  quote-props: "off"
   quotes:
     - error
     - single
@@ -267,7 +267,7 @@ rules:
     - error
     - last
   sort-imports: error
-  sort-keys: 'off'
+  sort-keys: "off"
   sort-vars: error
   space-before-blocks:
     - error

@@ -11,11 +11,8 @@ rules:
     severity: error
     given: $..properties[?(@property === 'meta')]
     then:
-      field: 'type'
+      field: "type"
       function: enumeration
       functionOptions:
         values:
           - object
-
-
-
