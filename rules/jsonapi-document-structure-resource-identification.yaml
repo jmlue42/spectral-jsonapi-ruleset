@@ -1,0 +1,33 @@
+# Document Structure - Meta Information
+# https://jsonapi.org/format/#document-resource-object-identification
+
+# all rules in this file MUST have corresponding tests
+
+rules:
+  resource-identification-property:
+    description: "Every resource object MUST contain an id member and a type member. The values of the id and type members MUST be strings."
+    documentationUrl: https://jsonapi.org/format/#document-resource-object-identification
+    message: "{{path}} - {{description}}"
+    severity: error
+    given: $..properties[?(@property === 'data' || @property === 'included')]..allOf.*.properties
+    then:
+      field: "@key"
+      function: enumeration
+      functionOptions:
+        values:
+          - type
+          - id
+
+  resource-identification-type:
+    description: "Every resource object MUST contain an id member and a type member. The values of the id and type members MUST be strings."
+    documentationUrl: https://jsonapi.org/format/#document-resource-object-identification
+    message: "{{path}} - {{description}}"
+    severity: error
+    given: $..properties[?(@property === 'data' || @property === 'included')]..allOf.*.properties[?(@property === 'id' || @property === 'type')]
+    then:
+      field: "type"
+      function: enumeration
+      functionOptions:
+        values:
+          - string
+          

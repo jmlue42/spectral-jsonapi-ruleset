@@ -1,0 +1,115 @@
+# Errors - Error Object
+# https://jsonapi.org/format/#errors
+
+# all rules in this file MUST have corresponding tests
+
+rules:
+  error-object-type:
+    description: "Error objects MUST be returned as an array keyed by errors in the top level of a JSON:API document."
+    documentationUrl: https://jsonapi.org/format/#error-objects
+    message: "{{path}} - {{description}}"
+    severity: error
+    given: $.paths..responses[?(@property >= '400' && @property <= '599')].content[application/vnd.api+json].schema.properties[errors]
+    then:
+      field: "type"
+      function: enumeration
+      functionOptions:
+        values:
+          - array
+
+  error-object-properties:
+    description: "Must follow error object properties."
+    documentationUrl: https://jsonapi.org/format/#error-objects
+    message: "{{path}} - {{description}}"
+    severity: error
+    given: $.paths..responses[?(@property >= '400' && @property <= '599')].content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties
+    then:
+      field: "@key"
+      function: enumeration
+      functionOptions:
+        values:
+          - id
+          - links
+          - status
+          - code
+          - title
+          - detail
+          - source
+          - meta
+
+  error-object-members-type-object:
+    description: "Links, source, and meta (if included) must be an object"
+    documentationUrl: https://jsonapi.org/format/#error-objects
+    message: "{{path}} - {{description}}"
+    severity: error
+    given: $.paths..responses[?(@property >= '400' && @property <= '599')].content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[?(@property === 'links' || @property === 'meta' || @property === 'source')]
+    then:
+      field: "type"
+      function: enumeration
+      functionOptions:
+        values:
+          - object
+
+  error-object-members-type-string:
+    description: "Status, code, title, detail, and source members (if included) must be strings"
+    documentationUrl: https://jsonapi.org/format/#error-objects
+    message: "{{path}} - {{description}}"
+    severity: error
+    given: $.paths..responses[?(@property >= '400' && @property <= '599')].content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[?(@property === 'status' || @property === 'code' || @property === 'title' || @property === 'detail')]
+    then:
+      field: "type"
+      function: enumeration
+      functionOptions:
+        values:
+          - string
+
+  error-object-links-properties:
+    description: "Links object inside an error object must include an 'about' member "
+    documentationUrl: https://jsonapi.org/format/#error-objects
+    message: "{{path}} - {{description}}"
+    severity: error
+    given: $.paths..responses[?(@property >= '400' && @property <= '599')].content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[links].properties
+    then:
+      field: "about"
+      function: truthy
+
+  error-object-source-properties:
+    description: "Must follow source object properties"
+    documentationUrl: https://jsonapi.org/format/#error-objects
+    message: "{{path}} - {{description}}"
+    severity: error
+    given: $.paths..responses[?(@property >= '400' && @property <= '599')].content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[source].properties
+    then:
+      field: "@key"
+      function: enumeration
+      functionOptions:
+        values:
+          - pointer
+          - parameter
+
+  error-object-source-parameter-type:
+    description: "Parameter, if included in source object, must be of type string"
+    documentationUrl: https://jsonapi.org/format/#error-objects
+    message: "{{path}} - {{description}}"
+    severity: error
+    given: $.paths..responses[?(@property >= '400' && @property <= '599')].content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[source].properties[parameter]
+    then:
+      field: "type"
+      function: enumeration
+      functionOptions:
+        values:
+          - string
+  
+  error-object-source-pointer-type:
+    description: "Pointer, if included in source object, must be of type string or array"
+    documentationUrl: https://jsonapi.org/format/#error-objects
+    message: "{{path}} - {{description}}"
+    severity: error
+    given: $.paths..responses[?(@property >= '400' && @property <= '599')].content[application/vnd.api+json].schema.properties[errors]..allOf.*.properties[source].properties[pointer]
+    then:
+      field: "type"
+      function: enumeration
+      functionOptions:
+        values:
+          - string
+          - array
