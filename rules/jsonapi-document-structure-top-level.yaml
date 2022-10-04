@@ -11,7 +11,7 @@ rules:
     severity: error
     given: $.paths..content[?(@property === 'application/vnd.api+json')].schema
     then:
-      field: 'type'
+      field: "type"
       function: enumeration
       functionOptions:
         values:
@@ -23,7 +23,7 @@ rules:
     severity: error
     given: $.paths..content[?(@property === 'application/vnd.api+json')].schema.properties
     then:
-      field: '@key'
+      field: "@key"
       function: enumeration
       functionOptions:
         values:
@@ -40,7 +40,7 @@ rules:
     severity: error
     given: $.paths..content[?(@property === 'application/vnd.api+json')].schema.properties[?(@property === 'included')]^
     then:
-      field: 'data'
+      field: "data"
       function: truthy
   top-level-json-properties-errors:
     description: "data property must not exist if errors is returned"
@@ -49,6 +49,5 @@ rules:
     severity: error
     given: $.paths..content[?(@property === 'application/vnd.api+json')].schema.properties[?(@property === 'errors')]^
     then:
-      field: 'data'
+      field: "data"
       function: falsy
-
