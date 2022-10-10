@@ -673,7 +673,7 @@
           "single"
         ],
         "summary": "Create Resource",
-        "description": "A longer MEANINGFUL descripition. Do not copy summary.",
+        "description": "A longer MEANINGFUL description. Do not copy summary.",
         "security": [
           {
             "ApiKeyAuth": [],

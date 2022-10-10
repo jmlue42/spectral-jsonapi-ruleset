@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "spectral rules for json:api",
   "main": "json-ruleset.yaml",
+  "type": "module",
   "scripts": {
-    "test": "./node_modules/.bin/eslint test/ && ./node_modules/.bin/mocha test/",
+    "test": "./node_modules/.bin/mocha test/*-new.test.js",
     "lint": "./node_modules/.bin/eslint test/",
-    "testwin": "C:/Spectral4/spectral-jsonapi-ruleset/node_modules/.bin/eslint test/ && C:/Spectral4/spectral-jsonapi-ruleset/node_modules/.bin/mocha test/",
-    "lintwin": "C:/Spectral4/spectral-jsonapi-ruleset/node_modules/.bin/eslint test/"
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -28,15 +28,18 @@
   },
   "homepage": "https://github.com/jmlue42/spectral-jsonapi-ruleset#readme",
   "devDependencies": {
-    "@stoplight/spectral": "^5.9.2",
-    "chai": "^4.2.0",
-    "eslint": "^7.11.0",
-    "eslint-plugin-mocha": "^8.0.0",
-    "husky": "^4.3.8",
-    "jsonpath-plus": "^4.0.0",
-    "mocha": "^8.2.0"
+    "@stoplight/spectral-core": "^1.14.2",
+    "@stoplight/spectral-parsers": "^1.0.2",
+    "chai": "^4.3.6",
+    "eslint": "^8.24.0",
+    "eslint-plugin-mocha": "^10.1.0",
+    "husky": "^8.0.1",
+    "jsonpath-plus": "^7.2.0",
+    "mocha": "^10.0.0"
   },
-  "husky": {
-    "hooks": {}
+  "dependencies": {
+    "@stoplight/spectral-formats": "^1.4.0",
+    "@stoplight/spectral-functions": "^1.7.1",
+    "@stoplight/types": "^13.7.0"
   }
 }

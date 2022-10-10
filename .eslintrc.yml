@@ -3,6 +3,7 @@ env:
   es6: true
 extends: "eslint:recommended"
 parserOptions:
+  sourceType: "module"
   ecmaFeatures:
     jsx: false
 rules:
@@ -32,9 +33,7 @@ rules:
   camelcase:
     - error
     - properties: never
-  capitalized-comments:
-    - error
-    - never
+  capitalized-comments: off
   class-methods-use-this: error
   comma-dangle: error
   comma-spacing:
@@ -266,7 +265,7 @@ rules:
   semi-style:
     - error
     - last
-  sort-imports: error
+  sort-imports: off
   sort-keys: "off"
   sort-vars: error
   space-before-blocks:
@@ -282,9 +281,7 @@ rules:
     - never
   space-infix-ops: error
   space-unary-ops: error
-  spaced-comment:
-    - error
-    - never
+  spaced-comment: off
   strict:
     - error
     - safe

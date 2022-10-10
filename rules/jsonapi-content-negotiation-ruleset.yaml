@@ -5,5 +5,5 @@
 # all rules in this file MUST have corresponding tests
 
 extends:
-  - jsonapi-content-negotiation-clients.yaml
-  - jsonapi-content-negotiation-servers.yaml
+  - jsonapi-content-negotiation-clients.js
+  - jsonapi-content-negotiation-servers.js
