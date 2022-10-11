@@ -113,12 +113,10 @@ rules:
   max-params: error
   max-statements: error
   max-statements-per-line: error
-  multiline-comment-style: error
+  multiline-comment-style: off
   multiline-ternary: error
   new-parens: error
-  newline-after-var:
-    - error
-    - always
+  newline-after-var: off
   newline-before-return: error
   newline-per-chained-call: error
   no-alert: error
@@ -224,7 +222,7 @@ rules:
   object-curly-newline: error
   object-curly-spacing:
     - error
-    - never
+    - always
   object-property-newline: error
   object-shorthand: error
   one-var:
@@ -233,7 +231,10 @@ rules:
   one-var-declaration-per-line: error
   operator-assignment: error
   operator-linebreak: error
-  padded-blocks: error
+  padded-blocks:
+    - error
+    - always
+    - allowSingleLineBlocks: true
   padding-line-between-statements: error
   prefer-arrow-callback: "off"
   prefer-const: error
@@ -281,7 +282,9 @@ rules:
     - never
   space-infix-ops: error
   space-unary-ops: error
-  spaced-comment: off
+  spaced-comment:
+    - error 
+    - always
   strict:
     - error
     - safe

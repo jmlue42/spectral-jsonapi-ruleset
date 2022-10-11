@@ -1,5 +1,5 @@
 # Main JSON:API Spectral RuleSet
-# https://jsonapi.org/format/
+# https://jsonapi.org/format/1.0/
 
 # *-ruleset.yaml files SHOULD NOT contain any testable items.
 

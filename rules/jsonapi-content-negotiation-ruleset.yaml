@@ -1,5 +1,5 @@
 # Content Negotiation
-# https://jsonapi.org/format/#content-negotiation
+# https://jsonapi.org/format/1.0/#content-negotiation
 
 # *-ruleset.yaml files generally SHOULD NOT contain any testable rules.
 # all rules in this file MUST have corresponding tests

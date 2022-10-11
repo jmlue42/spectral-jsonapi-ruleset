@@ -4,7 +4,7 @@ import spectralCore from '@stoplight/spectral-core';
 const { Spectral, Document } = spectralCore;
 import Parsers from '@stoplight/spectral-parsers';
 
-//rules under test
+// rules under test
 import ruleset from '../rules/jsonapi-document-structure-links.js';
 
 describe('jsonapi-content-negotiation-servers ruleset:', function () {
@@ -19,7 +19,7 @@ describe('jsonapi-content-negotiation-servers ruleset:', function () {
 
   describe('links-object:', function () {
 
-    it('the json path expression should find the correct paths from the given document', function(done) {
+    it('the json path expression should find the correct paths from the given document', function (done) {
 
       const doc = {
         'openapi': '3.0.2',
@@ -74,7 +74,7 @@ describe('jsonapi-content-negotiation-servers ruleset:', function () {
 
     });
 
-    it('the rule should return "links-object" errors if links object doesn\'t match schema', function(done) {
+    it('the rule should return "links-object" errors if links object doesn\'t match schema', function (done) {
 
       const badDocument = new Document(`
         openapi: 3.0.2
@@ -108,7 +108,7 @@ describe('jsonapi-content-negotiation-servers ruleset:', function () {
       delete spectral.ruleset.rules['links-object-schema-properties'];
       delete spectral.ruleset.rules['links-object-schema-properties-href'];
       spectral.run(badDocument)
-        .then(results => {
+        .then((results) => {
           
           expect(results.length).to.equal(2, 'Error count should be 2');
           expect(results[0].code).to.equal('links-object', 'Incorrect error');
@@ -117,7 +117,7 @@ describe('jsonapi-content-negotiation-servers ruleset:', function () {
           done();
 
         })
-        .catch(error => {
+        .catch((error) => {
 
           done(error);
 
@@ -125,7 +125,7 @@ describe('jsonapi-content-negotiation-servers ruleset:', function () {
 
     });
 
-    it('the rule should pass with NO errors', function(done) {
+    it('the rule should pass with NO errors', function (done) {
 
       const cleanDocument = new Document(`
         openapi: 3.0.2
@@ -148,12 +148,13 @@ describe('jsonapi-content-negotiation-servers ruleset:', function () {
       delete spectral.ruleset.rules['links-object-schema-properties'];
       delete spectral.ruleset.rules['links-object-schema-properties-href'];
       spectral.run(cleanDocument)
-        .then(results => {
+        .then((results) => {
+
           expect(results.length).to.equal(0, 'Error(s) found');
           done();
 
         })
-        .catch(error => {
+        .catch((error) => {
 
           done(error);
 
@@ -165,7 +166,7 @@ describe('jsonapi-content-negotiation-servers ruleset:', function () {
 
   describe('links-object-schema-type:', function () {
 
-    it('the json path expression should find the correct paths from the given document', function(done) {
+    it('the json path expression should find the correct paths from the given document', function (done) {
 
       const doc = {
         'openapi': '3.0.2',
@@ -238,7 +239,7 @@ describe('jsonapi-content-negotiation-servers ruleset:', function () {
 
     });
 
-    it('the rule should return "links-object-schema-type" errors if links object doesn\'t match schema', function(done) {
+    it('the rule should return "links-object-schema-type" errors if links object doesn\'t match schema', function (done) {
 
       const badDocument = new Document(`
         openapi: 3.0.2
@@ -294,7 +295,7 @@ describe('jsonapi-content-negotiation-servers ruleset:', function () {
       delete spectral.ruleset.rules['links-object-schema-properties'];
       delete spectral.ruleset.rules['links-object-schema-properties-href'];
       spectral.run(badDocument)
-        .then(results => {
+        .then((results) => {
           
           expect(results.length).to.equal(2, 'Error count should be 2');
           expect(results[0].code).to.equal('links-object-schema-type', 'Incorrect error');
@@ -303,7 +304,7 @@ describe('jsonapi-content-negotiation-servers ruleset:', function () {
           done();
 
         })
-        .catch(error => {
+        .catch((error) => {
 
           done(error);
 
@@ -311,7 +312,7 @@ describe('jsonapi-content-negotiation-servers ruleset:', function () {
 
     });
 
-    it('the rule should pass with NO errors', function(done) {
+    it('the rule should pass with NO errors', function (done) {
 
       const cleanDocument = new Document(`
         openapi: 3.0.2
@@ -343,13 +344,13 @@ describe('jsonapi-content-negotiation-servers ruleset:', function () {
 
       spectral.setRuleset(ruleset);
       spectral.run(cleanDocument)
-        .then(results => {
+        .then((results) => {
           
           expect(results.length).to.equal(0, 'Error(s) found');
           done();
 
         })
-        .catch(error => {
+        .catch((error) => {
 
           done(error);
 
@@ -361,7 +362,7 @@ describe('jsonapi-content-negotiation-servers ruleset:', function () {
 
   describe('links-object-schema-properties:', function () {
 
-    it('the json path expression should find the correct paths from the given document', function(done) {
+    it('the json path expression should find the correct paths from the given document', function (done) {
 
       const doc = {
         'openapi': '3.0.2',
@@ -439,7 +440,7 @@ describe('jsonapi-content-negotiation-servers ruleset:', function () {
 
     });
 
-    it('the rule should return "links-object-schema-properties" errors if links object doesn\'t match schema', function(done) {
+    it('the rule should return "links-object-schema-properties" errors if links object doesn\'t match schema', function (done) {
 
       const badDocument = new Document(`
         openapi: 3.0.2
@@ -500,7 +501,7 @@ describe('jsonapi-content-negotiation-servers ruleset:', function () {
       delete spectral.ruleset.rules['links-object-schema-type'];
       delete spectral.ruleset.rules['links-object-schema-properties-href'];
       spectral.run(badDocument)
-        .then(results => {
+        .then((results) => {
           
           expect(results.length).to.equal(2, 'Error count should be 2');
           expect(results[0].code).to.equal('links-object-schema-properties', 'Incorrect error');
@@ -509,7 +510,7 @@ describe('jsonapi-content-negotiation-servers ruleset:', function () {
           done();
 
         })
-        .catch(error => {
+        .catch((error) => {
 
           done(error);
 
@@ -517,7 +518,7 @@ describe('jsonapi-content-negotiation-servers ruleset:', function () {
 
     });
 
-    it('the rule should pass with NO errors', function(done) {
+    it('the rule should pass with NO errors', function (done) {
 
       const cleanDocument = new Document(`
         openapi: 3.0.2
@@ -568,13 +569,13 @@ describe('jsonapi-content-negotiation-servers ruleset:', function () {
 
       spectral.setRuleset(ruleset);
       spectral.run(cleanDocument)
-        .then(results => {
+        .then((results) => {
           
           expect(results.length).to.equal(0, 'Error(s) found');
           done();
 
         })
-        .catch(error => {
+        .catch((error) => {
 
           done(error);
 
@@ -586,7 +587,7 @@ describe('jsonapi-content-negotiation-servers ruleset:', function () {
 
   describe('links-object-schema-properties-href:', function () {
 
-    it('the json path expression should find the correct paths from the given document', function(done) {
+    it('the json path expression should find the correct paths from the given document', function (done) {
 
       const doc = {
         'openapi': '3.0.2',
@@ -664,7 +665,7 @@ describe('jsonapi-content-negotiation-servers ruleset:', function () {
 
     });
 
-    it('the rule should return "links-object-schema-properties" errors if links object doesn\'t match schema', function(done) {
+    it('the rule should return "links-object-schema-properties" errors if links object doesn\'t match schema', function (done) {
 
       const badDocument = new Document(`
         openapi: 3.0.2
@@ -725,7 +726,7 @@ describe('jsonapi-content-negotiation-servers ruleset:', function () {
       delete spectral.ruleset.rules['links-object-schema-type'];
       delete spectral.ruleset.rules['links-object-schema-properties'];
       spectral.run(badDocument)
-        .then(results => {
+        .then((results) => {
           
           expect(results.length).to.equal(1, 'Error count should be 1');
           expect(results[0].code).to.equal('links-object-schema-properties-href', 'Incorrect error');
@@ -733,7 +734,7 @@ describe('jsonapi-content-negotiation-servers ruleset:', function () {
           done();
 
         })
-        .catch(error => {
+        .catch((error) => {
 
           done(error);
 
@@ -741,7 +742,7 @@ describe('jsonapi-content-negotiation-servers ruleset:', function () {
 
     });
 
-    it('the rule should pass with NO errors', function(done) {
+    it('the rule should pass with NO errors', function (done) {
 
       const cleanDocument = new Document(`
         openapi: 3.0.2
@@ -792,13 +793,13 @@ describe('jsonapi-content-negotiation-servers ruleset:', function () {
 
       spectral.setRuleset(ruleset);
       spectral.run(cleanDocument)
-        .then(results => {
+        .then((results) => {
           
           expect(results.length).to.equal(0, 'Error(s) found');
           done();
 
         })
-        .catch(error => {
+        .catch((error) => {
 
           done(error);
 

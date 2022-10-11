@@ -4,7 +4,7 @@ import spectralCore from '@stoplight/spectral-core';
 const { Spectral, Document } = spectralCore;
 import Parsers from '@stoplight/spectral-parsers';
 
-//rules under test
+// rules under test
 import ruleset from '../rules/jsonapi-content-negotiation-clients.js';
 
 describe('jsonapi-content-negotiation-clients ruleset:', function () {
@@ -90,7 +90,7 @@ describe('jsonapi-content-negotiation-clients ruleset:', function () {
 
       spectral.setRuleset(ruleset);
       spectral.run(badDocument)
-        .then(results => {
+        .then((results) => {
           
           expect(results.length).to.equal(1, 'Error count should be 1');
           expect(results[0].code).to.equal('request-content-type', 'Incorrect error');
@@ -98,7 +98,7 @@ describe('jsonapi-content-negotiation-clients ruleset:', function () {
           done();
 
         })
-        .catch(error => {
+        .catch((error) => {
 
           done(error);
 
@@ -122,13 +122,13 @@ describe('jsonapi-content-negotiation-clients ruleset:', function () {
 
       spectral.setRuleset(ruleset);
       spectral.run(cleanDocument)
-        .then(results => {
+        .then((results) => {
           
           expect(results.length).to.equal(0, 'Error(s) found');
           done();
 
         })
-        .catch(error => {
+        .catch((error) => {
 
           done(error);
 

@@ -4,7 +4,7 @@ import spectralCore from '@stoplight/spectral-core';
 const { Spectral, Document } = spectralCore;
 import Parsers from '@stoplight/spectral-parsers';
 
-//rules under test
+// rules under test
 import ruleset from '../rules/jsonapi-document-structure-jsonapi-object.js';
 
 describe('jsonapi-document-structure-jsonapi-object ruleset:', function () {
@@ -19,7 +19,7 @@ describe('jsonapi-document-structure-jsonapi-object ruleset:', function () {
 
   describe('jsonapi-object-schema:', function () {
 
-    it('the json path expression should find the correct paths from the given document', function(done) {
+    it('the json path expression should find the correct paths from the given document', function (done) {
 
       const doc = {
         'openapi': '3.0.2',
@@ -68,7 +68,7 @@ describe('jsonapi-document-structure-jsonapi-object ruleset:', function () {
 
     });
 
-    it('the rule should return "jsonapi-object-schema" errors if jsonapi object doesn\'t match schema', function(done) {
+    it('the rule should return "jsonapi-object-schema" errors if jsonapi object doesn\'t match schema', function (done) {
 
       const badDocument = new Document(`
         openapi: 3.0.2
@@ -109,7 +109,7 @@ describe('jsonapi-document-structure-jsonapi-object ruleset:', function () {
 
       spectral.setRuleset(ruleset);
       spectral.run(badDocument)
-        .then(results => {
+        .then((results) => {
           
           expect(results.length).to.equal(1, 'Error count should be 2');
           expect(results[0].code).to.equal('jsonapi-object-schema', 'Incorrect error');
@@ -118,7 +118,7 @@ describe('jsonapi-document-structure-jsonapi-object ruleset:', function () {
           done();
 
         })
-        .catch(error => {
+        .catch((error) => {
 
           done(error);
 
@@ -126,7 +126,7 @@ describe('jsonapi-document-structure-jsonapi-object ruleset:', function () {
 
     });
 
-    it('the rule should pass with NO errors', function(done) {
+    it('the rule should pass with NO errors', function (done) {
 
       const cleanDocument = new Document(`
         openapi: 3.0.2
@@ -168,13 +168,13 @@ describe('jsonapi-document-structure-jsonapi-object ruleset:', function () {
 
       spectral.setRuleset(ruleset);
       spectral.run(cleanDocument)
-        .then(results => {
+        .then((results) => {
           
           expect(results.length).to.equal(0, 'Error(s) found');
           done();
 
         })
-        .catch(error => {
+        .catch((error) => {
 
           done(error);
 

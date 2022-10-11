@@ -1,4 +1,4 @@
-// Content Negotiation - Client Responsibilities - https://jsonapi.org/format/#content-negotiation-servers
+// Content Negotiation - Client Responsibilities - https://jsonapi.org/format/1.0/#content-negotiation-servers
 
 // All rules in this file MUST have corresponding tests
 
@@ -6,7 +6,7 @@ import { enumeration, truthy } from '@stoplight/spectral-functions';
 import { DiagnosticSeverity } from '@stoplight/types';
 
 export default {
-  documentationUrl: 'https://jsonapi.org/format/#content-negotiation-servers',
+  documentationUrl: 'https://jsonapi.org/format/1.0/#content-negotiation-servers',
   rules: {
     'response-content-type': {
       description: 'All JSON:API response bodies MUST be returned with the header Content-Type: application/vnd.api+json',

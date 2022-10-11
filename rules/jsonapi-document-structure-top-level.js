@@ -1,4 +1,4 @@
-// Document Structure - Top Level - https://jsonapi.org/format/#document-top-level
+// Document Structure - Top Level - https://jsonapi.org/format/1.0/#document-top-level
 
 // All rules in this file MUST have corresponding tests
 
@@ -6,7 +6,7 @@ import { enumeration, truthy, falsy } from '@stoplight/spectral-functions';
 import { DiagnosticSeverity } from '@stoplight/types';
 
 export default {
-  documentationUrl: 'https://jsonapi.org/format/#document-top-level',
+  documentationUrl: 'https://jsonapi.org/format/1.0/#document-top-level',
   rules: {
     'top-level-json-object': {
       description: 'A JSON object MUST be at the root of every JSON:API request/response body containing data.',

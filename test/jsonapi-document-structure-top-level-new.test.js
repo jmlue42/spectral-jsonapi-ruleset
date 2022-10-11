@@ -4,7 +4,7 @@ import spectralCore from '@stoplight/spectral-core';
 const { Spectral, Document } = spectralCore;
 import Parsers from '@stoplight/spectral-parsers';
 
-//rules under test
+// rules under test
 import ruleset from '../rules/jsonapi-document-structure-top-level.js';
 
 describe('jsonapi-document-structure-top-level ruleset:', function () {
@@ -19,7 +19,7 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
 
   describe('top-level-json-object:', function () {
 
-    it('the json path expression should find the correct paths from the given document', function(done) {
+    it('the json path expression should find the correct paths from the given document', function (done) {
 
       const doc = {
         'openapi': '3.0.2',
@@ -93,7 +93,7 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
 
     });
 
-    it('the rule should return "top-level-request-json-object" errors if using JSON:API and top level schema is NOT an object', function(done) {
+    it('the rule should return "top-level-request-json-object" errors if using JSON:API and top level schema is NOT an object', function (done) {
 
       const badDocument = new Document(`
         openapi: 3.0.2
@@ -136,7 +136,7 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
       delete spectral.ruleset.rules['top-level-json-properties-included'];
       delete spectral.ruleset.rules['top-level-json-properties-errors'];
       spectral.run(badDocument)
-        .then(results => {
+        .then((results) => {
           
           expect(results.length).to.equal(2, 'Error count should be 2');
           expect(results[0].code).to.equal('top-level-json-object', 'Incorrect error');
@@ -146,7 +146,7 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
           done();
 
         })
-        .catch(error => {
+        .catch((error) => {
 
           done(error);
 
@@ -154,7 +154,7 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
 
     });
 
-    it('the rule should pass with NO errors', function(done) {
+    it('the rule should pass with NO errors', function (done) {
 
       const cleanDocument = new Document(`
         openapi: 3.0.2
@@ -197,13 +197,13 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
       delete spectral.ruleset.rules['top-level-json-properties-included'];
       delete spectral.ruleset.rules['top-level-json-properties-errors'];
       spectral.run(cleanDocument)
-        .then(results => {
+        .then((results) => {
           
           expect(results.length).to.equal(0, 'Error(s) found');
           done();
 
         })
-        .catch(error => {
+        .catch((error) => {
 
           done(error);
 
@@ -215,7 +215,7 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
 
   describe('top-level-json-properties:', function () {
 
-    it('the json path expression should find the correct paths from the given document', function(done) {
+    it('the json path expression should find the correct paths from the given document', function (done) {
       
       const doc = {
         'openapi': '3.0.2',
@@ -275,9 +275,10 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
       expect(results.length).to.equal(2, 'Wrong number of results.');
       expect(results).to.deep.equal(expectedPaths, 'Wrong paths');
       done();
+    
     });
 
-    it('the rule should return "top-level-json-properties" errors if top level schema properties are not allowed', function(done) {
+    it('the rule should return "top-level-json-properties" errors if top level schema properties are not allowed', function (done) {
 
       const badDocument = new Document(`
         openapi: 3.0.2
@@ -323,7 +324,7 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
       delete spectral.ruleset.rules['top-level-json-properties-included'];
       delete spectral.ruleset.rules['top-level-json-properties-errors'];
       spectral.run(badDocument)
-        .then(results => {
+        .then((results) => {
           
           expect(results.length).to.equal(2, 'Error count should be 2');
           expect(results[0].code).to.equal('top-level-json-properties', 'Incorrect error');
@@ -333,7 +334,7 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
           done();
 
         })
-        .catch(error => {
+        .catch((error) => {
 
           done(error);
 
@@ -341,7 +342,7 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
 
     });
 
-    it('the rule should pass with NO errors', function(done) {
+    it('the rule should pass with NO errors', function (done) {
 
       const cleanDocument = new Document(`
         openapi: 3.0.2
@@ -383,13 +384,13 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
       delete spectral.ruleset.rules['top-level-json-properties-included'];
       delete spectral.ruleset.rules['top-level-json-properties-errors'];
       spectral.run(cleanDocument)
-        .then(results => {
+        .then((results) => {
           
           expect(results.length).to.equal(0, 'Error(s) found');
           done();
 
         })
-        .catch(error => {
+        .catch((error) => {
 
           done(error);
 
@@ -401,7 +402,7 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
 
   describe('top-level-json-properties-included:', function () {
 
-    it('the json path expression should find the correct paths from the given document', function(done) {
+    it('the json path expression should find the correct paths from the given document', function (done) {
 
       const doc = {
         'openapi': '3.0.2',
@@ -466,7 +467,7 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
 
     });
 
-    it('the rule should return "top-level-json-properties-included" errors if included property exists w/o data property', function(done) {
+    it('the rule should return "top-level-json-properties-included" errors if included property exists w/o data property', function (done) {
 
       const badDocument = new Document(`
         openapi: 3.0.2
@@ -506,7 +507,7 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
       delete spectral.ruleset.rules['top-level-json-properties'];
       delete spectral.ruleset.rules['top-level-json-properties-errors'];
       spectral.run(badDocument)
-        .then(results => {
+        .then((results) => {
           
           expect(results.length).to.equal(1, 'Error count should be 1');
           expect(results[0].code).to.equal('top-level-json-properties-included', 'Incorrect error');
@@ -514,7 +515,7 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
           done();
 
         })
-        .catch(error => {
+        .catch((error) => {
 
           done(error);
 
@@ -522,7 +523,7 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
 
     });
 
-    it('the rule should pass with NO errors', function(done) {
+    it('the rule should pass with NO errors', function (done) {
 
       const cleanDocument = new Document(`
         openapi: 3.0.2
@@ -564,13 +565,13 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
       delete spectral.ruleset.rules['top-level-json-properties'];
       delete spectral.ruleset.rules['top-level-json-properties-errors'];
       spectral.run(cleanDocument)
-        .then(results => {
+        .then((results) => {
           
           expect(results.length).to.equal(0, 'Error(s) found');
           done();
 
         })
-        .catch(error => {
+        .catch((error) => {
 
           done(error);
 
@@ -582,7 +583,7 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
 
   describe('top-level-json-properties-errors:', function () {
 
-    it('the json path expression should find the correct paths from the given document', function(done) {
+    it('the json path expression should find the correct paths from the given document', function (done) {
 
       const doc = {
         'openapi': '3.0.2',
@@ -647,7 +648,7 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
 
     });
 
-    it('the rule should return "top-level-json-properties-errors" errors if errors property exists w/ data property', function(done) {
+    it('the rule should return "top-level-json-properties-errors" errors if errors property exists w/ data property', function (done) {
 
       const badDocument = new Document(`
         openapi: 3.0.2
@@ -689,7 +690,7 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
       delete spectral.ruleset.rules['top-level-json-properties'];
       delete spectral.ruleset.rules['top-level-json-properties-included'];
       spectral.run(badDocument)
-        .then(results => {
+        .then((results) => {
           
           expect(results.length).to.equal(1, 'Error count should be 1');
           expect(results[0].code).to.equal('top-level-json-properties-errors', 'Incorrect error');
@@ -697,7 +698,7 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
           done();
 
         })
-        .catch(error => {
+        .catch((error) => {
 
           done(error);
 
@@ -705,7 +706,7 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
 
     });
 
-    it('the rule should pass with NO errors', function(done) {
+    it('the rule should pass with NO errors', function (done) {
 
       const cleanDocument = new Document(`
         openapi: 3.0.2
@@ -737,13 +738,13 @@ describe('jsonapi-document-structure-top-level ruleset:', function () {
       delete spectral.ruleset.rules['top-level-json-properties'];
       delete spectral.ruleset.rules['top-level-json-properties-included'];
       spectral.run(cleanDocument)
-        .then(results => {
+        .then((results) => {
           
           expect(results.length).to.equal(0, 'Error(s) found');
           done();
 
         })
-        .catch(error => {
+        .catch((error) => {
 
           done(error);
 
