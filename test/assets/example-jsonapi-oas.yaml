@@ -45,6 +45,10 @@ paths:
           $ref: '#/components/responses/401Error'
         '403':
           $ref: '#/components/responses/403Error'
+        '406':
+          $ref: '#/components/responses/DefaultError'
+        '415':
+          $ref: '#/components/responses/DefaultError'  
         'default':
           $ref: '#/components/responses/DefaultError'
     post:
@@ -65,6 +69,10 @@ paths:
           $ref: '#/components/responses/401Error'
         '403':
           $ref: '#/components/responses/403Error'
+        '406':
+          $ref: '#/components/responses/DefaultError'
+        '415':
+          $ref: '#/components/responses/DefaultError'
         'default':
           $ref: '#/components/responses/DefaultError'
   /myResources/{id}:
@@ -87,6 +95,10 @@ paths:
           $ref: '#/components/responses/401Error'
         '403':
           $ref: '#/components/responses/403Error'
+        '406':
+          $ref: '#/components/responses/DefaultError'
+        '415':
+          $ref: '#/components/responses/DefaultError'
         'default':
           $ref: '#/components/responses/DefaultError'
     patch:
@@ -109,6 +121,10 @@ paths:
           $ref: '#/components/responses/401Error'
         '403':
           $ref: '#/components/responses/403Error'
+        '406':
+          $ref: '#/components/responses/DefaultError'
+        '415':
+          $ref: '#/components/responses/DefaultError'
         'default':
           $ref: '#/components/responses/DefaultError'
     delete:
@@ -129,6 +145,10 @@ paths:
           $ref: '#/components/responses/401Error'
         '403':
           $ref: '#/components/responses/403Error'
+        '406':
+          $ref: '#/components/responses/DefaultError'
+        '415':
+          $ref: '#/components/responses/DefaultError'
         'default':
           $ref: '#/components/responses/DefaultError'
           

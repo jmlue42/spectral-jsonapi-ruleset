@@ -506,6 +506,326 @@
               }
             }
           },
+          "406": {
+            "description": "Error",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "JSON:API Error Object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "a unique identifier for this particular occurrence of the problem"
+                          },
+                          "links": {
+                            "type": "object",
+                            "description": "links that lead to further detail about the particular occurrence of the problem",
+                            "properties": {
+                              "about": {
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "required": [
+                                      "href"
+                                    ],
+                                    "properties": {
+                                      "href": {
+                                        "type": "string"
+                                      },
+                                      "meta": {
+                                        "type": "object",
+                                        "additionalProperties": true
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "the HTTP status code applicable to this problem"
+                          },
+                          "code": {
+                            "type": "string",
+                            "description": "an application-specific error code"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "a human-readable summary specific of the problem. Usually the http status friendly name."
+                          },
+                          "detail": {
+                            "type": "string",
+                            "description": "a human-readable explanation specific to this occurrence of the problem"
+                          },
+                          "source": {
+                            "type": "object",
+                            "description": "an object containing references to the source of the error",
+                            "properties": {
+                              "pointer": {
+                                "description": "a JSON Pointer [RFC6901] to the associated entity in the request document",
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  }
+                                ]
+                              },
+                              "parameter": {
+                                "description": "a string indicating which URI query parameter caused the error",
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "meta": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "400 - Bad Request": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "404 - Not Found": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "404",
+                          "title": "Not Found"
+                        }
+                      ]
+                    }
+                  },
+                  "500 - Server Error": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "500",
+                          "title": "Internal Server Error"
+                        }
+                      ]
+                    }
+                  },
+                  "Multiple Errors": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        },
+                        {
+                          "id": "b6ad7d24-4dec-4ba0-931c-52731a9469e3",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "pointer": "/data/attributes/name"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Error",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "JSON:API Error Object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "a unique identifier for this particular occurrence of the problem"
+                          },
+                          "links": {
+                            "type": "object",
+                            "description": "links that lead to further detail about the particular occurrence of the problem",
+                            "properties": {
+                              "about": {
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "required": [
+                                      "href"
+                                    ],
+                                    "properties": {
+                                      "href": {
+                                        "type": "string"
+                                      },
+                                      "meta": {
+                                        "type": "object",
+                                        "additionalProperties": true
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "the HTTP status code applicable to this problem"
+                          },
+                          "code": {
+                            "type": "string",
+                            "description": "an application-specific error code"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "a human-readable summary specific of the problem. Usually the http status friendly name."
+                          },
+                          "detail": {
+                            "type": "string",
+                            "description": "a human-readable explanation specific to this occurrence of the problem"
+                          },
+                          "source": {
+                            "type": "object",
+                            "description": "an object containing references to the source of the error",
+                            "properties": {
+                              "pointer": {
+                                "description": "a JSON Pointer [RFC6901] to the associated entity in the request document",
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  }
+                                ]
+                              },
+                              "parameter": {
+                                "description": "a string indicating which URI query parameter caused the error",
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "meta": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "400 - Bad Request": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "404 - Not Found": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "404",
+                          "title": "Not Found"
+                        }
+                      ]
+                    }
+                  },
+                  "500 - Server Error": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "500",
+                          "title": "Internal Server Error"
+                        }
+                      ]
+                    }
+                  },
+                  "Multiple Errors": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        },
+                        {
+                          "id": "b6ad7d24-4dec-4ba0-931c-52731a9469e3",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "pointer": "/data/attributes/name"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
           "default": {
             "description": "Error",
             "content": {
@@ -1212,6 +1532,326 @@
               }
             }
           },
+          "406": {
+            "description": "Error",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "JSON:API Error Object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "a unique identifier for this particular occurrence of the problem"
+                          },
+                          "links": {
+                            "type": "object",
+                            "description": "links that lead to further detail about the particular occurrence of the problem",
+                            "properties": {
+                              "about": {
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "required": [
+                                      "href"
+                                    ],
+                                    "properties": {
+                                      "href": {
+                                        "type": "string"
+                                      },
+                                      "meta": {
+                                        "type": "object",
+                                        "additionalProperties": true
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "the HTTP status code applicable to this problem"
+                          },
+                          "code": {
+                            "type": "string",
+                            "description": "an application-specific error code"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "a human-readable summary specific of the problem. Usually the http status friendly name."
+                          },
+                          "detail": {
+                            "type": "string",
+                            "description": "a human-readable explanation specific to this occurrence of the problem"
+                          },
+                          "source": {
+                            "type": "object",
+                            "description": "an object containing references to the source of the error",
+                            "properties": {
+                              "pointer": {
+                                "description": "a JSON Pointer [RFC6901] to the associated entity in the request document",
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  }
+                                ]
+                              },
+                              "parameter": {
+                                "description": "a string indicating which URI query parameter caused the error",
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "meta": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "400 - Bad Request": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "404 - Not Found": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "404",
+                          "title": "Not Found"
+                        }
+                      ]
+                    }
+                  },
+                  "500 - Server Error": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "500",
+                          "title": "Internal Server Error"
+                        }
+                      ]
+                    }
+                  },
+                  "Multiple Errors": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        },
+                        {
+                          "id": "b6ad7d24-4dec-4ba0-931c-52731a9469e3",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "pointer": "/data/attributes/name"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Error",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "JSON:API Error Object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "a unique identifier for this particular occurrence of the problem"
+                          },
+                          "links": {
+                            "type": "object",
+                            "description": "links that lead to further detail about the particular occurrence of the problem",
+                            "properties": {
+                              "about": {
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "required": [
+                                      "href"
+                                    ],
+                                    "properties": {
+                                      "href": {
+                                        "type": "string"
+                                      },
+                                      "meta": {
+                                        "type": "object",
+                                        "additionalProperties": true
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "the HTTP status code applicable to this problem"
+                          },
+                          "code": {
+                            "type": "string",
+                            "description": "an application-specific error code"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "a human-readable summary specific of the problem. Usually the http status friendly name."
+                          },
+                          "detail": {
+                            "type": "string",
+                            "description": "a human-readable explanation specific to this occurrence of the problem"
+                          },
+                          "source": {
+                            "type": "object",
+                            "description": "an object containing references to the source of the error",
+                            "properties": {
+                              "pointer": {
+                                "description": "a JSON Pointer [RFC6901] to the associated entity in the request document",
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  }
+                                ]
+                              },
+                              "parameter": {
+                                "description": "a string indicating which URI query parameter caused the error",
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "meta": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "400 - Bad Request": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "404 - Not Found": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "404",
+                          "title": "Not Found"
+                        }
+                      ]
+                    }
+                  },
+                  "500 - Server Error": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "500",
+                          "title": "Internal Server Error"
+                        }
+                      ]
+                    }
+                  },
+                  "Multiple Errors": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        },
+                        {
+                          "id": "b6ad7d24-4dec-4ba0-931c-52731a9469e3",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "pointer": "/data/attributes/name"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
           "default": {
             "description": "Error",
             "content": {
@@ -1849,6 +2489,326 @@
                       "title": "Forbidden"
                     }
                   ]
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Error",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "JSON:API Error Object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "a unique identifier for this particular occurrence of the problem"
+                          },
+                          "links": {
+                            "type": "object",
+                            "description": "links that lead to further detail about the particular occurrence of the problem",
+                            "properties": {
+                              "about": {
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "required": [
+                                      "href"
+                                    ],
+                                    "properties": {
+                                      "href": {
+                                        "type": "string"
+                                      },
+                                      "meta": {
+                                        "type": "object",
+                                        "additionalProperties": true
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "the HTTP status code applicable to this problem"
+                          },
+                          "code": {
+                            "type": "string",
+                            "description": "an application-specific error code"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "a human-readable summary specific of the problem. Usually the http status friendly name."
+                          },
+                          "detail": {
+                            "type": "string",
+                            "description": "a human-readable explanation specific to this occurrence of the problem"
+                          },
+                          "source": {
+                            "type": "object",
+                            "description": "an object containing references to the source of the error",
+                            "properties": {
+                              "pointer": {
+                                "description": "a JSON Pointer [RFC6901] to the associated entity in the request document",
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  }
+                                ]
+                              },
+                              "parameter": {
+                                "description": "a string indicating which URI query parameter caused the error",
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "meta": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "400 - Bad Request": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "404 - Not Found": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "404",
+                          "title": "Not Found"
+                        }
+                      ]
+                    }
+                  },
+                  "500 - Server Error": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "500",
+                          "title": "Internal Server Error"
+                        }
+                      ]
+                    }
+                  },
+                  "Multiple Errors": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        },
+                        {
+                          "id": "b6ad7d24-4dec-4ba0-931c-52731a9469e3",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "pointer": "/data/attributes/name"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Error",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "JSON:API Error Object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "a unique identifier for this particular occurrence of the problem"
+                          },
+                          "links": {
+                            "type": "object",
+                            "description": "links that lead to further detail about the particular occurrence of the problem",
+                            "properties": {
+                              "about": {
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "required": [
+                                      "href"
+                                    ],
+                                    "properties": {
+                                      "href": {
+                                        "type": "string"
+                                      },
+                                      "meta": {
+                                        "type": "object",
+                                        "additionalProperties": true
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "the HTTP status code applicable to this problem"
+                          },
+                          "code": {
+                            "type": "string",
+                            "description": "an application-specific error code"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "a human-readable summary specific of the problem. Usually the http status friendly name."
+                          },
+                          "detail": {
+                            "type": "string",
+                            "description": "a human-readable explanation specific to this occurrence of the problem"
+                          },
+                          "source": {
+                            "type": "object",
+                            "description": "an object containing references to the source of the error",
+                            "properties": {
+                              "pointer": {
+                                "description": "a JSON Pointer [RFC6901] to the associated entity in the request document",
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  }
+                                ]
+                              },
+                              "parameter": {
+                                "description": "a string indicating which URI query parameter caused the error",
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "meta": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "400 - Bad Request": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "404 - Not Found": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "404",
+                          "title": "Not Found"
+                        }
+                      ]
+                    }
+                  },
+                  "500 - Server Error": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "500",
+                          "title": "Internal Server Error"
+                        }
+                      ]
+                    }
+                  },
+                  "Multiple Errors": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        },
+                        {
+                          "id": "b6ad7d24-4dec-4ba0-931c-52731a9469e3",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "pointer": "/data/attributes/name"
+                          }
+                        }
+                      ]
+                    }
+                  }
                 }
               }
             }
@@ -2593,6 +3553,326 @@
               }
             }
           },
+          "406": {
+            "description": "Error",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "JSON:API Error Object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "a unique identifier for this particular occurrence of the problem"
+                          },
+                          "links": {
+                            "type": "object",
+                            "description": "links that lead to further detail about the particular occurrence of the problem",
+                            "properties": {
+                              "about": {
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "required": [
+                                      "href"
+                                    ],
+                                    "properties": {
+                                      "href": {
+                                        "type": "string"
+                                      },
+                                      "meta": {
+                                        "type": "object",
+                                        "additionalProperties": true
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "the HTTP status code applicable to this problem"
+                          },
+                          "code": {
+                            "type": "string",
+                            "description": "an application-specific error code"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "a human-readable summary specific of the problem. Usually the http status friendly name."
+                          },
+                          "detail": {
+                            "type": "string",
+                            "description": "a human-readable explanation specific to this occurrence of the problem"
+                          },
+                          "source": {
+                            "type": "object",
+                            "description": "an object containing references to the source of the error",
+                            "properties": {
+                              "pointer": {
+                                "description": "a JSON Pointer [RFC6901] to the associated entity in the request document",
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  }
+                                ]
+                              },
+                              "parameter": {
+                                "description": "a string indicating which URI query parameter caused the error",
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "meta": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "400 - Bad Request": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "404 - Not Found": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "404",
+                          "title": "Not Found"
+                        }
+                      ]
+                    }
+                  },
+                  "500 - Server Error": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "500",
+                          "title": "Internal Server Error"
+                        }
+                      ]
+                    }
+                  },
+                  "Multiple Errors": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        },
+                        {
+                          "id": "b6ad7d24-4dec-4ba0-931c-52731a9469e3",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "pointer": "/data/attributes/name"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Error",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "JSON:API Error Object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "a unique identifier for this particular occurrence of the problem"
+                          },
+                          "links": {
+                            "type": "object",
+                            "description": "links that lead to further detail about the particular occurrence of the problem",
+                            "properties": {
+                              "about": {
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "required": [
+                                      "href"
+                                    ],
+                                    "properties": {
+                                      "href": {
+                                        "type": "string"
+                                      },
+                                      "meta": {
+                                        "type": "object",
+                                        "additionalProperties": true
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "the HTTP status code applicable to this problem"
+                          },
+                          "code": {
+                            "type": "string",
+                            "description": "an application-specific error code"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "a human-readable summary specific of the problem. Usually the http status friendly name."
+                          },
+                          "detail": {
+                            "type": "string",
+                            "description": "a human-readable explanation specific to this occurrence of the problem"
+                          },
+                          "source": {
+                            "type": "object",
+                            "description": "an object containing references to the source of the error",
+                            "properties": {
+                              "pointer": {
+                                "description": "a JSON Pointer [RFC6901] to the associated entity in the request document",
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  }
+                                ]
+                              },
+                              "parameter": {
+                                "description": "a string indicating which URI query parameter caused the error",
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "meta": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "400 - Bad Request": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "404 - Not Found": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "404",
+                          "title": "Not Found"
+                        }
+                      ]
+                    }
+                  },
+                  "500 - Server Error": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "500",
+                          "title": "Internal Server Error"
+                        }
+                      ]
+                    }
+                  },
+                  "Multiple Errors": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        },
+                        {
+                          "id": "b6ad7d24-4dec-4ba0-931c-52731a9469e3",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "pointer": "/data/attributes/name"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
           "default": {
             "description": "Error",
             "content": {
@@ -3053,6 +4333,326 @@
                       "title": "Forbidden"
                     }
                   ]
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Error",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "JSON:API Error Object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "a unique identifier for this particular occurrence of the problem"
+                          },
+                          "links": {
+                            "type": "object",
+                            "description": "links that lead to further detail about the particular occurrence of the problem",
+                            "properties": {
+                              "about": {
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "required": [
+                                      "href"
+                                    ],
+                                    "properties": {
+                                      "href": {
+                                        "type": "string"
+                                      },
+                                      "meta": {
+                                        "type": "object",
+                                        "additionalProperties": true
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "the HTTP status code applicable to this problem"
+                          },
+                          "code": {
+                            "type": "string",
+                            "description": "an application-specific error code"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "a human-readable summary specific of the problem. Usually the http status friendly name."
+                          },
+                          "detail": {
+                            "type": "string",
+                            "description": "a human-readable explanation specific to this occurrence of the problem"
+                          },
+                          "source": {
+                            "type": "object",
+                            "description": "an object containing references to the source of the error",
+                            "properties": {
+                              "pointer": {
+                                "description": "a JSON Pointer [RFC6901] to the associated entity in the request document",
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  }
+                                ]
+                              },
+                              "parameter": {
+                                "description": "a string indicating which URI query parameter caused the error",
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "meta": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "400 - Bad Request": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "404 - Not Found": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "404",
+                          "title": "Not Found"
+                        }
+                      ]
+                    }
+                  },
+                  "500 - Server Error": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "500",
+                          "title": "Internal Server Error"
+                        }
+                      ]
+                    }
+                  },
+                  "Multiple Errors": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        },
+                        {
+                          "id": "b6ad7d24-4dec-4ba0-931c-52731a9469e3",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "pointer": "/data/attributes/name"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Error",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "JSON:API Error Object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "a unique identifier for this particular occurrence of the problem"
+                          },
+                          "links": {
+                            "type": "object",
+                            "description": "links that lead to further detail about the particular occurrence of the problem",
+                            "properties": {
+                              "about": {
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "required": [
+                                      "href"
+                                    ],
+                                    "properties": {
+                                      "href": {
+                                        "type": "string"
+                                      },
+                                      "meta": {
+                                        "type": "object",
+                                        "additionalProperties": true
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "the HTTP status code applicable to this problem"
+                          },
+                          "code": {
+                            "type": "string",
+                            "description": "an application-specific error code"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "a human-readable summary specific of the problem. Usually the http status friendly name."
+                          },
+                          "detail": {
+                            "type": "string",
+                            "description": "a human-readable explanation specific to this occurrence of the problem"
+                          },
+                          "source": {
+                            "type": "object",
+                            "description": "an object containing references to the source of the error",
+                            "properties": {
+                              "pointer": {
+                                "description": "a JSON Pointer [RFC6901] to the associated entity in the request document",
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  }
+                                ]
+                              },
+                              "parameter": {
+                                "description": "a string indicating which URI query parameter caused the error",
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "meta": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "400 - Bad Request": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "404 - Not Found": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "404",
+                          "title": "Not Found"
+                        }
+                      ]
+                    }
+                  },
+                  "500 - Server Error": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "500",
+                          "title": "Internal Server Error"
+                        }
+                      ]
+                    }
+                  },
+                  "Multiple Errors": {
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "e50d3928-c1f0-4e10-888b-b110734656ab",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "parameter": "id"
+                          }
+                        },
+                        {
+                          "id": "b6ad7d24-4dec-4ba0-931c-52731a9469e3",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "source": {
+                            "pointer": "/data/attributes/name"
+                          }
+                        }
+                      ]
+                    }
+                  }
                 }
               }
             }
