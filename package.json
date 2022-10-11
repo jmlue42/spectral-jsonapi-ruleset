@@ -5,7 +5,7 @@
   "main": "./rules/json-ruleset.yaml",
   "type": "module",
   "scripts": {
-    "test": "./node_modules/.bin/eslint test/ && ./node_modules/.bin/mocha test/*-new.test.js",
+    "test": "./node_modules/.bin/eslint test/ && ./node_modules/.bin/mocha test/*.test.js",
     "lint": "./node_modules/.bin/eslint test/",
     "prepare": "husky install"
   },
