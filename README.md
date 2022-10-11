@@ -15,7 +15,7 @@ Rules and Rulesets are organized by section of the JSON:API specification:
 - Main Sections
   - `./rules/jsonapi-{name-of-section}-ruleset.yaml`
 - Sub Sections
-  - `./rules/jsonapi-{name-of-section}.yaml`
+  - `./rules/jsonapi-{name-of-section}.js`
 
 Each file `extends` rules/rulesets contained in its corresponding subsections.
 
