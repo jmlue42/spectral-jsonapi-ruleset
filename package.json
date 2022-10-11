@@ -21,7 +21,11 @@
     "ruleset",
     "jsonapi"
   ],
-  "author": "",
+  "author": "Jeff Marquez <jmlue42@gmail.com> (https://www.linkedin.com/in/jeffmarquez)",
+  "contributors": [
+      "Ali Fazal",
+      "Ananya Poddar"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/jmlue42/spectral-jsonapi-ruleset/issues"
