@@ -4,5 +4,5 @@
 # *-ruleset.yaml files SHOULD NOT contain any testable items.
 
 extends:
-  - ./rules/jsonapi-content-negotiation-ruleset.yaml
-  - ./rules/jsonapi-document-structure-ruleset.yaml
+  - jsonapi-content-negotiation-ruleset.yaml
+  - jsonapi-document-structure-ruleset.yaml

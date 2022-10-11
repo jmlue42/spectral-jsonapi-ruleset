@@ -2,7 +2,7 @@
   "name": "spectral-jsonapi-ruleset",
   "version": "1.0.0",
   "description": "spectral rules for json:api",
-  "main": "json-ruleset.yaml",
+  "main": "./rules/json-ruleset.yaml",
   "type": "module",
   "scripts": {
     "test": "./node_modules/.bin/eslint test/ && ./node_modules/.bin/mocha test/*-new.test.js",
