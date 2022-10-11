@@ -1,11 +1,11 @@
-'use strict';
+import { expect } from 'chai';
+import { JSONPath } from 'jsonpath-plus';
+import spectralCore from '@stoplight/spectral-core';
+const { Spectral, Document } = spectralCore;
+import Parsers from '@stoplight/spectral-parsers';
 
-const {join} = require('path');
-const {expect} = require('chai');
-const {Spectral, Document, Parsers} = require('@stoplight/spectral');
-const {JSONPath} = require('jsonpath-plus');
-
-const RULESET_FILE = join(__dirname, '../rules/jsonapi-content-negotiation-clients.yaml');
+// rules under test
+import ruleset from '../rules/jsonapi-content-negotiation-clients.js';
 
 describe('jsonapi-content-negotiation-clients ruleset:', function () {
 
@@ -57,7 +57,7 @@ describe('jsonapi-content-negotiation-clients ruleset:', function () {
           }
         }
       };
-      const jsonPathExpression = '$.paths[*].*.requestBody.content';
+      const jsonPathExpression = ruleset.rules['request-content-type'].given;
       const expectedPaths = [
         doc.paths['/junk'].patch.requestBody.content,
         doc.paths['/stuff'].patch.requestBody.content
@@ -74,32 +74,33 @@ describe('jsonapi-content-negotiation-clients ruleset:', function () {
     it('the rule should return "request-content-type" errors if request content-type is not JSON:API', function (done) {
 
       const badDocument = new Document(`
-                openapi: 3.0.2
-                paths:
-                  /junk:
-                    patch:
-                      requestBody:
-                        content:
-                          application/vnd.api+json:
-                            schema:
-                              type: string
-                          application/json:
-                            schema:
-                              type: string
-            `, Parsers.Yaml);
+        openapi: 3.0.2
+        paths:
+          /junk:
+            patch:
+              requestBody:
+                content:
+                  application/vnd.api+json:
+                    schema:
+                      type: string
+                  application/json:
+                    schema:
+                      type: string
+      `, Parsers.Yaml);
 
-      spectral.loadRuleset(RULESET_FILE)
-        .then(() => {
-
-          return spectral.run(badDocument);
-
-        })
+      spectral.setRuleset(ruleset);
+      spectral.run(badDocument)
         .then((results) => {
-
+          
           expect(results.length).to.equal(1, 'Error count should be 1');
           expect(results[0].code).to.equal('request-content-type', 'Incorrect error');
           expect(results[0].path.join('/')).to.equal('paths//junk/patch/requestBody/content/application/json', 'Wrong path');
           done();
+
+        })
+        .catch((error) => {
+
+          done(error);
 
         });
 
@@ -108,32 +109,33 @@ describe('jsonapi-content-negotiation-clients ruleset:', function () {
     it('the rule should pass with NO errors', function (done) {
 
       const cleanDocument = new Document(`
-            openapi: 3.0.2
-            paths:
-              /stuff:
-                patch:
-                  requestBody:
-                    content:
-                      application/vnd.api+json:
-                        schema:
-                          type: string
-            `, Parsers.Yaml);
+        openapi: 3.0.2
+        paths:
+          /stuff:
+            patch:
+              requestBody:
+                content:
+                  application/vnd.api+json:
+                    schema:
+                      type: string
+      `, Parsers.Yaml);
 
-      spectral.loadRuleset(RULESET_FILE)
-        .then(() => {
-
-          return spectral.run(cleanDocument);
-
-        })
+      spectral.setRuleset(ruleset);
+      spectral.run(cleanDocument)
         .then((results) => {
-
+          
           expect(results.length).to.equal(0, 'Error(s) found');
           done();
+
+        })
+        .catch((error) => {
+
+          done(error);
 
         });
 
     });
 
   });
-
+  
 });

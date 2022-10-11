@@ -6,3 +6,6 @@ extends:
   - plugin:mocha/recommended
 rules:
   func-names: 'off'
+  spaced-comment:
+    - error 
+    - always
