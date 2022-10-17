@@ -19,7 +19,7 @@ describe('jsonapi-document-structure-resource-identifier-object ruleset:', funct
 
   describe('relationships-data:', function () {
 
-    it('the json path expression should find the correct paths from the given document', function (done) {
+    it.skip('the json path expression should find the correct paths from the given document', function (done) {
 
       const doc = {
         'openapi': '3.0.2',
@@ -273,7 +273,7 @@ describe('jsonapi-document-structure-resource-identifier-object ruleset:', funct
 
   describe('relationships-data-allow-meta:', function () {
 
-    it('the json path expression should find the correct paths from the given document', function (done) {
+    it.skip('the json path expression should find the correct paths from the given document', function (done) {
 
       const doc = {
         'openapi': '3.0.2',

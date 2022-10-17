@@ -2,40 +2,328 @@
 
 // All rules in this file MUST have corresponding tests
 
-import { enumeration, truthy } from '@stoplight/spectral-functions';
+import { schema, enumeration } from '@stoplight/spectral-functions';
 import { DiagnosticSeverity } from '@stoplight/types';
 
 export default {
   documentationUrl: 'https://jsonapi.org/format/1.0/#document-resource-identifier-objects',
   rules: {
-    'relationships-data': {
-      description: '\'relationships..data\' properties MUST be an object or an array of objects with a min schema ',
+
+    // explicitly defined
+    'relationships-data-object-explicit': {
+      description: '\'relationships..data\' properties MUST be an object or an array of objects with an id and type property',
       message: '{{path}} - {{description}}',
       severity: DiagnosticSeverity.Error,
-      given: "$..*[?(@property === 'relationships')]..properties.data",
+      resolved: true,
+      given: "$..*[?(@property === 'relationships')]..properties.data[?(@property === 'type' && (@ === 'object' || @ === 'array'))]^",
       then: [
         {
-          field: 'type',
-          function: enumeration,
+          function: schema,
           functionOptions: {
-            values: ['object', 'array']
-          }
-        },
-        {
-          field: 'required',
-          function: truthy
-        },
-        {
-          field: 'required',
-          function: enumeration,
-          functionOptions: {
-            values: ['id', 'type']
+            schema: {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "required": {
+                      "type": "array",
+                      "items": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "properties": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string"
+                            },
+                            "pattern": {
+                              "type": "string"
+                            },
+                            "example": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "type"
+                          ]
+                        },
+                        "type": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string"
+                            },
+                            "enum": {
+                              "type": "array",
+                              "items": [
+                                {
+                                  "type": "string"
+                                }
+                              ]
+                            }
+                          },
+                          "required": [
+                            "type"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "required",
+                    "properties"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        },
+                        "required": {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "properties": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "type"
+                              ]
+                            },
+                            "type": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "type"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "type"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "required",
+                        "properties"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "items"
+                  ]
+                }
+              ]
+            }
           }
         }
       ]
     },
-    'relationships-data-allow-meta': {
-      description: 'Resource Identifier Objects MUST have id and type fields with an optional meta object',
+
+    // composed using allOf
+    'relationships-data-object-composed': {
+      description: '\'relationships..data\' properties MUST be an object or an array of objects with an id and type property',
+      message: '{{path}} - {{description}}',
+      severity: DiagnosticSeverity.Error,
+      resolved: true,
+      given: "$..*[?(@property === 'relationships')]..properties.data.allOf",
+      then: [
+        {
+          function: schema,
+          functionOptions: {
+            schema: {
+              "contains": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string"
+                      },
+                      "required": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "string"
+                          }
+                        ]
+                      },
+                      "properties": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string"
+                              },
+                              "pattern": {
+                                "type": "string"
+                              },
+                              "example": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "type"
+                            ]
+                          },
+                          "type": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string"
+                              },
+                              "enum": {
+                                "type": "array",
+                                "items": [
+                                  {
+                                    "type": "string"
+                                  }
+                                ]
+                              }
+                            },
+                            "required": [
+                              "type"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "type"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "required",
+                      "properties"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string"
+                      },
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string"
+                          },
+                          "required": {
+                            "type": "array",
+                            "items": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "string"
+                              }
+                            ]
+                          },
+                          "properties": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "type"
+                                ]
+                              },
+                              "type": {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "type"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "type"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "required",
+                          "properties"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "items"
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    'relationships-data-allowed-fields': {
+      description: 'Resource Identifier Objects MAY only contain id, type, and meta fields',
       message: '{{path}} - {{description}}',
       severity: DiagnosticSeverity.Error,
       given: "$..*[?(@property === 'relationships')]..properties.data..properties",
