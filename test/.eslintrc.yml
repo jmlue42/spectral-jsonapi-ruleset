@@ -9,3 +9,4 @@ rules:
   spaced-comment:
     - error 
     - always
+  max-statements: off

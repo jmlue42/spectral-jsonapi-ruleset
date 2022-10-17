@@ -21,141 +21,141 @@ export default {
           function: schema,
           functionOptions: {
             schema: {
-              "oneOf": [
+              'oneOf': [
                 {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string"
+                  'type': 'object',
+                  'properties': {
+                    'type': {
+                      'type': 'string'
                     },
-                    "required": {
-                      "type": "array",
-                      "items": [
+                    'required': {
+                      'type': 'array',
+                      'items': [
                         {
-                          "type": "string"
+                          'type': 'string'
                         },
                         {
-                          "type": "string"
+                          'type': 'string'
                         }
                       ]
                     },
-                    "properties": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string"
+                    'properties': {
+                      'type': 'object',
+                      'properties': {
+                        'id': {
+                          'type': 'object',
+                          'properties': {
+                            'type': {
+                              'type': 'string'
                             },
-                            "pattern": {
-                              "type": "string"
+                            'pattern': {
+                              'type': 'string'
                             },
-                            "example": {
-                              "type": "string"
+                            'example': {
+                              'type': 'string'
                             }
                           },
-                          "required": [
-                            "type"
+                          'required': [
+                            'type'
                           ]
                         },
-                        "type": {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string"
+                        'type': {
+                          'type': 'object',
+                          'properties': {
+                            'type': {
+                              'type': 'string'
                             },
-                            "enum": {
-                              "type": "array",
-                              "items": [
+                            'enum': {
+                              'type': 'array',
+                              'items': [
                                 {
-                                  "type": "string"
+                                  'type': 'string'
                                 }
                               ]
                             }
                           },
-                          "required": [
-                            "type"
+                          'required': [
+                            'type'
                           ]
                         }
                       },
-                      "required": [
-                        "id",
-                        "type"
+                      'required': [
+                        'id',
+                        'type'
                       ]
                     }
                   },
-                  "required": [
-                    "type",
-                    "required",
-                    "properties"
+                  'required': [
+                    'type',
+                    'required',
+                    'properties'
                   ]
                 },
                 {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string"
+                  'type': 'object',
+                  'properties': {
+                    'type': {
+                      'type': 'string'
                     },
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "type": {
-                          "type": "string"
+                    'items': {
+                      'type': 'object',
+                      'properties': {
+                        'type': {
+                          'type': 'string'
                         },
-                        "required": {
-                          "type": "array",
-                          "items": [
+                        'required': {
+                          'type': 'array',
+                          'items': [
                             {
-                              "type": "string"
+                              'type': 'string'
                             },
                             {
-                              "type": "string"
+                              'type': 'string'
                             }
                           ]
                         },
-                        "properties": {
-                          "type": "object",
-                          "properties": {
-                            "id": {
-                              "type": "object",
-                              "properties": {
-                                "type": {
-                                  "type": "string"
+                        'properties': {
+                          'type': 'object',
+                          'properties': {
+                            'id': {
+                              'type': 'object',
+                              'properties': {
+                                'type': {
+                                  'type': 'string'
                                 }
                               },
-                              "required": [
-                                "type"
+                              'required': [
+                                'type'
                               ]
                             },
-                            "type": {
-                              "type": "object",
-                              "properties": {
-                                "type": {
-                                  "type": "string"
+                            'type': {
+                              'type': 'object',
+                              'properties': {
+                                'type': {
+                                  'type': 'string'
                                 }
                               },
-                              "required": [
-                                "type"
+                              'required': [
+                                'type'
                               ]
                             }
                           },
-                          "required": [
-                            "id",
-                            "type"
+                          'required': [
+                            'id',
+                            'type'
                           ]
                         }
                       },
-                      "required": [
-                        "type",
-                        "required",
-                        "properties"
+                      'required': [
+                        'type',
+                        'required',
+                        'properties'
                       ]
                     }
                   },
-                  "required": [
-                    "type",
-                    "items"
+                  'required': [
+                    'type',
+                    'items'
                   ]
                 }
               ]
@@ -177,142 +177,142 @@ export default {
           function: schema,
           functionOptions: {
             schema: {
-              "contains": {
-                "oneOf": [
+              'contains': {
+                'oneOf': [
                   {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "type": "string"
+                    'type': 'object',
+                    'properties': {
+                      'type': {
+                        'type': 'string'
                       },
-                      "required": {
-                        "type": "array",
-                        "items": [
+                      'required': {
+                        'type': 'array',
+                        'items': [
                           {
-                            "type": "string"
+                            'type': 'string'
                           },
                           {
-                            "type": "string"
+                            'type': 'string'
                           }
                         ]
                       },
-                      "properties": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "object",
-                            "properties": {
-                              "type": {
-                                "type": "string"
+                      'properties': {
+                        'type': 'object',
+                        'properties': {
+                          'id': {
+                            'type': 'object',
+                            'properties': {
+                              'type': {
+                                'type': 'string'
                               },
-                              "pattern": {
-                                "type": "string"
+                              'pattern': {
+                                'type': 'string'
                               },
-                              "example": {
-                                "type": "string"
+                              'example': {
+                                'type': 'string'
                               }
                             },
-                            "required": [
-                              "type"
+                            'required': [
+                              'type'
                             ]
                           },
-                          "type": {
-                            "type": "object",
-                            "properties": {
-                              "type": {
-                                "type": "string"
+                          'type': {
+                            'type': 'object',
+                            'properties': {
+                              'type': {
+                                'type': 'string'
                               },
-                              "enum": {
-                                "type": "array",
-                                "items": [
+                              'enum': {
+                                'type': 'array',
+                                'items': [
                                   {
-                                    "type": "string"
+                                    'type': 'string'
                                   }
                                 ]
                               }
                             },
-                            "required": [
-                              "type"
+                            'required': [
+                              'type'
                             ]
                           }
                         },
-                        "required": [
-                          "id",
-                          "type"
+                        'required': [
+                          'id',
+                          'type'
                         ]
                       }
                     },
-                    "required": [
-                      "type",
-                      "required",
-                      "properties"
+                    'required': [
+                      'type',
+                      'required',
+                      'properties'
                     ]
                   },
                   {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "type": "string"
+                    'type': 'object',
+                    'properties': {
+                      'type': {
+                        'type': 'string'
                       },
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "type": {
-                            "type": "string"
+                      'items': {
+                        'type': 'object',
+                        'properties': {
+                          'type': {
+                            'type': 'string'
                           },
-                          "required": {
-                            "type": "array",
-                            "items": [
+                          'required': {
+                            'type': 'array',
+                            'items': [
                               {
-                                "type": "string"
+                                'type': 'string'
                               },
                               {
-                                "type": "string"
+                                'type': 'string'
                               }
                             ]
                           },
-                          "properties": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "object",
-                                "properties": {
-                                  "type": {
-                                    "type": "string"
+                          'properties': {
+                            'type': 'object',
+                            'properties': {
+                              'id': {
+                                'type': 'object',
+                                'properties': {
+                                  'type': {
+                                    'type': 'string'
                                   }
                                 },
-                                "required": [
-                                  "type"
+                                'required': [
+                                  'type'
                                 ]
                               },
-                              "type": {
-                                "type": "object",
-                                "properties": {
-                                  "type": {
-                                    "type": "string"
+                              'type': {
+                                'type': 'object',
+                                'properties': {
+                                  'type': {
+                                    'type': 'string'
                                   }
                                 },
-                                "required": [
-                                  "type"
+                                'required': [
+                                  'type'
                                 ]
                               }
                             },
-                            "required": [
-                              "id",
-                              "type"
+                            'required': [
+                              'id',
+                              'type'
                             ]
                           }
                         },
-                        "required": [
-                          "type",
-                          "required",
-                          "properties"
+                        'required': [
+                          'type',
+                          'required',
+                          'properties'
                         ]
                       }
                     },
-                    "required": [
-                      "type",
-                      "items"
+                    'required': [
+                      'type',
+                      'items'
                     ]
                   }
                 ]
