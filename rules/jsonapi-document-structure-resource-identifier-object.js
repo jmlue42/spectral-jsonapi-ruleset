@@ -171,7 +171,7 @@ export default {
       message: '{{path}} - {{description}}',
       severity: DiagnosticSeverity.Error,
       resolved: true,
-      given: "$..*[?(@property === 'relationships')]..properties.data.allOf",
+      given: "$..*[?(@property === 'relationships')]..properties.data..allOf",
       then: [
         {
           function: schema,
