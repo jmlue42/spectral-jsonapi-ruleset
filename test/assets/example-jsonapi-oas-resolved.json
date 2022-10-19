@@ -191,35 +191,22 @@
                                         }
                                       },
                                       "data": {
-                                        "allOf": [
-                                          {
-                                            "type": "object",
-                                            "required": [
-                                              "id",
-                                              "type"
-                                            ],
-                                            "properties": {
-                                              "id": {
-                                                "type": "string",
-                                                "pattern": "^([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[afA-F0-9]{4}-[a-fA-F0-9]{12}){1}$",
-                                                "example": "2357c52f-6c78-4747-8106-e185c08143aa"
-                                              },
-                                              "type": {
-                                                "type": "string"
-                                              }
-                                            }
+                                        "type": "object",
+                                        "required": ["id", "type"],
+                                        "properties": {
+                                          "id":{
+                                            "type":"string",
+                                            "pattern":"^([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[afA-F0-9]{4}-[a-fA-F0-9]{12}){1}$",
+                                            "example":"2357c52f-6c78-4747-8106-e185c08143aa"
                                           },
-                                          {
-                                            "type": "object",
-                                            "properties": {
-                                              "type": {
-                                                "enum": [
-                                                  "manufacturers"
-                                                ]
-                                              }
-                                            }
+                                          "type":{
+                                            "type":"string",
+                                            "enum":["manufacturers"]
+                                          },
+                                          "meta": {
+                                            "type": "object"
                                           }
-                                        ]
+                                        }
                                       }
                                     }
                                   }

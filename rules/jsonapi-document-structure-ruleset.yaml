@@ -7,7 +7,7 @@
 extends:
   - jsonapi-document-structure-top-level.js
   # - jsonapi-document-structure-resource-object-ruleset.yaml
-  # - jsonapi-document-structure-resource-identifier-object.js
+  - jsonapi-document-structure-resource-identifier-object.js
   # - jsonapi-document-structure-compound-document.js
   - jsonapi-document-structure-meta-information.js
   - jsonapi-document-structure-links.js
