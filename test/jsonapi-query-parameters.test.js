@@ -1,5 +1,7 @@
 import { expect } from 'chai';
 import spectralCore from '@stoplight/spectral-core';
+import { DiagnosticSeverity } from '@stoplight/types';
+
 const { Spectral } = spectralCore;
 
 // rules under test
