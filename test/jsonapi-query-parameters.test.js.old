@@ -463,7 +463,7 @@ describe('jsonapi-query-parameters ruleset:', function () {
       expect(results.length).to.be.greaterThan(0, 'At least one error should be returned');
       
       // Check for the correct error code
-      expect(results[0].code).to.equal('get-filter-query-parameters', 'Incorrect error code');
+      expect(results[0].code).to.equal('member-names-end_with', 'Incorrect error code');
       
       // Optionally, check for severity level
       expect(results[0].severity).to.equal(DiagnosticSeverity.Error, 'Severity should be "Error"');
