@@ -155,7 +155,7 @@ describe('jsonapi-query-parameters ruleset:', function () {
       expect(results.length).to.be.greaterThan(0, 'Error count should be greater than 0');
 
       // Check for severity
-      expect(result[0].severity).to.equal(DiagnosticSeverity.Error);
+      expect(results[0].severity).to.equal(DiagnosticSeverity.Error);
     } catch (error) {
       throw new Error(error);
     }
