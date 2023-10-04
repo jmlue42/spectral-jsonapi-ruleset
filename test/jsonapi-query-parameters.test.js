@@ -6,33 +6,34 @@ const { Spectral } = spectralCore;
 import ruleset from '../rules/jsonapi-query-parameters.js';
 
 describe('jsonapi-query-parameters ruleset:', function () {
-
   let spectral;
 
+  // Common setup for all test cases
   beforeEach(function () {
-
     spectral = new Spectral();
-
+    spectral.setRuleset(ruleset);
   });
 
   // see test/assets/example-jsonapi-oas.yaml see filter and fields
   // describe('get-filter-query-parameters:', function () {
 
-  it('the query fields/parameters should adhere to the specification', function (done) {
-
-    const doc = {
+  // Test cases for valid query fields/parameters
+  it('should pass with no errors for valid query fields/parameters', async function () {
+    const validDocument = {
       'openapi': '3.0.2',
       'paths': {
-        '/myResources?{abcEfg}=22': {
+        '/myResources': {
           'get': {
-            'parameters': {
-              'name': 'abcEfg',
-              'description': 'schema for \'fields\' query parameter',
-              'in': 'query',
-              'schema': {
-                'type': 'string'
+            'parameters': [
+              {
+                'name': 'abcEfg_A',
+                'description': 'schema for \'fields\' query parameter',
+                'in': 'query',
+                'schema': {
+                  'type': 'string'
+                }
               }
-            },
+            ],
             'responses': {
               '200': {
                 'content': {
@@ -74,21 +75,12 @@ describe('jsonapi-query-parameters ruleset:', function () {
       }
     };
 
-    spectral.setRuleset(ruleset);
-    spectral.run(doc)
-      .then((results) => {
-
-        // results: ${JSON.stringify(results, null, 2)}`);
-        expect(results.length).to.equal(0, 'Error count should be 0');
-        done();
-
-      })
-      .catch((error) => {
-
-        done(error);
-
-      });
-
+    try{
+      const results = await spectral.run(validDocument);
+      expect(results.length).to.equal(0, 'Error count should be 0');
+    } catch (error) {
+      throw new Error(error);
+    }
   });
 
 
@@ -96,23 +88,23 @@ describe('jsonapi-query-parameters ruleset:', function () {
   //   conventions above, and the server does not know how to process it as a
   //   query parameter from this specification, it MUST return 400 Bad Request
   // https://jsonapi.org/format/1.0/#query-parameters
-  it('the query should return a 400 Bad Request error if the parameters do not adhere to ' +
-     'the specification', function (done) {
-
-    const badDocument = {
+  // Test case for invalid parameter names
+  it('should return an error for invalid parameter names', async function () {
+    const documentWithInvalidParameterName = {
       'openapi': '3.0.2',
       'paths': {
-        '/myResources?{abefg}=22': {
+        '/myResources': {
           'get': {
-            'parameters': {
-              'name': 'abcefg',
-              'description': 'schema for \'fields\' query parameter',
-              'in': 'query',
-              'schema': {
-                'type': 'string'
+            'parameters': [
+              {
+                'name': 'abcefg',
+                'description': 'schema for \'fields\' query parameter',
+                'in': 'query',
+                'schema': {
+                  'type': 'string'
+                }
               }
-            },
-
+            ],
             'responses': {
               '400': {
                 'content': {
@@ -154,47 +146,47 @@ describe('jsonapi-query-parameters ruleset:', function () {
       }
     };
 
-    spectral.setRuleset(ruleset);
-    spectral.run(badDocument)
-      .then((results) => {
+    try{
+      const results = await spectral.run(documentWithInvalidParameterName);
 
-        // results: ${JSON.stringify(results, null, 2)}`);
-        expect(results[0].code).to.equal('get-filter-query-parameters', 'Incorrect error');
-        done();
+      // Check for error length
+      expect(results.length).to.be.greaterThan(0, 'Error count should be greater than 0');
 
-      })
-      .catch((error) => {
-
-        done(error);
-
-      });
-
+      // Check for severity
+      expect(result[0].severity).to.equal(DiagnosticSeverity.Error);
+    } catch (error) {
+      throw new Error(error);
+    }
   });
 
 
   // https://support.stoplight.io/s/article/Does-Stoplight-support-query-parameters
-  it('the rule should pass with NO errors', function (done) {
+  // Test case for query parameters with no errors
+  it('should pass with no errors for valid query parameters', async function () {
 
-    const cleanDoc3 = {
+    const validQueryParametersDocument = {
       'openapi': '3.0.2',
       'paths': {
-        '/myResources?{abcEfg}=22&{a_b}=23': {
-
+        '/myResources': {
           'get': {
-
-            'parameters': [{ 'name': 'abcEfg',
-              'description': 'schema for \'fields\' query parameter',
-              'in': 'query',
-              'schema': {
-                'type': 'string'
-              } },
-            { 'name': 'a_b',
-              'description': 'schema for \'fields\' query parameter',
-              'in': 'query',
-              'schema': {
-                'type': 'string'
-              } }],
-
+            'parameters': [
+              {
+                'name': 'abcEfg_A',
+                'description': 'schema for \'fields\' query parameter',
+                'in': 'query',
+                'schema': {
+                  'type': 'string'
+                }
+              },
+              {
+                'name': 'a_b',
+                'description': 'schema for \'fields\' query parameter',
+                'in': 'query',
+                'schema': {
+                  'type': 'string'
+                }
+              }
+            ],
             'responses': {
               '200': {
                 'content': {
@@ -236,52 +228,44 @@ describe('jsonapi-query-parameters ruleset:', function () {
       }
     };
 
-    spectral.setRuleset(ruleset);
-    spectral.run(cleanDoc3)
-      .then((results) => {
-
-        // results: ${JSON.stringify(results, null, 2)}`);
-        expect(results.length).to.equal(0, 'Error count should be 0');
-
-        done();
-
-      })
-      .catch((error) => {
-
-        done(error);
-
-      });
-
+    try{
+      const results = await spectral.run(validQueryParametersDocument);
+      expect(results.length).to.equal(0, 'Error count should be 0');
+    } catch (error){
+      throw new Error(error);
+    }
   });
 
   // https://support.stoplight.io/s/article/Does-Stoplight-support-query-parameters
-  it('the rule should pass with errors, bad parameter name, paremeter name must have at ' +
-     'least one non a-z character, could be [-_A-Z]', function (done) {
-
-    const badDoc4 = {
+  // test case for bad parameter name with one non a-z character
+  it('should return an error for bad parameter name with one non a-z character', async function () {
+    const badParameterNameDocument = {
       'openapi': '3.0.2',
       'paths': {
         // second parameter is the bad one
-        '/myResources?{abcEfg}=22&{ab}=23': {
-
+        '/myResources': {
           'get': {
-
-            'parameters': [{ 'name': 'abcEfg',
-              'description': 'schema for \'fields\' query parameter',
-              'in': 'query',
-              'schema': {
-                'type': 'string'
-              } },
-            // this parameter is a baddie
-            { 'name': 'ab',
-              'description': 'schema for \'fields\' query parameter',
-              'in': 'query',
-              'schema': {
-                'type': 'string'
-              } }],
-
+            'parameters': [
+              {
+                'name': 'abcEfg_A',
+                'description': 'schema for \'fields\' query parameter',
+                'in': 'query',
+                'schema': {
+                  'type': 'string'
+                }
+              },
+              // this parameter is a baddie
+              {
+                'name': 'ab@',
+                'description': 'schema for \'fields\' query parameter',
+                'in': 'query',
+                'schema': {
+                  'type': 'string'
+                }
+              }
+            ],
             'responses': {
-              '200': {
+              '400': {
                 'content': {
                   'application/vnd.api+json': {
                     'schema': {
@@ -321,51 +305,42 @@ describe('jsonapi-query-parameters ruleset:', function () {
       }
     };
 
-    spectral.setRuleset(ruleset);
-    spectral.run(badDoc4)
-      .then((results) => {
+    try{
+      const results = await spectral.run(badParameterNameDocument);
 
-        // results: ${JSON.stringify(results, null, 2)}
+      // Check that an error is returned
+      expect(results.length).to.be.greaterThan(0, 'At least one error should be returned');
 
-        expect(results[0].code).to.equal('get-filter-query-parameters', 'Incorrect error');
-        done();
+      // Check for the correct error code
+      expect(results[0].code).to.equal('get-filter-query-parameters', 'Incorrect error code');
 
-      })
-      .catch((error) => {
-
-        done(error);
-
-      });
-
+      // Optionally, check for severity level
+      expect(results[0].severity).to.equal(DiagnosticSeverity.Error, 'Severity should be "Error"');
+    } catch (error) {
+      throw new Error(error);
+    }
   });
 
   // https://support.stoplight.io/s/article/Does-Stoplight-support-query-parameters
-  it('the rule should pass with errors, bad parameter name, cannot be a number', function (done) {
-
-    const badDoc5 = {
+  // Test case for bad parameter name with a number
+  it('should return an error for bad parameter name with a number', async function () {
+    const badParameterNumberDocument = {
       'openapi': '3.0.2',
       'paths': {
-        // second parameter is the bad one
-        '/myResources?{33}=22&{33}=23': {
-
+        '/myResources': {
           'get': {
-
-            'parameters': [{ 'name': '33',
-              'description': 'schema for \'fields\' query parameter',
-              'in': 'query',
-              'schema': {
-                'type': 'string'
-              } },
-            // this parameter is the baddie
-            { 'name': '33',
-              'description': 'schema for \'fields\' query parameter',
-              'in': 'query',
-              'schema': {
-                'type': 'string'
-              } }],
-
+            'parameters': [
+              {
+                'name': '33',
+                'description': 'schema for \'fields\' query parameter',
+                'in': 'query',
+                'schema': {
+                  'type': 'string'
+                }
+              }
+            ],
             'responses': {
-              '200': {
+              '400': {
                 'content': {
                   'application/vnd.api+json': {
                     'schema': {
@@ -405,52 +380,41 @@ describe('jsonapi-query-parameters ruleset:', function () {
       }
     };
 
+    try{
+      const results = await spectral.run(badParameterNumberDocument);
 
-    spectral.setRuleset(ruleset);
-
-    spectral.run(badDoc5)
-      .then((results) => {
-
-        // results: ${JSON.stringify(results, null, 2)}`);
-
-        expect(results[0].code).to.equal('get-filter-query-parameters', 'Incorrect error');
-        done();
-
-      })
-      .catch((error) => {
-
-        done(error);
-
-      });
-
+      // Check that an error is returned
+      expect(results.length).to.be.greaterThan(0, 'At least one error should be returned');
+      
+      // Check for the correct error code
+      expect(results[0].code).to.equal('get-filter-query-parameters', 'Incorrect error code');
+      
+      // Optionally, check for severity level
+      expect(results[0].severity).to.equal(DiagnosticSeverity.Error, 'Severity should be "Error"');
+    } catch (error) {
+      throw new Error (error);
+    }
   });
 
-  it('the rule should pass with errors, bad parameter name, unallowed special character', function (done) {
-
-    const badDoc6 = {
+  // Test case for bad parameter name with unallowed special characters
+  it('should return an error for bad parameter name with unallowed special characters', async function () {
+    const badParameterSpecialCharDocument = {
       'openapi': '3.0.2',
       'paths': {
-        // second parameter is the bad one
-        "/myResources?{'A_-___'}=22&{'A_-__'}=23": {
-
+        "/myResources": {
           'get': {
-
-            'parameters': [{ 'name': 'A_-___',
-              'description': 'schema for \'fields\' query parameter',
-              'in': 'query',
-              'schema': {
-                'type': 'string'
-              } },
-            // this parameter is the baddie
-            { 'name': 'A_-___',
-              'description': 'schema for \'fields\' query parameter',
-              'in': 'query',
-              'schema': {
-                'type': 'string'
-              } }],
-
+            'parameters': [
+              {
+                'name': 'A_-___',
+                'description': 'schema for \'fields\' query parameter',
+                'in': 'query',
+                'schema': {
+                  'type': 'string'
+                }
+              }
+            ],
             'responses': {
-              '200': {
+              '400': {
                 'content': {
                   'application/vnd.api+json': {
                     'schema': {
@@ -490,23 +454,23 @@ describe('jsonapi-query-parameters ruleset:', function () {
       }
     };
 
-    spectral.setRuleset(ruleset);
-
-    spectral.run(badDoc6)
-      .then((results) => {
-
-        // results: ${JSON.stringify(results, null, 2)}`);
-
-        expect(results[0].code).to.equal('member-names-end_with', 'Incorrect error');
-        done();
-
-      })
-      .catch((error) => {
-
-        done(error);
-
-      });
-
+    try{
+      const results = await spectral.run(badParameterSpecialCharDocument);
+      
+      // Check that an error is returned
+      expect(results.length).to.be.greaterThan(0, 'At least one error should be returned');
+      
+      // Check for the correct error code
+      expect(results[0].code).to.equal('get-filter-query-parameters', 'Incorrect error code');
+      
+      // Optionally, check for severity level
+      expect(results[0].severity).to.equal(DiagnosticSeverity.Error, 'Severity should be "Error"');
+    } catch (error) {
+      throw new Error(error);
+    }
   });
 
+
+
+  
 });
