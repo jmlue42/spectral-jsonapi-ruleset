@@ -8,12 +8,15 @@ const { Spectral } = spectralCore;
 import ruleset from '../rules/jsonapi-query-parameters.js';
 
 describe('jsonapi-query-parameters ruleset:', function () {
+
   let spectral;
 
   // Common setup for all test cases
   beforeEach(function () {
+
     spectral = new Spectral();
     spectral.setRuleset(ruleset);
+  
   });
 
   // see test/assets/example-jsonapi-oas.yaml see filter and fields
@@ -21,6 +24,7 @@ describe('jsonapi-query-parameters ruleset:', function () {
 
   // Test cases for valid query fields/parameters
   it('should pass with no errors for valid query fields/parameters', async function () {
+
     const validDocument = {
       'openapi': '3.0.2',
       'paths': {
@@ -77,12 +81,17 @@ describe('jsonapi-query-parameters ruleset:', function () {
       }
     };
 
-    try{
+    try {
+
       const results = await spectral.run(validDocument);
       expect(results.length).to.equal(0, 'Error count should be 0');
+    
     } catch (error) {
+
       throw new Error(error);
+    
     }
+  
   });
 
 
@@ -92,6 +101,7 @@ describe('jsonapi-query-parameters ruleset:', function () {
   // https://jsonapi.org/format/1.0/#query-parameters
   // Test case for invalid parameter names
   it('should return an error for invalid parameter names', async function () {
+
     const documentWithInvalidParameterName = {
       'openapi': '3.0.2',
       'paths': {
@@ -148,7 +158,8 @@ describe('jsonapi-query-parameters ruleset:', function () {
       }
     };
 
-    try{
+    try {
+
       const results = await spectral.run(documentWithInvalidParameterName);
 
       // Check for error length
@@ -156,9 +167,13 @@ describe('jsonapi-query-parameters ruleset:', function () {
 
       // Check for severity
       expect(results[0].severity).to.equal(DiagnosticSeverity.Error);
+    
     } catch (error) {
+
       throw new Error(error);
+    
     }
+  
   });
 
 
@@ -230,17 +245,23 @@ describe('jsonapi-query-parameters ruleset:', function () {
       }
     };
 
-    try{
+    try {
+
       const results = await spectral.run(validQueryParametersDocument);
       expect(results.length).to.equal(0, 'Error count should be 0');
-    } catch (error){
+    
+    } catch (error) {
+
       throw new Error(error);
+    
     }
+  
   });
 
   // https://support.stoplight.io/s/article/Does-Stoplight-support-query-parameters
   // test case for bad parameter name with one non a-z character
   it('should return an error for bad parameter name with one non a-z character', async function () {
+
     const badParameterNameDocument = {
       'openapi': '3.0.2',
       'paths': {
@@ -307,7 +328,8 @@ describe('jsonapi-query-parameters ruleset:', function () {
       }
     };
 
-    try{
+    try {
+
       const results = await spectral.run(badParameterNameDocument);
 
       // Check that an error is returned
@@ -318,14 +340,19 @@ describe('jsonapi-query-parameters ruleset:', function () {
 
       // Optionally, check for severity level
       expect(results[0].severity).to.equal(DiagnosticSeverity.Error, 'Severity should be "Error"');
+    
     } catch (error) {
+
       throw new Error(error);
+    
     }
+  
   });
 
   // https://support.stoplight.io/s/article/Does-Stoplight-support-query-parameters
   // Test case for bad parameter name with a number
   it('should return an error for bad parameter name with a number', async function () {
+
     const badParameterNumberDocument = {
       'openapi': '3.0.2',
       'paths': {
@@ -382,7 +409,8 @@ describe('jsonapi-query-parameters ruleset:', function () {
       }
     };
 
-    try{
+    try {
+
       const results = await spectral.run(badParameterNumberDocument);
 
       // Check that an error is returned
@@ -393,17 +421,22 @@ describe('jsonapi-query-parameters ruleset:', function () {
       
       // Optionally, check for severity level
       expect(results[0].severity).to.equal(DiagnosticSeverity.Error, 'Severity should be "Error"');
+    
     } catch (error) {
-      throw new Error (error);
+
+      throw new Error(error);
+    
     }
+  
   });
 
   // Test case for bad parameter name with unallowed special characters
   it('should return an error for bad parameter name with unallowed special characters', async function () {
+
     const badParameterSpecialCharDocument = {
       'openapi': '3.0.2',
       'paths': {
-        "/myResources": {
+        '/myResources': {
           'get': {
             'parameters': [
               {
@@ -456,7 +489,8 @@ describe('jsonapi-query-parameters ruleset:', function () {
       }
     };
 
-    try{
+    try {
+
       const results = await spectral.run(badParameterSpecialCharDocument);
       
       // Check that an error is returned
@@ -467,12 +501,14 @@ describe('jsonapi-query-parameters ruleset:', function () {
       
       // Optionally, check for severity level
       expect(results[0].severity).to.equal(DiagnosticSeverity.Error, 'Severity should be "Error"');
+    
     } catch (error) {
+
       throw new Error(error);
+    
     }
+  
   });
-
-
 
   
 });
