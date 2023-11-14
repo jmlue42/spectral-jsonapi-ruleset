@@ -20,32 +20,34 @@ export default {
       description: 'Error objects must be returned in an array under `errors` key.',
       message: '{{path}} - {{description}}',
       severity: DiagnosticSeverity.Error,
+      given: '$.paths.*.*.responses.*.content.*.schema.properties.errors',
       // given: '$.paths.*.*.responses.*.content[*].schema.properties.errors',
       // given: '$.paths.*.*.responses.*.content[*].schema.properties.errors',
       // given: "$.paths.*.*.responses.*.content['application/vnd.api+json'].schema.properties[?(@.errors)].errors",
       // given: "$.paths.*.*.responses.*.content['application/vnd.api+json'].schema.properties.errors",
-      given: '$..components..errors',
+      // given: ['$..components..errors'],
       then: {
         function: schema,
         functionOptions: {
-          schema: {
-            type: 'object',
-            not: {
-              properties: {
-                type: {
-                  const: 'object'
-                }
-              }
-            },
-            properties: {
-              errors: {
-                const: 'array'
-                // items: { type: 'object' }
-              }
-            }
-            // ,
-            // required: ['errors']
-          }
+
+          // schema: {
+          //   type: 'object',
+          //   not: {
+          //     properties: {
+          //       type: {
+          //         const: 'object'
+          //       }
+          //     }
+          //   },
+          //   properties: {
+          //     errors: {
+          //       const: 'array'
+          //       // items: { type: 'object' }
+          //     }
+          //   }
+          //   // ,
+          //   // required: ['errors']
+          // }
 
           // schema: {
           //   type: 'array',
@@ -58,9 +60,9 @@ export default {
           //   }
           // }
 
-          // schema: {
-          //   type: 'array'
-          // }
+          schema: {
+            type: 'array'
+          }
 
         }
       }
@@ -76,11 +78,13 @@ export default {
       description: 'Error object must contain at least one of the specified members.',
       message: '{{path}} - {{description}}',
       severity: DiagnosticSeverity.Error,
-      given: '$.errors[*]',
+      // given: '$.errors[*]',
+      given: '$.paths.*.*.responses.*.content.*.schema.properties.errors[*]',
       then: {
         function: schema,
         functionOptions: {
           schema: {
+            // Original type: 'object'
             type: 'object',
             properties: {
               id: { type: 'string' },

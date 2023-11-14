@@ -19,7 +19,7 @@ export async function handleSpectralResults(spectral, document, resultCode) {
     // console.log(spectral.ruleset.rules[resultCode]);
     
     // Log the details of the rule
-    console.log(`Rule Details:`, spectral.ruleset.rules[resultCode]);
+    // console.log(`Rule Details:`, spectral.ruleset.rules[resultCode]);
     // console.log(spectral.ruleset.rules[resultCode].message);
     // console.log(spectral.ruleset.rules[resultCode].given);
     // console.log(spectral.ruleset.rules[resultCode].then);
@@ -27,7 +27,7 @@ export async function handleSpectralResults(spectral, document, resultCode) {
     const results = await spectral.run(document, { rules: enabledRules });
     // const results = await spectral.run(document);
 
-    console.debug(`\x1b[32mSpectral Results: ${JSON.stringify(results)}  \x1b[0m`);
+    // console.debug(`\x1b[32mSpectral Results: ${JSON.stringify(results)}  \x1b[0m`);
 
     // Log each result, including targetVal
     results.forEach((result) => {

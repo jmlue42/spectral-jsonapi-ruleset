@@ -105,13 +105,13 @@ const validApiDocument = {
       JsonApiError: {
         type: 'object',
         properties: {
-          errors: {
+          errors: [ {
             // validating here - original: array
-            type: 'object', 
+            type: 'array',
             items: {
               $ref: '#/components/schemas/ErrorObject'
             }
-          }
+          } ]
         }
       },
       ErrorObject: {

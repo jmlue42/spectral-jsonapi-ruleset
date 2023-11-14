@@ -79,15 +79,15 @@ describe('jsonapi-errors-error-objects ruleset passing scenarios:', function err
       // const relevantResults = await handleSpectralResults(spectral, validArrayStructureDocument, 'errors-error-objects-array-structure');
       const relevantResults = await handleSpectralResults(spectral, validApiDocument, 'errors-error-objects-array-structure');
 
-      console.debug(`Spectral JSONPath: ${JSON.stringify(spectral.ruleset.rules['errors-error-objects-array-structure'].given)}`);
-      console.debug(`\x1b[32m ${JSON.stringify(relevantResults.given)}  \x1b[0m`);
+      // console.debug(`Spectral JSONPath: ${JSON.stringify(spectral.ruleset.rules['errors-error-objects-array-structure'].given)}`);
+      // console.debug(`\x1b[32m ${JSON.stringify(relevantResults.given)}  \x1b[0m`);
 
       // console.debug(`OpenAPI Document: ${JSON.stringify(validArrayStructureDocument, null, 2)}`);
 
       console.log(`  Confirmed Errors:`);
       console.log(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
 
-      console.log(`\x1b[31m  Spectral Results: \x1b[0m ${JSON.stringify(relevantResults, null, 2)} \n`);
+      // console.log(`\x1b[31m  Spectral Results: \x1b[0m ${JSON.stringify(relevantResults, null, 2)} \n`);
       const errorMessage = `
               \x1b[31mError count should be 0 for Array Structure within OpenAPI structure.\n
               \x1b[31mFailing Ruleset Details:
@@ -101,6 +101,24 @@ describe('jsonapi-errors-error-objects ruleset passing scenarios:', function err
     
     }
   
+  });
+
+  it('should pas with no errors for |errors-error-objects-object-structure|', async function errorsErrorObjectsPassingObjectStructure() {
+
+    try{
+      const relevantResults = await handleSpectralResults(spectral, validApiDocument, 'errors-error-objects-object-structure');
+      console.log(`  Confirmed Errors:`);
+      console.log(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
+      const errorMessage = `
+              \x1b[31mError count should be 0 for Object Structure within OpenAPI structure.\n
+              \x1b[31mFailing Ruleset Details:
+          `;
+      const jsData = JSON.stringify(relevantResults, null, 2);
+      expect(relevantResults.length).to.equal(0, errorMessage + jsData.replace(/", /gu, `",\n`));
+    } catch (error) {
+      throw new Error(formattedErrorMessage(error));
+    }
+
   });
       
 });
