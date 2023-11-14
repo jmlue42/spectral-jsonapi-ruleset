@@ -105,7 +105,8 @@ describe('jsonapi-errors-error-objects ruleset passing scenarios:', function err
 
   it('should pas with no errors for |errors-error-objects-object-structure|', async function errorsErrorObjectsPassingObjectStructure() {
 
-    try{
+    try {
+
       const relevantResults = await handleSpectralResults(spectral, validApiDocument, 'errors-error-objects-object-structure');
       console.log(`  Confirmed Errors:`);
       console.log(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
@@ -115,8 +116,11 @@ describe('jsonapi-errors-error-objects ruleset passing scenarios:', function err
           `;
       const jsData = JSON.stringify(relevantResults, null, 2);
       expect(relevantResults.length).to.equal(0, errorMessage + jsData.replace(/", /gu, `",\n`));
+    
     } catch (error) {
+
       throw new Error(formattedErrorMessage(error));
+    
     }
 
   });
