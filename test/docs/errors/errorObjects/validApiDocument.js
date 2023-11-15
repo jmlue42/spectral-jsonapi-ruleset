@@ -105,6 +105,69 @@ const validApiDocument = {
       JsonApiError: {
         type: 'object',
         properties: {
+          
+          /**
+           * Added `[]` to the `errors` OpenAPI structure to test the issue with not passing 
+           * ruleset `errors-error-objects-array-structure`. 
+           * 
+           * In a RESTful API, that is following JSON:API specification; the JSON structure
+           * in a HTTP response can be respresented as followed:
+           * 
+           * HTTP/1.1 400 Bad Request
+           * Content-Type: application/vnd.api+json
+           * 
+           * {
+           *  "errors": [
+           *    {
+           *      "id": "err_12345",
+           *      "status": "400",
+           *      "code": "InvalidRequest",
+           *      "title": "Invalid Data Provided",
+           *      "detail": "The provided data is invalid. 'email' field must be a valid email address.",
+           *      "source": {
+           *        "pointer": "/data/attributes/email"
+           *      },
+           *      "meta": {
+           *        "timestamp": "2023-11-14T12:32:56Z"
+           *      },
+           *    }
+           *  ]
+           * }
+           * 
+           * 
+           * The ruleset `errors-error-objects-array-structure` is designed to validate the structure of the OpenAPI
+           * document, specifically focusing on the 'errors' field within the response schema. The rule ensures that 
+           * 'errors' is defined as an array of error objectsc, as per the JSON:API specification.
+           * 
+           * However, it's important to note the difference between OpenAPI document validation and actualy runtime
+           * behavior of the API:
+           * 
+           * 1. OpenAPI Document Validation:
+           *      - The Spectral rule checks the OpenAPI specification document.
+           *      - In the OpenAPI document, 'errors' must be defined in a way that aligns with the JSON:API specification
+           *        OpenAPI standards, typically as a schema under 'responses'.
+           *      - Example in OpenAPI doc:
+           *          errors: {
+           *            type: 'array',
+           *            items: { ... } // Schema definition of error objects
+           *          }
+           *      - This structure is necessary for documentation and tooling purposes but does not represent the actualy
+           *        JSON payload directly.
+           * 
+           * 2. Runtime API Behavior:
+           *      - At runtime, when the API is called, the response JSON will have 'errors' as an actual array of error
+           *        objects.
+           *      - Example in runtime response:
+           *          "errors": [
+           *            { ... } // Actual error object instances
+           *          ]
+           *      - This is the actual structure that clietns of the API will receive and process.
+           * 
+           * The distinction is key because while OpenAPI document fails validation for an array-like structure under 'errors'
+           * the runtime behavior correctly represents 'errors' as an array, adhering to the JSON:API specification. Thus, the
+           * Spectral rule ensures the OpenAPI document accurately describes the expected runtime structure, even though the 
+           * document's structure differs from the runtime JSON format.
+           */
           errors: [{
             // validating here - original: array
             type: 'array',
