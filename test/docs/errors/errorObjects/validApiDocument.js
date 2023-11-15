@@ -1,5 +1,5 @@
 const validApiDocument = {
-  openapi: '3.0.0',
+  openapi: '3.1.0',
   info: {
     title: 'User Information API',
     version: '1.0.0',
@@ -105,7 +105,7 @@ const validApiDocument = {
       JsonApiError: {
         type: 'object',
         properties: {
-          
+
           /**
            * Added `[]` to the `errors` OpenAPI structure to test the issue with not passing 
            * ruleset `errors-error-objects-array-structure`. 
