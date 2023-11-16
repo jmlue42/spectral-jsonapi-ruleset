@@ -3,7 +3,6 @@
 // All rules in this file MUST have corresponding tests
 
 import { schema, falsy } from '@stoplight/spectral-functions';
-// import { DiagnosticSeverity } from '@stoplight/types';
 
 export default {
   documentationUrl: 'https://jsonapi.org/format/1.0/#document-jsonapi-object',
