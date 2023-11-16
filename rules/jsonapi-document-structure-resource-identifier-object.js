@@ -3,7 +3,6 @@
 // All rules in this file MUST have corresponding tests
 
 import { schema, enumeration } from '@stoplight/spectral-functions';
-import { DiagnosticSeverity } from '@stoplight/types';
 
 export default {
   documentationUrl: 'https://jsonapi.org/format/1.0/#document-resource-identifier-objects',
@@ -13,7 +12,7 @@ export default {
     'relationships-data-object-explicit': {
       description: '\'relationships..data\' properties MUST be an object or an array of objects with an id and type property',
       message: '{{path}} - {{description}}',
-      severity: DiagnosticSeverity.Error,
+      severity: 'error',
       resolved: true,
       given: "$..*[?(@property === 'relationships')]..properties.data[?(@property === 'type' && (@ === 'object' || @ === 'array'))]^",
       then: [
@@ -169,7 +168,7 @@ export default {
     'relationships-data-object-composed': {
       description: '\'relationships..data\' properties MUST be an object or an array of objects with an id and type property',
       message: '{{path}} - {{description}}',
-      severity: DiagnosticSeverity.Error,
+      severity: 'error',
       resolved: true,
       given: "$..*[?(@property === 'relationships')]..properties.data..allOf",
       then: [
@@ -325,7 +324,7 @@ export default {
     'relationships-data-allowed-fields': {
       description: 'Resource Identifier Objects MAY only contain id, type, and meta fields',
       message: '{{path}} - {{description}}',
-      severity: DiagnosticSeverity.Error,
+      severity: 'error',
       given: "$..*[?(@property === 'relationships')]..properties.data..properties",
       then: {
         field: '@key',
