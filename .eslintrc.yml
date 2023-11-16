@@ -96,7 +96,7 @@ rules:
   jsx-quotes: error
   key-spacing: error
   keyword-spacing: error
-  line-comment-position: error
+  line-comment-position: off
   linebreak-style:
     - error
     - unix
@@ -131,7 +131,11 @@ rules:
     - error
     - always
   no-confusing-arrow: error
-  no-console: error
+  no-console:
+    - error
+    - allow:
+        - warn
+        - error
   no-constructor-return: error
   no-continue: error
   no-div-regex: error
@@ -148,7 +152,7 @@ rules:
   no-implicit-coercion: error
   no-implicit-globals: error
   no-implied-eval: error
-  no-inline-comments: error
+  no-inline-comments: warn
   no-invalid-this: error
   no-iterator: error
   no-label-var: error
