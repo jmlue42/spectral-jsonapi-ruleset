@@ -15,10 +15,11 @@ import { enableSpecificRuleset } from './utils/enableSpecificRuleset.js';
 import { displayRulesets } from './utils/displayRulesets.js';
 import { formattedErrorMessage } from './utils/formattedErrorMessage.js';
 import { processErrors } from './utils/processErrors.js';
-// import validArrayStructureDocument from './docs/errors/errorObjects/validArrayStructureDocument.js';
-import validApiDocument from './docs/errors/errorObjects/validApiDocument.js';
+import { debugDebug, debugLog } from './utils/debugUtils.js';
 
 // Valid OpenAPI Documents
+// import validArrayStructureDocument from './docs/errors/errorObjects/validArrayStructureDocument.js';
+import validApiDocument from './docs/errors/errorObjects/validApiDocument.js';
 
 /**
  * @fileoverview This test suite validates the behavior of the JSON: API fetching data ruleset
@@ -46,15 +47,9 @@ describe('jsonapi-errors-error-objects ruleset passing scenarios:', function err
 
       spectral = setupSpectral(ruleset);
 
-      // console.debug(`\x1b[32m Spectral beforeEach: ${JSON.stringify(spectral, null, 2)}`);
-
       this.currentTestTitle = this.currentTest.title;
 
-      // console.debug(`Current Test Title: ${this.currentTestTitle}`);
-
       const rulesFromTitle = getRulesFromTestTitle(this.currentTestTitle, getAllRulesets(ruleset));
-
-      // console.debug(`Rules From Title: ${rulesFromTitle} \n Rules From Title Length: ${rulesFromTitle.length}`);
 
       if (rulesFromTitle && rulesFromTitle.length > 0) {
 
@@ -79,18 +74,14 @@ describe('jsonapi-errors-error-objects ruleset passing scenarios:', function err
       // const relevantResults = await handleSpectralResults(spectral, validArrayStructureDocument, 'errors-error-objects-array-structure');
       const relevantResults = await handleSpectralResults(spectral, validApiDocument, 'errors-error-objects-array-structure');
 
-      // console.debug(`Spectral JSONPath: ${JSON.stringify(spectral.ruleset.rules['errors-error-objects-array-structure'].given)}`);
-      // console.debug(`\x1b[32m ${JSON.stringify(relevantResults.given)}  \x1b[0m`);
+      debugDebug(`\x1b[35mSpectral JSONPath:\x1b[36m ${JSON.stringify(spectral.ruleset.rules['errors-error-objects-array-structure'].given)}\x1b[0m\n`);
 
-      // console.debug(`OpenAPI Document: ${JSON.stringify(validArrayStructureDocument, null, 2)}`);
+      debugLog(`  Confirmed Errors:`);
+      debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
 
-      console.log(`  Confirmed Errors:`);
-      console.log(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
-
-      // console.log(`\x1b[31m  Spectral Results: \x1b[0m ${JSON.stringify(relevantResults, null, 2)} \n`);
       const errorMessage = `
               \x1b[31mError count should be 0 for Array Structure within OpenAPI structure.\n
-              \x1b[31mFailing Ruleset Details:
+              \x1b[31mFailing Ruleset Details: \x1b[0m
           `;
       const jsData = JSON.stringify(relevantResults, null, 2);
       expect(relevantResults.length).to.equal(0, errorMessage + jsData.replace(/", /gu, `",\n`));
@@ -103,16 +94,18 @@ describe('jsonapi-errors-error-objects ruleset passing scenarios:', function err
   
   });
 
-  it('should pas with no errors for |errors-error-objects-object-structure|', async function errorsErrorObjectsPassingObjectStructure() {
+  it('should pass with no errors for |errors-error-objects-object-structure|', async function errorsErrorObjectsPassingObjectStructure() {
 
     try {
 
       const relevantResults = await handleSpectralResults(spectral, validApiDocument, 'errors-error-objects-object-structure');
-      console.log(`  Confirmed Errors:`);
-      console.log(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
+
+      debugLog(`  Confirmed Errors:`);
+      debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
+
       const errorMessage = `
               \x1b[31mError count should be 0 for Object Structure within OpenAPI structure.\n
-              \x1b[31mFailing Ruleset Details:
+              \x1b[31mFailing Ruleset Details: \x1b[0m
           `;
       const jsData = JSON.stringify(relevantResults, null, 2);
       expect(relevantResults.length).to.equal(0, errorMessage + jsData.replace(/", /gu, `",\n`));

@@ -2,6 +2,9 @@
 /* eslint-disable complexity */
 /* eslint-disable no-cond-assign */
 /* eslint-disable no-console */
+
+import { debugError, debugDebug } from "./debugUtils.js";
+
 /**
  * Extracts and returns rules from a test title string.
  * 
@@ -29,7 +32,7 @@ export function getRulesFromTestTitle(title, rules) {
 
   if (!title) {
 
-    console.warn('No title provided.');
+    debugError('No title provided.');
     
     return [];
   
@@ -37,14 +40,16 @@ export function getRulesFromTestTitle(title, rules) {
 
   if (rules.length === 0) {
 
-    console.warn('No rules available to match.');
+    debugError('No rules available to match.');
   
     return [];
   
   }
 
-  // console.debug(`\ngetRulesFromTestTitle title param: ${title}`);
-  // console.debug(`\ngetRulesFromTestTitle rules param: ${rules}`);
+  debugDebug(`\x1b[35mCurrent Test Title:\x1b[0m\x1b[36m ${title} \n\x1b[0m`);
+
+  // debugDebug(`\ngetRulesFromTestTitle title param: ${title}`);
+  // debugDebug(`\ngetRulesFromTestTitle rules param: ${rules}`);
 
   const rulePattern = /\|(?<ruleName>[\w-]+)\|/gu;
   const matchingRules = [];
@@ -56,7 +61,7 @@ export function getRulesFromTestTitle(title, rules) {
 
     const { ruleName } = match.groups;
 
-    // console.debug(`while 'ruleName': ${ruleName}`);
+    // debugDebug(`while 'ruleName': ${ruleName}`);
 
     if (rules.includes(ruleName)) {
 
@@ -69,7 +74,7 @@ export function getRulesFromTestTitle(title, rules) {
   
   }
 
-  // console.debug(`Matched Rule: ${matchingRules}`);
+  // debugDebug(`Matched Rule: ${matchingRules}`);
 
   return matchingRules;
 

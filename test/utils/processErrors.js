@@ -1,5 +1,8 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-console */
+
+import { debugError } from "./debugUtils.js";
+
 /**
  * Processes and logs errors, specifically handling AggregateErrors separately.
  * This function checks if the provided error is an instance of AggregateError. If so,
@@ -26,13 +29,13 @@ export function processErrors(error) {
 
     for (const individualError of error.errors) {
 
-      console.error('Aggregate error encountered: ', individualError);
+      debugError('Aggregate error encountered: ', individualError);
       
     }
   
   } else {
 
-    console.error('Unexpected error during Spectral setup: ', error);
+    debugError('Unexpected error during Spectral setup: ', error);
   
   }
 

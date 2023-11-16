@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import spectralCore from '@stoplight/spectral-core';
 import { disableAllRulesets } from './disableAllRulesets.js';
+import { debugLog, debugDebug } from './debugUtils.js';
 
 const { Spectral } = spectralCore;
 
@@ -12,19 +13,15 @@ const { Spectral } = spectralCore;
  */
 export default function setupSpectral(ruleset) {
 
-  console.debug(`\n\n\n\x1b[34m==================================\x1b[0m Setting Up Test Case \x1b[34m==================================\x1b[0m`);
+  debugLog(`\n\n\x1b[34m==================================\x1b[0m Setting Up Test Case \x1b[34m==================================\x1b[0m`);
 
   const spectral = new Spectral();
 
-  // console.debug(`\x1b[32m Spectral Results Step 1: ${JSON.stringify(spectral.ruleset, null, 2)}`);
-
   spectral.setRuleset(ruleset);
-
-  // console.debug(`\x1b[33m Spectral Results Step 2: ${JSON.stringify(spectral.ruleset, null, 2)}`);
 
   disableAllRulesets(spectral);
 
-  // console.debug(`\x1b[34m Spectral Results Step 3: ${JSON.stringify(spectral.ruleset, null, 2)}`);
+  debugDebug(`\x1b[35m Spectral Results:\x1b[36m ${JSON.stringify(spectral.ruleset, null, 2)}\x1b[0m\n`);
     
   return spectral;
 

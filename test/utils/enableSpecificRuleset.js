@@ -1,5 +1,8 @@
 /* eslint-disable no-console */
 /* eslint-disable no-prototype-builtins */
+
+import { debugDebug } from "./debugUtils.js";
+
 /**
  * Enables a specific set of rules within a Spectral instance.
  * This function iterates through an array of ruleset names and enables each specified rule within the Spectral instance.
@@ -18,6 +21,9 @@
  * - This function is crucial for targeted testing, allowing for the selective enabling of rules based on the test being executed.
  */
 export function enableSpecificRuleset(spectral, rulesetNames) {
+
+  debugDebug(`\x1b[35mExtracted Rules From Title:\x1b[0m\x1b[36m ${rulesetNames}\n`);
+  debugDebug(`\x1b[35mTotal Rules From Title:\x1b[0m\x1b[36m ${rulesetNames.length}\n\n\x1b[0m`);
 
   for (const rulesetName of rulesetNames) {
 

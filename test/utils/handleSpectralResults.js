@@ -1,5 +1,6 @@
 /* eslint-disable arrow-body-style */
 /* eslint-disable no-console */
+import { debugDebug, debugError, debugLog } from './debugUtils.js';
 import { getEnabledRules } from './getEnabledRules.js';
 
 /**
@@ -16,32 +17,25 @@ export async function handleSpectralResults(spectral, document, resultCode) {
 
     const enabledRules = getEnabledRules(spectral);
     
-    // console.log(spectral.ruleset.rules[resultCode]);
-    
     // Log the details of the rule
-    // console.log(`Rule Details:`, spectral.ruleset.rules[resultCode]);
-    // console.log(spectral.ruleset.rules[resultCode].message);
-    // console.log(spectral.ruleset.rules[resultCode].given);
-    // console.log(spectral.ruleset.rules[resultCode].then);
+    debugDebug(`\x1b[35mRule Details:\x1b[36m ${JSON.stringify(spectral.ruleset.rules[resultCode], null, 2)}\n`);
+    debugDebug(`\x1b[35mRule Message:\x1b[36m ${spectral.ruleset.rules[resultCode].message}\n`);
+    debugDebug(`\x1b[35mRule Given:\x1b[36m ${spectral.ruleset.rules[resultCode].given}\n`);
+    debugDebug(`\x1b[35mRule Then:\x1b[36m ${spectral.ruleset.rules[resultCode].then}\n\n\x1b[0m\n`);
     
     const results = await spectral.run(document, { rules: enabledRules });
-    // const results = await spectral.run(document);
 
-    // console.debug(`\x1b[32mSpectral Results: ${JSON.stringify(results)}  \x1b[0m`);
+    // debugDebug(`\x1b[32mSpectral Results: ${JSON.stringify(results)}  \x1b[0m\n`);
 
     // Log each result, including targetVal
     results.forEach((result) => {
 
       if (result.code === resultCode) {
 
-        console.log(`\x1b[32mResult for ${resultCode}:`, result);
-        console.log(`\x1b[33mTarget Value:`, result.targetVal);
+        debugLog(`\x1b[32mResult for ${resultCode}:\x1b[36m ${result} \x1b[0m\n`);
+        debugLog(`\x1b[33mTarget Value:\x1b[36m ${result.targetVal} \x1b[0m\n`);
       
       }
-
-      
-      console.log(`\x1b[32mResult for ${resultCode}:`, result);
-      console.log(`\x1b[33mTarget Value:`, result.targetVal);
     
     });
         
@@ -49,7 +43,7 @@ export async function handleSpectralResults(spectral, document, resultCode) {
   
   } catch (error) {
 
-    console.error('An error occurred while running Spectral: ', error);
+    debugError('An error occurred while running Spectral: ', error);
     throw error;
   
   }

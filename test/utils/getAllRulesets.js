@@ -1,4 +1,7 @@
 /* eslint-disable no-console */
+
+import { debugError } from "./debugUtils.js";
+
 /**
  * Extracts all rule names from a given Spectral ruleset.
  * This function is designed to retrieve the keys (rule names) from the rules object within a Spectral ruleset.
@@ -20,7 +23,7 @@ export function getAllRulesets(ruleset) {
 
   if (!ruleset || !ruleset.rules || Object.keys(ruleset.rules).length === 0) {
 
-    console.warn('No rules found in the provided ruleset.');
+    debugError('No rules found in the provided ruleset.');
     
     return [];
   
