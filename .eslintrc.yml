@@ -131,7 +131,11 @@ rules:
     - error
     - always
   no-confusing-arrow: error
-  no-console: error
+  no-console:
+    - error
+    - allow:
+        - warn
+        - error
   no-constructor-return: error
   no-continue: error
   no-div-regex: error

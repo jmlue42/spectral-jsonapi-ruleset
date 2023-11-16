@@ -59,6 +59,6 @@ export default {
           values: ['string']
         }
       }
-    },
+    }
   }
 };
