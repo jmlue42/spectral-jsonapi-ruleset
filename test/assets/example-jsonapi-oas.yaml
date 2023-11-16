@@ -31,7 +31,7 @@ paths:
       tags:
         - collection
       summary: Short Description
-      description: A longer MEANINGFUL descripition. Do not copy summary.
+      description: A longer MEANINGFUL description. Do not copy summary.
       security:
         - ApiKeyAuth: []
           AuthCode:
@@ -55,7 +55,7 @@ paths:
       tags:
         - single
       summary: Create Resource
-      description: A longer MEANINGFUL descripition. Do not copy summary.
+      description: A longer MEANINGFUL description. Do not copy summary.
       security:
         - ApiKeyAuth: []
           AuthCode:
@@ -80,7 +80,7 @@ paths:
       tags:
         - single
       summary: Short Description
-      description: A longer MEANINGFUL descripition. Do not copy summary.
+      description: A longer MEANINGFUL description. Do not copy summary.
       security:
         - ApiKeyAuth: []
           AuthCode:
@@ -105,7 +105,7 @@ paths:
       tags:
         - single
       summary: Short Description
-      description: A longer MEANINGFUL descripition. Do not copy summary.
+      description: A longer MEANINGFUL description. Do not copy summary.
       security:
         - ApiKeyAuth: []
           AuthCode:
@@ -131,7 +131,7 @@ paths:
       tags:
         - single
       summary: Short Description
-      description: A longer MEANINGFUL descripition. Do not copy summary.
+      description: A longer MEANINGFUL description. Do not copy summary.
       security:
         - ApiKeyAuth: []
           AuthCode:
