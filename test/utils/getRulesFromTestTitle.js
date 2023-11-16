@@ -3,7 +3,7 @@
 /* eslint-disable no-cond-assign */
 /* eslint-disable no-console */
 
-import { debugError, debugDebug } from "./debugUtils.js";
+import { debugError, debugDebug } from './debugUtils.js';
 
 /**
  * Extracts and returns rules from a test title string.

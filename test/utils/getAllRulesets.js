@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import { debugError } from "./debugUtils.js";
+import { debugError } from './debugUtils.js';
 
 /**
  * Extracts all rule names from a given Spectral ruleset.

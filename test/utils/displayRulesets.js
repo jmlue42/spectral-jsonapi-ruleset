@@ -1,7 +1,7 @@
 /* eslint-disable no-prototype-builtins */
 /* eslint-disable no-console */
 
-import { debugLog } from "./debugUtils.js";
+import { debugLog } from './debugUtils.js';
 
 /**
  * Logs the current enabled/disabled state of each rule in the Spectral instance's ruleset.

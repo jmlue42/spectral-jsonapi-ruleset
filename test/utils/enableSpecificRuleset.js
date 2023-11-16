@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable no-prototype-builtins */
 
-import { debugDebug } from "./debugUtils.js";
+import { debugDebug } from './debugUtils.js';
 
 /**
  * Enables a specific set of rules within a Spectral instance.

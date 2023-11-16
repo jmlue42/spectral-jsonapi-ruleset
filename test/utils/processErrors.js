@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-console */
 
-import { debugError } from "./debugUtils.js";
+import { debugError } from './debugUtils.js';
 
 /**
  * Processes and logs errors, specifically handling AggregateErrors separately.
