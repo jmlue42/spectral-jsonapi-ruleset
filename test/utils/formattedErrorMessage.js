@@ -2,7 +2,7 @@
  * Formats an error message for readability. It replaces escaped
  * characters with their unescaped counterparts.
  * 
- * @param {Error} error - The error object that needs formatting.
+ * @param {error} error - The error object that needs formatting.
  * @returns {string} A formatted, human-readable error message.
  */
 export function formattedErrorMessage(error) {
