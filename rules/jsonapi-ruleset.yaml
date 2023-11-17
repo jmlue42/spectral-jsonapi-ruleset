@@ -6,8 +6,5 @@
 extends:
   - jsonapi-content-negotiation-ruleset.yaml
   - jsonapi-document-structure-ruleset.yaml
-<<<<<<< HEAD
-=======
   - jsonapi-query-ruleset.yaml
   - jsonapi-errors-ruleset.yaml
->>>>>>> 188ddef (feat: Add Spectral rules and tests for JSON:API error objects)
