@@ -10,3 +10,5 @@ rules:
     - error 
     - always
   max-statements: off
+  no-invalid-this: off
+  no-console: off
