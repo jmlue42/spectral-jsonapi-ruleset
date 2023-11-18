@@ -3,8 +3,7 @@
 // All rules in the file MUST have corresponding tests
 
 import { schema, truthy } from '@stoplight/spectral-functions';
-
-import { DiagnosticSeverity } from '@stoplight/types';
+import validatePropertiesWithCriteria from '../functions/validatePropertyType.js';
 
 export default {
   documentationUrl: 'https://jsonapi.org/format/#error-objects',
@@ -18,54 +17,63 @@ export default {
      */
     'errors-error-objects-array-structure': {
       description: 'Error objects must be returned in an array under `errors` key.',
-      message: '{{path}} - {{description}}',
-      severity: DiagnosticSeverity.Error,
-      given: '$.paths.*.*.responses.*.content.*.schema.properties.errors',
-      // given: '$.paths.*.*.responses.*.content[*].schema.properties.errors',
-      // given: '$.paths.*.*.responses.*.content[*].schema.properties.errors',
-      // given: "$.paths.*.*.responses.*.content['application/vnd.api+json'].schema.properties[?(@.errors)].errors",
-      // given: "$.paths.*.*.responses.*.content['application/vnd.api+json'].schema.properties.errors",
-      // given: ['$..components..errors'],
-      then: {
-        function: schema,
-        functionOptions: {
+      message: '{{path}} - {{error}}',
+      severity: 'error',
+      // given: "$.paths.*.*.responses.[?(@property >= '400' && @property <= '599')].content.*.schema.properties",
+      // given: "$.paths.*.*.responses.['400'].content.*.schema.properties",
+      // given: "$.paths.*.*.responses.['400'].content.*.schema.properties.errors",
+      // given: "$.paths.*.*.responses.*[?(@property === 'errors')]",
+      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property ==='properties')]",
+      // given: "$..[?(@property === '400')]..[*[?(@property ==='properties')]",
+      then: [
+        // {
+        //   function: schema,
+        //   functionOptions: {
 
-          // schema: {
-          //   type: 'object',
-          //   not: {
-          //     properties: {
-          //       type: {
-          //         const: 'object'
-          //       }
-          //     }
-          //   },
-          //   properties: {
-          //     errors: {
-          //       const: 'array'
-          //       // items: { type: 'object' }
-          //     }
-          //   }
-          //   // ,
-          //   // required: ['errors']
-          // }
+        //     // schema: {
+        //     //   type: 'object',
+        //     //   not: {
+        //     //     properties: {
+        //     //       type: {
+        //     //         const: 'object'
+        //     //       }
+        //     //     }
+        //     //   },
+        //     //   properties: {
+        //     //     errors: {
+        //     //       const: 'array'
+        //     //       // items: { type: 'object' }
+        //     //     }
+        //     //   }
+        //     //   // ,
+        //     //   // required: ['errors']
+        //     // }
 
-          // schema: {
-          //   type: 'array',
-          //   items: {
-          //     type: 'object',
-          //     properties: {
-          //       // Error Object Properties here
-          //     }
-          //     // constraints here if needed
-          //   }
-          // }
+        //     // schema: {
+        //     //   type: 'array',
+        //     //   items: {
+        //     //     type: 'object',
+        //     //     properties: {
+        //     //       // Error Object Properties here
+        //     //     }
+        //     //     // constraints here if needed
+        //     //   }
+        //     // }
 
-          schema: {
-            type: 'array'
+        //     schema: {
+        //       type: 'array'
+        //     }
+
+        //   }
+        // }
+        {
+          function: validatePropertiesWithCriteria,
+          functionOptions: {
+            propertyName: 'errors',
+            propertyType: 'array'
           }
-
         }
-      }
+      ]
     },
 
     /**
@@ -77,7 +85,7 @@ export default {
     'errors-error-objects-object-structure': {
       description: 'Error object must contain at least one of the specified members.',
       message: '{{path}} - {{description}}',
-      severity: DiagnosticSeverity.Error,
+      severity: 'error',
       // given: '$.errors[*]',
       given: '$.paths.*.*.responses.*.content.*.schema.properties.errors[*]',
       then: {
@@ -111,8 +119,7 @@ export default {
     'errors-error-objects-links': {
       description: 'Links object within error object should have valid URLs in "about" and/or "type".',
       message: '{{path}} - {{description}}',
-      // Confirm if 'Warning' is acceptable or 'Error' is the required severity
-      severity: DiagnosticSeverity.Warning, 
+      severity: 'error',
       given: '$.error[*].links',
       then: {
         function: schema,
@@ -145,9 +152,8 @@ export default {
      */
     'errors-error-objects-source': {
       description: 'Source object in error object should contain valid "pointer", "parameter", or "header".',
-      message: '{{path}} - {description}}',
-      // Ask about severity
-      severity: DiagnosticSeverity.Warning, 
+      message: '{{path}} - {{description}}',
+      severity: 'error',
       given: '$.errors[*].source',
       then: {
         function: schema,
@@ -175,8 +181,7 @@ export default {
     'errors-error-objects-status': {
       description: 'Status in error object should be a valid HTTP status code.',
       message: '{{path}} - {{description}}',
-      // Ask about severity
-      severity: DiagnosticSeverity.Warning, 
+      severity: 'error',
       given: '$.errors[*].status',
       then: {
         // Additional validation for status code format can be implemented with a custom function
@@ -191,8 +196,7 @@ export default {
     'errors-error-objects-id': {
       description: 'The `id` property in error objects should be a string.',
       message: '{{path}} - {{description}}',
-      // Ask about severity
-      severity: DiagnosticSeverity.Warning, 
+      severity: 'error',
       given: '$.errors[*].id',
       then: {
         function: schema,
@@ -210,8 +214,7 @@ export default {
     'errors-error-objects-code': {
       description: 'The `code` property in error objects should be a string.',
       message: '{{path}} - {{description}}',
-      // Ask about severity
-      severity: DiagnosticSeverity.Warning, 
+      severity: 'error',
       given: '$.errors[*].code',
       then: {
         function: schema,
@@ -228,8 +231,7 @@ export default {
     'errors-error-objects-title': {
       description: 'The `title` property in error objects should be a string.',
       message: '{{path}} - {{description}}',
-      // Ask about severity
-      severity: DiagnosticSeverity.Warning, 
+      severity: 'error',
       given: '$.errors[*].title',
       then: {
         function: schema,
@@ -246,8 +248,7 @@ export default {
     'errors-error-objects-detail': {
       description: 'The `detail` property in error objects should be a string.',
       message: '{{path} - {{description}}',
-      // Ask about severity
-      severity: DiagnosticSeverity.Warning, 
+      severity: 'error',
       given: '$.errors[*].detail',
       then: {
         function: schema,
@@ -264,8 +265,7 @@ export default {
     'errors-error-objects-meta': {
       description: 'the `meta` property in error objects should be an object',
       message: '{{path}} - {{description}}',
-      // Ask about severity
-      severity: DiagnosticSeverity.Warning, 
+      severity: 'error',
       given: '$.errors[*].meta',
       then: {
         function: schema,
