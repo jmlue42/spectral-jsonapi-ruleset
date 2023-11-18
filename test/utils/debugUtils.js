@@ -1,6 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable valid-jsdoc */
-/* eslint-disable no-process-env */
 /**
  * A utility module for handling debug logs with different levels (log, debug, warn, error, info).
  * Each level can be independently enabled via specific environment variables:
@@ -25,6 +22,7 @@ const isDebugModeEnabled = (envVar) => {
 /**
  * Logs a general message to the console if LOG_DEBUG is enabled.
  * @param {String} message - The message to log.
+ * @return {void}
  */
 export const debugLog = (message) => {
 
@@ -39,12 +37,13 @@ export const debugLog = (message) => {
 /**
  * Outputs a debugging message to the console if DEBUG_DEBUG is enabled.
  * @param {string} message - The debugging message to output.
+ * @return {void}
  */
 export const debugDebug = (message) => {
 
   if (isDebugModeEnabled('DEBUG_DEBUG')) {
 
-    console.debug(message);
+    console.debug(`\x1b[35m${message}`);
   
   }
 
@@ -53,6 +52,7 @@ export const debugDebug = (message) => {
 /**
  * Outputs a warning message to the console if WARN_DEBUG is enabled.
  * @param {string} message - The warning message to output.
+ * @return {void}
  */
 export const debugWarn = (message) => {
 
@@ -67,12 +67,13 @@ export const debugWarn = (message) => {
 /**
  * Outputs an error message to the console if ERROR_DEBUG is enabled.
  * @param {string} message - The error message to output.
+ * @return {void}
  */
 export const debugError = (message) => {
 
   if (isDebugModeEnabled('ERROR_DEBUG')) {
 
-    console.error(message);
+    console.error(`\x1b[31m[\x1b[0m  \x1b[1mERROR \x1b[0m\x1b[31m ] \x1b[33m${message}`);
   
   }
 
@@ -81,6 +82,7 @@ export const debugError = (message) => {
 /**
  * Outputs an informational message to the console if INFO_DEBUG is enabled.
  * @param {string} message - The information message to output.
+ * @return {void}
  */
 export const debugInfo = (message) => {
 

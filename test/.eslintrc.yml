@@ -12,3 +12,4 @@ rules:
   max-statements: off
   no-invalid-this: off
   no-console: off
+  no-process-env: off
