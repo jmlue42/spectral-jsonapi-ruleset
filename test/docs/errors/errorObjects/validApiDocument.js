@@ -1,45 +1,61 @@
+/* eslint-env mocha */
+/* eslint-disable quotes */
 const validApiDocument = {
-  openapi: '3.1.0',
-  info: {
-    title: 'User Information API',
-    version: '1.0.0',
-    description: 'API for retrieving user information'
+  "openapi": "3.1.0",
+  "info": {
+    "title": "User Information API",
+    "version": "1.0.0",
+    "description": "API for retrieving user information"
   },
-  paths: {
-    '/users/{userId}': {
-      get: {
-        summary: 'Get User Information',
-        description: 'Retrieves information for a specific user by their ID.',
-        parameters: [
+  "paths": {
+    "/users/{userId}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get User by ID",
+        "description": "Retrieves information for a specific user by their ID.",
+        "operationId": "getUserById",
+        "parameters": [
           {
-            name: 'userId',
-            in: 'path',
-            required: true,
-            description: 'Unique identifier of the user',
-            schema: {
-              type: 'string'
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "description": "Unique identifier of the user",
+            "schema": {
+              "type": "string"
             }
           }
         ],
-        responses: {
-          '200': {
-            description: 'Successful response with user information',
-            content: {
-              'application/vnd.api+json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    data: {
-                      type: 'object',
-                      properties: {
-                        id: { type: 'string' },
-                        type: { type: 'string',
-                          enum: ['user'] },
-                        attributes: {
-                          type: 'object',
-                          properties: {
-                            name: { type: 'string' },
-                            email: { type: 'string' }
+        "responses": {
+          "200": {
+            "description": "Successful response with user information",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "user"
+                          ]
+                        },
+                        "attributes": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string"
+                            },
+                            "email": {
+                              "type": "string"
+                            }
                             // Other user attributes...
                           }
                         }
@@ -47,16 +63,16 @@ const validApiDocument = {
                     }
                   }
                 },
-                examples: {
-                  user: {
-                    summary: 'User Example',
-                    value: {
-                      data: {
-                        id: '12345',
-                        type: 'user',
-                        attributes: {
-                          name: 'John Doe',
-                          email: 'john.doe@example.com'
+                "examples": {
+                  "user": {
+                    "summary": "User Example",
+                    "value": {
+                      "data": {
+                        "id": "12345",
+                        "type": "user",
+                        "attributes": {
+                          "name": "John Doe",
+                          "email": "john.doe@example.com"
                           // Other user attributes...
                         }
                       }
@@ -66,32 +82,32 @@ const validApiDocument = {
               }
             }
           },
-          '400': {
-            description: 'Bad Request',
-            content: {
-              'application/vnd.api+json': {
-                schema: {
-                  $ref: '#/components/schemas/JsonApiError'
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiError"
                 }
               }
             }
           },
-          '404': {
-            description: 'User Not Found',
-            content: {
-              'application/vnd.api+json': {
-                schema: {
-                  $ref: '#/components/schemas/JsonApiError'
+          "404": {
+            "description": "User Not Found",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiError"
                 }
               }
             }
           },
-          '500': {
-            description: 'Internal Server Error',
-            content: {
-              'application/vnd.api+json': {
-                schema: {
-                  $ref: '#/components/schemas/JsonApiError'
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiError"
                 }
               }
             }
@@ -100,11 +116,11 @@ const validApiDocument = {
       }
     }
   },
-  components: {
-    schemas: {
-      JsonApiError: {
-        type: 'object',
-        properties: {
+  "components": {
+    "schemas": {
+      "JsonApiError": {
+        "type": "object",
+        "properties": {
 
           /**
            * Added `[]` to the `errors` OpenAPI structure to test the issue with not passing 
@@ -168,42 +184,69 @@ const validApiDocument = {
            * Spectral rule ensures the OpenAPI document accurately describes the expected runtime structure, even though the 
            * document's structure differs from the runtime JSON format.
            */
-          errors: [{
-            // validating here - original: array
-            type: 'array',
-            items: {
-              $ref: '#/components/schemas/ErrorObject'
+          "errors": {
+
+            /**
+             * validating here
+             *  original: array
+             *    Fail: object
+             *  */ 
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErrorObject"
             }
-          }]
+          }
         }
       },
-      ErrorObject: {
-        type: 'object',
-        properties: {
-          id: { type: 'string' },
-          links: {
-            type: 'object',
-            properties: {
-              about: { type: 'string',
-                format: 'uri' }
+      "ErrorObject": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "links": {
+            "type": "object",
+            "properties": {
+              "about": {
+                "type": "string",
+                "format": "uri"
+              }
             }
           },
-          status: { type: 'string' },
-          code: { type: 'string' },
-          title: { type: 'string' },
-          detail: { type: 'string' },
-          source: {
-            type: 'object',
-            properties: {
-              pointer: { type: 'string' },
-              parameter: { type: 'string' },
-              header: { type: 'string' }
+          "status": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "detail": {
+            "type": "string"
+          },
+          "source": {
+            "type": "object",
+            "properties": {
+              "pointer": {
+                "type": "string"
+              },
+              "parameter": {
+                "type": "string"
+              },
+              "header": {
+                "type": "string"
+              }
             }
           },
-          meta: { type: 'object',
-            additionalProperties: true }
+          "meta": {
+            "type": "object",
+            "additionalProperties": true
+          }
         },
-        required: ['detail']
+        "required": [
+          "detail"
+        ]
       }
     }
   }
