@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import spectralCore from '@stoplight/spectral-core';
 import { disableAllRulesets } from './disableAllRulesets.js';
-import { debugLog, debugDebug } from './debugUtils.js';
+import { debugLog } from './debugUtils.js';
 
 const { Spectral } = spectralCore;
 
@@ -21,7 +21,8 @@ export default function setupSpectral(ruleset) {
 
   disableAllRulesets(spectral);
 
-  debugDebug(`\x1b[35m Spectral Results:\x1b[36m ${JSON.stringify(spectral.ruleset, null, 2)}\x1b[0m\n`);
+  // Enable this to log details for the entire ruleset results
+  // debugDebug(`\x1b[35m Spectral Results:\x1b[36m ${JSON.stringify(spectral.ruleset, null, 2)}\x1b[0m\n`);
     
   return spectral;
 

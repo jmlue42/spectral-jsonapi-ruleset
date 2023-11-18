@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-/* eslint-disable no-console */
 
 import { debugError } from './debugUtils.js';
 
@@ -27,19 +26,34 @@ export function processErrors(error) {
 
   if (error instanceof AggregateError) {
 
+    debugError(`AggregateError encountered with multiple errors:\x1b[0m\n`);
+
     for (const individualError of error.errors) {
 
-      debugError('Aggregate error encountered: ', individualError);
+      debugError(`Individual error:\x1b[35m ${individualError}\n\x1b[0m`);
+
+      // Log more details if available
+      if (individualError instanceof Error) {
+
+        debugError(`Error Message:\x1b[35m ${individualError.message}\x1b[0m`);
+        debugError(`Error stack:\x1b[35m ${individualError.stack}\x1b[0m`);
+      
+      }
       
     }
   
   } else {
 
-    debugError('Unexpected error during Spectral setup: ', error);
+    debugError(`Unexpected error during Spectral setup:\x1b[35m ${error}\n`);
+
+    // if (error instanceof Error) {
+    //   debugError(`Error Message:\x1b[35m ${error.message}`);
+    //   debugError(`Error stack:\x1b[35m ${error.stack}`);
+    // }
   
   }
 
-  // Re-throw the error or handle it as needed.
+  // Re-throw the error for further handling or logging if needed.
   throw error;
 
 }
