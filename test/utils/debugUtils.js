@@ -43,7 +43,7 @@ export const debugDebug = (message) => {
 
   if (isDebugModeEnabled('DEBUG_DEBUG')) {
 
-    console.debug(`\x1b[35m${message}`);
+    console.debug(`\x1b[35m${message}\x1b[0m`);
   
   }
 
@@ -73,7 +73,7 @@ export const debugError = (message) => {
 
   if (isDebugModeEnabled('ERROR_DEBUG')) {
 
-    console.error(`\x1b[31m[\x1b[0m  \x1b[1mERROR \x1b[0m\x1b[31m ] \x1b[33m${message}`);
+    console.error(`\x1b[31m[\x1b[0m  \x1b[1mERROR \x1b[0m\x1b[31m ] \x1b[33m${message}\x1b[0m`);
   
   }
 

@@ -6,15 +6,20 @@ import setupSpectral from './setupSpectral.js';
 /**
  * Creates a beforeEach function for Mocha tests, setting up Spectral with a given ruleset and enabling specific rules.
  * 
- * @param {Object} ruleset - The Spectral ruleset to be used in test tests.
+ * @param {Object} ruleset - The Spectral ruleset to be used in the tests.
  * @param {string} ruleName - A rule name to be enabled for the test suite. If empty, all rules are used.
- * @returns {Function} A function to be used in beforeEach hook in Mocha tests.
+ * @param {Function} [setupSpectralFn=setupSpectral] - Optional function to setup Spectral. Defaults to the standard setupSpectral function.
+ * @returns {Function} A function to be used in the beforeEach hook in Mocha tests.
  * 
  * @example
  * // In your test file
  * beforeEach(setupSpectralBeforeEach(myRuleset, 'rule-set-name'));
+ * 
+ * @example
+ * // Using with a custom setupSpectral function
+ * beforeEach(setupSpectralBeforeEach(myRuleset, 'rule-set-name', customSetupSpectral));
  */
-export function setupSpectralBeforeEach(ruleset, ruleName) {
+export function setupSpectralBeforeEach(ruleset, ruleName, setupSpectralFn = setupSpectral) {
 
   return function () {
 
@@ -22,7 +27,7 @@ export function setupSpectralBeforeEach(ruleset, ruleName) {
 
     try {
 
-      spectral = setupSpectral(ruleset);
+      spectral = setupSpectralFn(ruleset);
 
       if (ruleName.length > 0) {
 

@@ -35,6 +35,9 @@ import invalidApiDocument from './docs/errors/errorObjects/invalidApiDocument.js
  */
 describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSuite() {
 
+  /**
+   * Ruleset: errors-error-objects-array-structure
+   */
   describe('errors-error-objects-array-structure:', function errorsErrorObjectsArrayStructure() {
 
     const testingRuleName = 'errors-error-objects-array-structure';
@@ -128,34 +131,87 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
 
   });
 
-  // describe('errors-error-objects-object-structure', function errorsErrorObjectsObjectStructure() {
+  /**
+   * Ruleset: errors-error-objects-object-structure
+   */
+  describe('errors-error-objects-object-structure', function errorsErrorObjectsObjectStructure() {
 
-  //   beforeEach(setupSpectralBeforeEach(ruleset, ['errors-error-objects-object-structure']));
+    const testingRuleName = 'errors-error-objects-object-structure';
 
-  //     it('should pass with no errors for ....', async function errorsErrorObjectsPassingObjectStructure() {
+    beforeEach(setupSpectralBeforeEach(ruleset, [testingRuleName]));
 
-  //       try {
+    // it('the json path expression should find the correct paths from the given document', async function errorsErrorObjectsObjectStructurePath() {
 
-  //         const relevantResults = await handleSpectralResults(this.spectral, validApiDocument, 'errors-error-objects-object-structure');
+    //   try {
 
-  //         debugLog(`  Confirmed Errors:`);
-  //         debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
+    //     const relevantResults = await handleSpectralResults(this.spectral, validApiDocument, testingRuleName);
 
-  //         const errorMessage = `
-  //                 \x1b[31mError count should be 0 for Object Structure within OpenAPI structure.\n
-  //                 \x1b[31mFailing Ruleset Details: \x1b[0m
-  //             `;
-  //         const jsData = JSON.stringify(relevantResults, null, 2);
-  //         expect(relevantResults.length).to.equal(0, errorMessage + jsData.replace(/", /gu, `",\n`));
+    //     debugLog(`  Confirmed Errors:`);
+    //     debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
+
+    //     const errorMessage = `
+    //               \x1b[31mError count should be 0 for Object Structure within OpenAPI structure.\n
+    //               \x1b[31mFailing Ruleset Details: \x1b[0m
+    //           `;
+    //     const jsData = JSON.stringify(relevantResults, null, 2);
+    //     // expect(relevantResults.length).to.equal(0, errorMessage + jsData.replace(/", /gu, `",\n`));
         
-  //       } catch (error) {
+    //   } catch (error) {
 
-  //         throw new Error(formattedErrorMessage(error));
+    //     processErrors(error);
         
-  //       }
+    //   }
 
-  //     });
+    // });
 
-  // });
+    // it('the rule should return "errors-error-objects-object-structure" errors if any errors properties type is NOT correct', async function errorsErrorObjectsObjectStructureFailure() {
+
+    //   try {
+
+    //     const relevantResults = await handleSpectralResults(this.spectral, validApiDocument, testingRuleName);
+
+    //     debugLog(`  Confirmed Errors:`);
+    //     debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
+
+    //     const errorMessage = `
+    //               \x1b[31mError count should be 0 for Object Structure within OpenAPI structure.\n
+    //               \x1b[31mFailing Ruleset Details: \x1b[0m
+    //           `;
+    //     const jsData = JSON.stringify(relevantResults, null, 2);
+    //     // expect(relevantResults.length).to.equal(0, errorMessage + jsData.replace(/", /gu, `",\n`));
+        
+    //   } catch (error) {
+
+    //     processErrors(error);
+        
+    //   }
+
+    // });
+
+    // it('the rule should pass with NO errors', async function errorsErrorObjectsObjectStructurePassing() {
+
+    //   try {
+
+    //     const relevantResults = await handleSpectralResults(this.spectral, validApiDocument, testingRuleName);
+
+    //     debugLog(`  Confirmed Errors:`);
+    //     debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
+
+    //     const errorMessage = `
+    //               \x1b[31mError count should be 0 for Object Structure within OpenAPI structure.\n
+    //               \x1b[31mFailing Ruleset Details: \x1b[0m
+    //           `;
+    //     const jsData = JSON.stringify(relevantResults, null, 2);
+    //     // expect(relevantResults.length).to.equal(0, errorMessage + jsData.replace(/", /gu, `",\n`));
+        
+    //   } catch (error) {
+
+    //     processErrors(error);
+        
+    //   }
+
+    // });
+
+  });
       
 });

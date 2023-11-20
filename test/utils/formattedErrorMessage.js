@@ -7,6 +7,13 @@
  */
 export function formattedErrorMessage(error) {
 
+  // Handle cases where error or error.message is undefined
+  if (!error || !error.message) {
+
+    return '';
+  
+  }
+
   // Convert error object to string if necessary
   const errorString = typeof error.message === 'string'
     ? error.message
@@ -14,9 +21,6 @@ export function formattedErrorMessage(error) {
 
   // Replace escaped characters like '\"' with '"'
   const readableErrorMessage = errorString.replace(/\\\\"/gu, '"').replace(/\\n/gu, '\n');
-
-  // Log the error message if needed for debugging
-  // console.log(`Spectral Error: ${readableErrorMessage}`);
 
   return readableErrorMessage;
   

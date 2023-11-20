@@ -17,11 +17,15 @@ export async function handleSpectralResults(spectral, document, resultCode) {
 
     const enabledRules = getEnabledRules(spectral);
     
-    // Log the details of the rule
-    debugDebug(`\x1b[35mRule Details:\x1b[36m ${JSON.stringify(spectral.ruleset.rules[resultCode], null, 2)}\n`);
-    debugDebug(`\x1b[35mRule Message:\x1b[36m ${spectral.ruleset.rules[resultCode].message}\n`);
-    debugDebug(`\x1b[35mRule Given:\x1b[36m ${spectral.ruleset.rules[resultCode].given}\n`);
-    debugDebug(`\x1b[35mRule Then:\x1b[36m ${JSON.stringify(spectral.ruleset.rules[resultCode].then, null, 2)}\n\n\x1b[0m\n`);
+    // Log the details of the rule, if it exists
+    if (spectral.ruleset.rules[resultCode]) {
+
+      debugDebug(`\x1b[35mRule Details:\x1b[36m ${JSON.stringify(spectral.ruleset.rules[resultCode], null, 2)}\n`);
+      debugDebug(`\x1b[35mRule Message:\x1b[36m ${spectral.ruleset.rules[resultCode].message}\n`);
+      debugDebug(`\x1b[35mRule Given:\x1b[36m ${spectral.ruleset.rules[resultCode].given}\n`);
+      debugDebug(`\x1b[35mRule Then:\x1b[36m ${JSON.stringify(spectral.ruleset.rules[resultCode].then, null, 2)}\n\n\x1b[0m\n`);
+    
+    }
     
     const results = await spectral.run(document, { rules: enabledRules });
 
