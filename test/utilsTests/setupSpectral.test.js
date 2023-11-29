@@ -10,6 +10,11 @@ describe('setupSpectral Utils:', function () {
 
   before(function () {
 
+    
+    process.env.LOG_DEBUG = false;
+    process.env.DEBUG_DEBUG = false;
+    process.env.INFO_DEBUG = false;
+
     ruleset = {
       rules: {
         'rule-one': {
@@ -36,9 +41,6 @@ describe('setupSpectral Utils:', function () {
   });
 
   it('should return a Spectral instance with a provided ruleset', function () {
-
-    process.env.LOG_DEBUG = false;
-    process.env.DEBUG_DEBUG = false;
 
     const spectral = setupSpectral(ruleset);
     expect(spectral).to.be.instanceof(Spectral);
