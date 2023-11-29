@@ -1,7 +1,5 @@
 /* eslint-disable no-prototype-builtins */
-/* eslint-disable no-console */
-
-import { debugLog } from './debugUtils.js';
+import { debugInfo } from './debugUtils.js';
 
 /**
  * Logs the current enabled/disabled state of each rule in the Spectral instance's ruleset.
@@ -21,13 +19,13 @@ import { debugLog } from './debugUtils.js';
  */
 export function displayRulesets(spectral) {
   
-  debugLog(`  \x1b[4mAll Rulesets\x1b[0m: `);
+  debugInfo(`  \x1b[4mAll Rulesets\x1b[0m: `);
 
   for (const rule in spectral.ruleset.rules) {
 
     if (spectral.ruleset.rules.hasOwnProperty(rule)) {
 
-      debugLog(`\x1b[35m    -\x1b[33m ${rule}: ${spectral.ruleset.rules[rule].enabled
+      debugInfo(`\x1b[35m    -\x1b[33m ${rule}: ${spectral.ruleset.rules[rule].enabled
         ? '\x1b[32mEnabled\x1b[0m'
         : '\x1b[31mDisabled\x1b[0m'}`);
     
@@ -35,6 +33,6 @@ export function displayRulesets(spectral) {
   
   }
   
-  debugLog(`\n`);
+  debugInfo(`\n`);
 
 }
