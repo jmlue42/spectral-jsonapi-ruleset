@@ -12,6 +12,7 @@ rules:
     - error 
     - always
   max-statements: off
+  no-undef: off
   no-invalid-this: off
   no-console: off
   no-process-env: off

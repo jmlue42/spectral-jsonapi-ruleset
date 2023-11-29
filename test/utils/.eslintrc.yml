@@ -1,0 +1,7 @@
+rules:
+  max-params:
+    - error
+    - max: 4
+  complexity:
+    - error
+    - max: 8
