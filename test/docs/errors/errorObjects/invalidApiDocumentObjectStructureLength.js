@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 /* eslint-disable quotes */
-const validApiDocument = {
+const invalidApiDocumentObjectStructureLength = {
   "openapi": "3.1.0",
   "info": {
     "title": "User Information API",
@@ -118,14 +118,6 @@ const validApiDocument = {
   },
   "components": {
     "schemas": {
-      "Test": {
-        "type": "object",
-        "properties": {
-          "test": {
-            "type": "string"
-          }
-        }
-      },
       "JsonApiError": {
         "type": "object",
         "properties": {
@@ -141,35 +133,42 @@ const validApiDocument = {
         "type": "object",
         "properties": {
           "id": {
-            "type": "string"
+            // Original: "string"
+            "type": "object"
+          },
+          "ExtraMember": {
+            // Original: "string"
+            "type": "object"
           },
           "links": {
-            "type": "object",
+            // Original: "object"
+            "type": "string",
             "properties": {
               "about": {
-                "type": "string",
-                "format": "uri"
-              },
-              "type": {
                 "type": "string",
                 "format": "uri"
               }
             }
           },
           "status": {
-            "type": "string"
+            // Original: "string"
+            "type": "object"
           },
           "code": {
-            "type": "string"
+            // Original: "string"
+            "type": "object"
           },
           "title": {
-            "type": "string"
+            // Original: "string"
+            "type": "object"
           },
           "detail": {
-            "type": "string"
+            // Original: "string"
+            "type": "object"
           },
           "source": {
-            "type": "object",
+            // Original: "object"
+            "type": "string",
             "properties": {
               "pointer": {
                 "type": "string"
@@ -183,7 +182,8 @@ const validApiDocument = {
             }
           },
           "meta": {
-            "type": "object",
+            // Original: "object"
+            "type": "string",
             "additionalProperties": true
           }
         },
@@ -195,4 +195,4 @@ const validApiDocument = {
   }
 };
 
-export default validApiDocument;
+export default invalidApiDocumentObjectStructureLength;

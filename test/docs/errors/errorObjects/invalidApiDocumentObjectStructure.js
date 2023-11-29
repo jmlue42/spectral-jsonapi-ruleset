@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 /* eslint-disable quotes */
-const validApiDocument = {
+const invalidApiDocumentObjectStructure = {
   "openapi": "3.1.0",
   "info": {
     "title": "User Information API",
@@ -118,14 +118,6 @@ const validApiDocument = {
   },
   "components": {
     "schemas": {
-      "Test": {
-        "type": "object",
-        "properties": {
-          "test": {
-            "type": "string"
-          }
-        }
-      },
       "JsonApiError": {
         "type": "object",
         "properties": {
@@ -138,37 +130,41 @@ const validApiDocument = {
         }
       },
       "ErrorObject": {
+        // Original: "object"
         "type": "object",
         "properties": {
-          "id": {
+          "idd": {
+            // Original: "string"
             "type": "string"
           },
-          "links": {
+          "linkss": {
+            // Original: "object"
             "type": "object",
             "properties": {
               "about": {
                 "type": "string",
                 "format": "uri"
-              },
-              "type": {
-                "type": "string",
-                "format": "uri"
               }
             }
           },
-          "status": {
+          "statuss": {
+            // Original: "string"
             "type": "string"
           },
-          "code": {
+          "codee": {
+            // Original: "string"
             "type": "string"
           },
-          "title": {
+          "titlee": {
+            // Original: "string"
             "type": "string"
           },
-          "detail": {
+          "detaill": {
+            // Original: "string"
             "type": "string"
           },
-          "source": {
+          "sourcee": {
+            // Original: "object"
             "type": "object",
             "properties": {
               "pointer": {
@@ -182,7 +178,8 @@ const validApiDocument = {
               }
             }
           },
-          "meta": {
+          "metaa": {
+            // Original: "object"
             "type": "object",
             "additionalProperties": true
           }
@@ -195,4 +192,4 @@ const validApiDocument = {
   }
 };
 
-export default validApiDocument;
+export default invalidApiDocumentObjectStructure;

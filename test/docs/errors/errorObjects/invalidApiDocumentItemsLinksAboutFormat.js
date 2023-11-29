@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 /* eslint-disable quotes */
-const validApiDocument = {
+const invalidApiDocumentItemsLinksAboutFormat = {
   "openapi": "3.1.0",
   "info": {
     "title": "User Information API",
@@ -148,7 +148,8 @@ const validApiDocument = {
             "properties": {
               "about": {
                 "type": "string",
-                "format": "uri"
+                // Original: "uri"
+                "format": "uris"
               },
               "type": {
                 "type": "string",
@@ -195,4 +196,4 @@ const validApiDocument = {
   }
 };
 
-export default validApiDocument;
+export default invalidApiDocumentItemsLinksAboutFormat;

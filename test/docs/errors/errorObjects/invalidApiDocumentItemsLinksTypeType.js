@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 /* eslint-disable quotes */
-const validApiDocument = {
+const invalidApiDocumentItemsLinksTypeType = {
   "openapi": "3.1.0",
   "info": {
     "title": "User Information API",
@@ -118,18 +118,16 @@ const validApiDocument = {
   },
   "components": {
     "schemas": {
-      "Test": {
-        "type": "object",
-        "properties": {
-          "test": {
-            "type": "string"
-          }
-        }
-      },
       "JsonApiError": {
         "type": "object",
         "properties": {
           "errors": {
+
+            /**
+             * validating here
+             *  original: array
+             *    Fail: object
+             *  */ 
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ErrorObject"
@@ -141,9 +139,11 @@ const validApiDocument = {
         "type": "object",
         "properties": {
           "id": {
-            "type": "string"
+            // Original: "string"
+            "type": "object"
           },
           "links": {
+            // Original: "object"
             "type": "object",
             "properties": {
               "about": {
@@ -151,25 +151,31 @@ const validApiDocument = {
                 "format": "uri"
               },
               "type": {
-                "type": "string",
-                "format": "uri"
+                // Original: "string"
+                "type": "object",
+                "format": "uriaaa"
               }
             }
           },
           "status": {
-            "type": "string"
+            // Original: "string"
+            "type": "object"
           },
           "code": {
-            "type": "string"
+            // Original: "string"
+            "type": "object"
           },
           "title": {
-            "type": "string"
+            // Original: "string"
+            "type": "object"
           },
           "detail": {
-            "type": "string"
+            // Original: "string"
+            "type": "object"
           },
           "source": {
-            "type": "object",
+            // Original: "object"
+            "type": "string",
             "properties": {
               "pointer": {
                 "type": "string"
@@ -183,7 +189,8 @@ const validApiDocument = {
             }
           },
           "meta": {
-            "type": "object",
+            // Original: "object"
+            "type": "string",
             "additionalProperties": true
           }
         },
@@ -195,4 +202,4 @@ const validApiDocument = {
   }
 };
 
-export default validApiDocument;
+export default invalidApiDocumentItemsLinksTypeType;
