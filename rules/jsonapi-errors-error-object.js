@@ -2,7 +2,7 @@
 
 // All rules in the file MUST have corresponding tests
 
-import { schema, truthy } from '@stoplight/spectral-functions';
+import { enumeration, length, schema } from '@stoplight/spectral-functions';
 import validatePropertiesWithCriteria from '../functions/validatePropertyType.js';
 
 export default {
@@ -10,10 +10,33 @@ export default {
   rules: {
 
     /**
-     * Ensures that error objects are structured correctly within the response.
-     * According to JSON:API specification, error objects must be returned as 
-     * an array under the 'errors' key. This rule checks the root ofthe document
-     * to ensure that 'errors' is an array and contains objects.
+     * Ensures that the 'JsonApiError' schema is only used in responses with
+     * status codes between 400 and 599. This rule aims to validate that error
+     * responses follow the JSON:API specification by using the correct schema.
+     */
+    'errors-error-objects-4xx-5xx-responses': {
+      description: 'Ensure JsonApiError schema is used only in responses with status codes 400-599',
+      message: '{{path - {{description}}',
+      severity: 'error',
+      given: '$.paths.*.*.responses[?(@property >= 400 && @property <= 599)]',
+      then: [
+        {
+          field: 'content.application/vnd.api+json.schema.$ref',
+          function: schema,
+          functionOptions: {
+            schema: {
+              type: 'string',
+              pattern: '^#/components/schemas/JsonApiError$'
+            }
+          }
+        }
+      ]
+    },
+
+    /**
+     * Checks that error objects are structured correctly within the response.
+     * Specifically, it ensures that the 'errors' key is an array, adhering
+     * to the JSON:API specification.
      */
     'errors-error-objects-array-structure': {
       description: 'Error objects must be returned in an array under `errors` key.',
@@ -25,6 +48,7 @@ export default {
       // given: "$.paths.*.*.responses.*[?(@property === 'errors')]",
       given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property ==='properties')]",
       // given: "$..[?(@property === '400')]..[*[?(@property ==='properties')]",
+      // given: "$.components.schemas.JsonApiError.properties.errors",
       then: [
         // {
         //   function: schema,
@@ -66,6 +90,8 @@ export default {
 
         //   }
         // }
+
+
         {
           function: validatePropertiesWithCriteria,
           functionOptions: {
@@ -73,208 +99,443 @@ export default {
             propertyType: 'array'
           }
         }
+
+        // {
+        //   function: schema,
+        //   functionOptions: {
+        //     schema: {
+        //       type: 'object',
+        //       properties: {
+        //         type: {
+        //           type: 'string',
+        //           enum: ['array']
+        //         },
+        //         items: {
+        //           type: 'object'
+        //         }
+        //       }
+        //     }
+        //   }
+        // }
       ]
     },
 
     /**
-     * Validatesthe structure of each error object within the errors array.
-     * According to JSON:API, an error object must contain at least one of the
-     * specified members. This rule checks for the presence of at least one
-     * property out of the specified oens in each error object.
+     * Validates the structure of error objects within the 'errors' array.
+     * It ensures that error objects only contain specified members as per
+     * JSON:API guidelines.
      */
     'errors-error-objects-object-structure': {
-      description: 'Error object must contain at least one of the specified members.',
+      description: 'Error objects must only contain the specified members.',
       message: '{{path}} - {{description}}',
       severity: 'error',
-      // given: '$.errors[*]',
-      given: '$.paths.*.*.responses.*.content.*.schema.properties.errors[*]',
+      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items.properties",
+      // given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items",
+      // given: "$..paths.*.*.responses.*.content.*.schema.properties.errors[*]",
+      // given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property ==='errors')]",
+      then: 
+      //   {
+      //   // field: "",
+      //   function: schema,
+      //   functionOptions: {
+      //     schema: {
+      //       // Original type: 'object'
+      //       // type: 'string',
+      //       // properties: {
+      //         // id: { type: 'string' },
+      //         // links: { type: 'object' },
+      //         // status: { type: 'string' },
+      //         // code: { type: 'string' },
+      //         // title: { type: 'string' },
+      //         // detail: { type: 'string' },
+      //         // source: { type: 'object' },
+      //         // meta: { type: 'object' }
+      //       // },
+      //       // minProperties: 1
+
+      //       // Only check members
+      //       properties: {
+      //         id,
+      //         links,
+      //         status,
+      //         code,
+      //         title,
+      //         detail,
+      //         source,
+      //         meta
+      //       },
+      //     }
+      //   }
+      // }
+
+        {
+          field: '@key',
+          function: enumeration,
+          functionOptions: {
+            values: [
+              'id',
+              'links',
+              'status',
+              'code',
+              'title',
+              'detail',
+              'source',
+              'meta'
+            ]
+          }
+        }
+    },
+
+    /**
+     * Ensures the error objects contain an appropriate number of members.
+     * This rule checks that each error object has at least one and no more
+     * than eight members.
+     */
+    'errors-error-objects-object-structure-length': {
+      description: 'Error objects must only contain the specified members.',
+      message: '{{path}} - {{description}}',
+      severity: 'error',
+      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items",
+      then: {
+        field: 'properties',
+        function: length,
+        functionOptions: {
+          min: 1,
+          max: 8
+        }
+      }
+    },
+
+    /**
+     * Verifies that the 'id' member in each error object is of type 'string'.
+     * This rule is crucial for maintaining consistency in error object identifiers.
+     */
+    'errors-error-objects-items-id-type': {
+      description: 'Id member in "errors" array must by of type "string".',
+      message: '{{path}} - {{description}}',
+      severity: 'error',
+      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items.properties.id",
       then: {
         function: schema,
         functionOptions: {
           schema: {
-            // Original type: 'object'
-            type: 'object',
-            properties: {
-              id: { type: 'string' },
-              links: { type: 'object' },
-              status: { type: 'string' },
-              code: { type: 'string' },
-              title: { type: 'string' },
-              detail: { type: 'string' },
-              source: { type: 'object' },
-              meta: { type: 'object' }
-            },
-            minProperties: 1
+            // Original type: 'string'
+            type: 'string'
           }
         }
       }
     },
 
     /**
-     * Checks the structure of the 'links' object within each error object.
-     * Validates that the 'about' and 'type' properties in the 'links' object
-     * are well-formed URIs. This ensures that any reference URLs provided
-     * in error objects are valid and adhere tothe URI format.
+     * Ensures that the 'links' member in each error object is of type 'object'.
+     * This rule checks the structure of 'links' objects within error responses.
      */
-    'errors-error-objects-links': {
-      description: 'Links object within error object should have valid URLs in "about" and/or "type".',
+    'errors-error-objects-items-links-type': {
+      description: 'Links member in "errors" array must by of type "object".',
       message: '{{path}} - {{description}}',
       severity: 'error',
-      given: '$.error[*].links',
+      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items.properties.links",
       then: {
         function: schema,
         functionOptions: {
           schema: {
-            type: 'object',
-            properties: {
-              about: {
-                type: 'string',
-                format: 'uri'
-              },
-              type: {
-                type: 'string',
-                format: 'uri'
-              },
-              additionalProperties: false
-            }
+            type: 'object'
           }
         }
       }
     },
 
     /**
-     * Validates the 'source' object in each error object.
-     * Ensures that the 'source' object, if present, contains valid
-     * 'pointer', 'parameter', or 'header' properties. This rule
-     * helps in pinpointing the exact source of the error in the request,
-     * whether it's a specific part of the payload (pointer), a query
-     * paramter, or a header.
+     * Checks the members of 'links' objects in error responses.
+     * It validates that 'links' object only contain the 'about' and/or 'type' members.
      */
-    'errors-error-objects-source': {
-      description: 'Source object in error object should contain valid "pointer", "parameter", or "header".',
+    'errors-error-objects-items-links': {
+      description: 'Links object may contain one of the following members: "about" and/or "type".',
       message: '{{path}} - {{description}}',
       severity: 'error',
-      given: '$.errors[*].source',
+      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items.properties.links.properties",
+      then: {
+        field: '@key',
+        function: enumeration,
+        functionOptions: {
+          values: [
+            'about',
+            'type'
+          ]
+        }
+      }
+    },
+
+    /**
+     * Validates the number of members in 'links' objects within error objects.
+     * Ensures that each 'links' object contains only one or two specified members.
+     */
+    'errors-error-objects-items-links-structure-length': {
+      description: 'Links objects must only contain the specified members.',
+      message: '{{path}} - {{description}}',
+      severity: 'error',
+      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items.properties.links",
+      then: {
+        field: 'properties',
+        function: length,
+        functionOptions: {
+          min: 1,
+          max: 2
+        }
+      }
+    },
+
+    /**
+     * Checks that the 'about' member in 'links' objects is a well-formed URI string.
+     * This rule is essential for ensuring that reference URLs in error objects are valid.
+     */
+    'errors-error-objects-items-links-about-type': {
+      description: 'About member in the Links object must be of type "string" in the format of an "URI".',
+      message: '{{path}} - {{description}}',
+      severity: 'error',
+      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items.properties.links.about",
       then: {
         function: schema,
         functionOptions: {
           schema: {
-            type: 'object',
-            properties: {
-              // Can add additional validation for JSON Pointer format, if required
-              pointer: { type: 'string' },
-              parameter: { type: 'string' },
-              header: { type: 'string' }
-            },
-            additionalProperties: false
+            type: 'string',
+            format: 'uri'
           }
         }
       }
     },
 
     /**
-     * Checks for the presence and validity of the 'status' field in error objects.
-     * this rule ensures that a 'status' is provided for each error and that it is
-     * a string. Further validation can be added toconfirm it's a valid HTTP status
-     * code if needed.
+     * Validates te structure of the 'type' member in 'links' objects within error arrays.
+     * Ensures that it is a string formatted as a URI, aligning with JSON:API specifications.
      */
-    'errors-error-objects-status': {
-      description: 'Status in error object should be a valid HTTP status code.',
+    'errors-error-objects-items-links-type-type': {
+      description: 'Type member in the Links object must be of type "string" in the format of an "URI".',
       message: '{{path}} - {{description}}',
       severity: 'error',
-      given: '$.errors[*].status',
-      then: {
-        // Additional validation for status code format can be implemented with a custom function
-        function: truthy        
-      }
-    },
-
-    /**
-     * Ensures the 'id' property in each error object, if present, is a string.
-     * The 'id' serves as a unique identifier for a particular occurrence of the problem.
-     */
-    'errors-error-objects-id': {
-      description: 'The `id` property in error objects should be a string.',
-      message: '{{path}} - {{description}}',
-      severity: 'error',
-      given: '$.errors[*].id',
+      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items.properties.links.type",
       then: {
         function: schema,
         functionOptions: {
-          schema: { type: 'string' }
-        }
-      }
-    },
-
-
-    /**
-     * Validates the 'code' property in each object, ensuring it's a string.
-     * The 'code' is an application-specific error code expressed as a string value.
-     */
-    'errors-error-objects-code': {
-      description: 'The `code` property in error objects should be a string.',
-      message: '{{path}} - {{description}}',
-      severity: 'error',
-      given: '$.errors[*].code',
-      then: {
-        function: schema,
-        functionOptions: {
-          schema: { type: 'string' }
+          schema: {
+            type: 'string',
+            format: 'uri'
+          }
         }
       }
     },
 
     /**
-     * Checks the 'title' property in each error object, ensuring it's a string.
-     * The 'title' is a short, human-readable summary of the problem.
+     * Ensures the 'status' member in error objects is of type 'string'.
+     * This rule checks the format of HTTP status codes in error responses.
      */
-    'errors-error-objects-title': {
-      description: 'The `title` property in error objects should be a string.',
+    'errors-error-objects-items-status-type': {
+      description: 'Status member in "errors" array must by of type "string".',
       message: '{{path}} - {{description}}',
       severity: 'error',
-      given: '$.errors[*].title',
+      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items.properties.status",
       then: {
         function: schema,
         functionOptions: {
-          schema: { type: 'string' }
+          schema: {
+            type: 'string'
+          }
         }
       }
     },
 
     /**
-     * Validates the 'detail' property in each error object, ensuring it's a string.
-     * The 'detail' provides a more detailed, human-readable explanation of the problem.
+     * Validates that the 'code' member in error objects is a string.
+     * This rule helps in standardizing error codes within error responses.
      */
-    'errors-error-objects-detail': {
-      description: 'The `detail` property in error objects should be a string.',
-      message: '{{path} - {{description}}',
+    'errors-error-objects-items-code-type': {
+      description: 'code member in "errors" array must by of type "string".',
+      message: '{{path}} - {{description}}',
       severity: 'error',
-      given: '$.errors[*].detail',
+      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items.properties.code",
       then: {
         function: schema,
         functionOptions: {
-          schema: { type: 'string' }
+          schema: {
+            type: 'string'
+          }
         }
       }
     },
 
     /**
-     * Checks the 'meta' property in each error object, ensuring it's an object.
-     * The 'meta' is a place for non-standard meta-information about the error.
+     * Ensures that the 'title' member in error objects is of type 'string'.
+     * This rule checks the format of error titles, ensuring they are textual descriptions.
      */
-    'errors-error-objects-meta': {
-      description: 'the `meta` property in error objects should be an object',
+    'errors-error-objects-items-title-type': {
+      description: 'title member in "errors" array must by of type "string".',
       message: '{{path}} - {{description}}',
       severity: 'error',
-      given: '$.errors[*].meta',
+      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items.properties.title",
       then: {
         function: schema,
         functionOptions: {
-          schema: { type: 'object' }
+          schema: {
+            type: 'string'
+          }
+        }
+      }
+    },
+
+    /**
+     * Validates that the 'detail member in error objects is a string.
+     * This rule ensures that error details provide a clear textual explanation.
+     */
+    'errors-error-objects-items-detail-type': {
+      description: 'detail member in "errors" array must by of type "string".',
+      message: '{{path}} - {{description}}',
+      severity: 'error',
+      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items.properties.detail",
+      then: {
+        function: schema,
+        functionOptions: {
+          schema: {
+            type: 'string'
+          }
+        }
+      }
+    },
+
+    /**
+     * Checks that the 'source' member in error objects is of type 'object'.
+     * This rule validates the structure of 'source' objects, which pinpoint the origin of errors.
+     */
+    'errors-error-objects-items-source-type': {
+      description: 'Source member in "errors" array must by of type "object".',
+      message: '{{path}} - {{description}}',
+      severity: 'error',
+      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items.properties.source",
+      then: {
+        function: schema,
+        functionOptions: {
+          schema: {
+            type: 'object'
+          }
+        }
+      }
+    },
+
+    /**
+     * Validates the members of 'source' objects in error responses.
+     * Ensures 'source' objects contain only 'pointer', 'parameter', and/or 'header' members.
+     */
+    'errors-error-objects-items-source': {
+      description: 'Source object SHOULD contain one of the following members: "pointer", "parameter" and/or "header".',
+      message: '{{path}} - {{description}}',
+      severity: 'error',
+      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items.properties.source.properties",
+      then: {
+        field: '@key',
+        function: enumeration,
+        functionOptions: {
+          values: [
+            'pointer',
+            'parameter',
+            'header'
+          ]
+        }
+      }
+    },
+
+    /**
+     * Ensures that the 'pointer' member in 'source' objects is a string.
+     * This rule checks the format of 'pointer', which should indicate the exact location of the error.
+     */
+    'errors-error-objects-items-source-pointer-type': {
+      description: 'Pointer member in the Source object must be of type "string".',
+      message: '{{path}} - {{description}}',
+      severity: 'error',
+      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items.properties.source.properties.pointer.type",
+      then: {
+        function: schema,
+        functionOptions: {
+          schema: {
+            type: 'string'
+          }
+        }
+      }
+    },
+
+    /**
+     * Validates the 'parameter' member in 'source' objects as a string.
+     * This rule is important for correctly identifying query parameters related to errors.
+     */
+    'errors-error-objects-items-source-parameter-type': {
+      description: 'Parameter member in the Source object must be of type "string".',
+      message: '{{path}} - {{description}}',
+      severity: 'error',
+      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items.properties.source.properties.parameter.type",
+      then: {
+        function: schema,
+        functionOptions: {
+          schema: {
+            type: 'string'
+          }
+        }
+      }
+    },
+
+    /**
+     * Checks that the 'header' member in 'source' objects is of type 'string'.
+     * It ensures accurate identification of headers related to errors in requests.
+     */
+    'errors-error-objects-items-source-header-type': {
+      description: 'Header member in the Source object must be of type "string".',
+      message: '{{path}} - {{description}}',
+      severity: 'error',
+      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items.properties.source.properties.header.type",
+      then: {
+        function: schema,
+        functionOptions: {
+          schema: {
+            type: 'string'
+          }
+        }
+      }
+    },
+
+    /**
+     * Validates the number of members in 'source' objects within error objects.
+     * Ensures that each 'source' object hsa between one and three members.
+     */
+    'errors-error-objects-items-source-structure-length': {
+      description: 'Source objects must only contain the specified members.',
+      message: '{{path}} - {{description}}',
+      severity: 'error',
+      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items.properties.source",
+      then: {
+        field: 'properties',
+        function: length,
+        functionOptions: {
+          min: 1,
+          max: 3
+        }
+      }
+    },
+
+    /**
+     * Ensures that the 'meta' member in error objects is of type 'object'.
+     * This rule checks the structure of 'meta' objects. which may contain additional error information.
+     */
+    'errors-error-objects-items-meta-type': {
+      description: 'Meta member in "errors" array must by of type "object".',
+      message: '{{path}} - {{description}}',
+      severity: 'error',
+      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items.properties.meta",
+      then: {
+        function: schema,
+        functionOptions: {
+          schema: {
+            type: 'object'
+          }
         }
       }
     }
-
 
   }
 
