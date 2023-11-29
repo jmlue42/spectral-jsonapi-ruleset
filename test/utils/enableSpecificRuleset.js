@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable no-prototype-builtins */
 
 import { debugDebug } from './debugUtils.js';
