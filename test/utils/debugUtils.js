@@ -28,7 +28,7 @@ export const debugLog = (message) => {
 
   if (isDebugModeEnabled('LOG_DEBUG')) {
 
-    console.log(message);
+    console.log(`\x1b[33m[\x1b[0m  \x1b[1mLOG \x1b[0m\x1b[33m ] \x1b[0m${message}`);
   
   }
 
@@ -43,7 +43,7 @@ export const debugDebug = (message) => {
 
   if (isDebugModeEnabled('DEBUG_DEBUG')) {
 
-    console.debug(`\x1b[35m${message}\x1b[0m`);
+    console.debug(`\x1b[36m[\x1b[0m  \x1b[1mDEBUG \x1b[0m\x1b[36m ] \x1b[35m${message}\x1b[0m`);
   
   }
 
@@ -88,7 +88,7 @@ export const debugInfo = (message) => {
 
   if (isDebugModeEnabled('INFO_DEBUG')) {
 
-    console.info(message);
+    console.info(`\x1b[32m[\x1b[0m  \x1b[1mINFO \x1b[0m\x1b[32m ] \x1b[36m${message}\x1b[0m`);
   
   }
 
