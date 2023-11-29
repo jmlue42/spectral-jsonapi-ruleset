@@ -1,7 +1,7 @@
 import sinon from 'sinon';
 import { processErrors } from '../utils/processErrors.js';
 
-describe('processErrors', function () {
+describe('processErrors Utils:', function () {
 
   let consoleErrorStub;
 

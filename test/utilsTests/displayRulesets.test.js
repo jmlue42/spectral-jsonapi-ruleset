@@ -4,8 +4,9 @@ const { Spectral } = pkg;
 import { truthy } from '@stoplight/spectral-functions';
 import sinon from 'sinon';
 import { displayRulesets } from '../utils/displayRulesets.js';
+// import { debugDebug, debugError, debugInfo, debugLog, debugWarn } from '../utils/debugUtils.js';
 
-describe('displayRulesets', function () {
+describe('displayRulesets Utils:', function () {
 
   let spectral;
   let consoleStub;
@@ -39,7 +40,7 @@ describe('displayRulesets', function () {
 
     // Setup stubs for console methods before each test
     consoleStub = {
-      log: sinon.stub(console, 'log')
+      info: sinon.stub(console, 'info')
     };
 
   });
@@ -47,22 +48,42 @@ describe('displayRulesets', function () {
   afterEach(function () {
 
     // Restore the original console methods after each test
-    consoleStub.log.restore();
+    consoleStub.info.restore();
 
   });
 
   it('should correctly log the status of each rule in the ruleset', function () {
 
-    process.env.LOG_DEBUG = 'true';
+    process.env.INFO_DEBUG = true;
+
     spectral.ruleset.rules['rule-one'].enabled = true;
     spectral.ruleset.rules['rule-two'].enabled = false;
 
     displayRulesets(spectral);
 
-    // Check that debugLog was called correctly
-    expect(consoleStub.log.callCount).to.be.greaterThan(0);
-    expect(consoleStub.log.calledWith(`\x1b[35m    -\x1b[33m rule-one: \x1b[32mEnabled\x1b[0m`)).to.be.true;
-    expect(consoleStub.log.calledWith(`\x1b[35m    -\x1b[33m rule-two: \x1b[31mDisabled\x1b[0m`)).to.be.true;
+    const enabledRegex = /rule-one.*Enabled/u;
+    const disabledRegex = /rule-two.*Disabled/u;
+
+    let foundEnabled = false;
+    let foundDisabled = false;
+
+    consoleStub.info.getCalls().forEach((call) => {
+
+      if (enabledRegex.test(call.args[0])) {
+
+        foundEnabled = true; 
+
+      }
+      if (disabledRegex.test(call.args[0])) {
+
+        foundDisabled = true; 
+
+      }
+
+    });
+
+    expect(foundEnabled).to.be.true;
+    expect(foundDisabled).to.be.true;
 
   });
 

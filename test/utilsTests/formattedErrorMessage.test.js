@@ -1,6 +1,6 @@
 import { formattedErrorMessage } from '../utils/formattedErrorMessage.js';
 
-describe('formattedErrorMessage Test Suite:', function () {
+describe('formattedErrorMessage Utils Test Suite:', function () {
 
   describe('standardError:', function () {
 

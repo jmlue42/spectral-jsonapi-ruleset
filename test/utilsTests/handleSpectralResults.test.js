@@ -8,7 +8,7 @@ import sinon from 'sinon';
 import { handleSpectralResults } from '../utils/handleSpectralResults.js';
 
 
-describe('handleSpectralResults', function () {
+describe('handleSpectralResults Utils:', function () {
 
   let spectral;
 

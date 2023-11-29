@@ -4,7 +4,7 @@ const { Spectral } = pkg;
 import { truthy } from '@stoplight/spectral-functions';
 import { getEnabledRules } from '../utils/getEnabledRules.js';
 
-describe('getEnabledRules', function () {
+describe('getEnabledRules Utils:', function () {
 
   let spectral;
 

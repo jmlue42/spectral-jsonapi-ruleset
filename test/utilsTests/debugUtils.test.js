@@ -35,7 +35,7 @@ describe('debug Utils Test Suite:', function () {
 
       process.env.LOG_DEBUG = 'true';
       debugUtils.debugLog('Log Message');
-      expect(consoleStub.log.calledWith('Log Message')).to.be.true;
+      expect(consoleStub.log.calledWith('\x1b[33m[\x1b[0m  \x1b[1mLOG \x1b[0m\x1b[33m ] \x1b[0mLog Message')).to.be.true;
     
     });
     
@@ -55,7 +55,7 @@ describe('debug Utils Test Suite:', function () {
 
       process.env.DEBUG_DEBUG = 'true';
       debugUtils.debugDebug('Debug Message');
-      expect(consoleStub.debug.calledWith('\x1b[35mDebug Message\x1b[0m')).to.be.true;
+      expect(consoleStub.debug.calledWith('\x1b[36m[\x1b[0m  \x1b[1mDEBUG \x1b[0m\x1b[36m ] \x1b[35mDebug Message\x1b[0m')).to.be.true;
     
     });
     
@@ -75,7 +75,7 @@ describe('debug Utils Test Suite:', function () {
 
       process.env.INFO_DEBUG = 'true';
       debugUtils.debugInfo('Info Message');
-      expect(consoleStub.info.calledWith('Info Message')).to.be.true;
+      expect(consoleStub.info.calledWith('\x1b[32m[\x1b[0m  \x1b[1mINFO \x1b[0m\x1b[32m ] \x1b[36mInfo Message\x1b[0m')).to.be.true;
     
     });
     

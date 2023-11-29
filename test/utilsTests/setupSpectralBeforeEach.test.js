@@ -2,7 +2,7 @@ import sinon from 'sinon';
 import { truthy } from '@stoplight/spectral-functions';
 import { setupSpectralBeforeEach } from '../utils/setupSpectralBeforeEach.js';
 
-describe('setupSpectralBeforeEach:', function () {
+describe('setupSpectralBeforeEach Utils:', function () {
 
   let mockSetupSpectral;
   let ruleset;

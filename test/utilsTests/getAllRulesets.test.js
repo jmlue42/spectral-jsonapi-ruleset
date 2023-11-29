@@ -1,6 +1,6 @@
 import { getAllRulesets } from '../utils/getAllRulesets.js';
 
-describe('getAllRulesets', function () {
+describe('getAllRulesets Utils:', function () {
 
   it('should return all rule names from a given ruleset', function () {
         

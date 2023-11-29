@@ -4,7 +4,7 @@ const { Spectral } = pkg;
 import setupSpectral from '../utils/setupSpectral.js';
 import { truthy } from '@stoplight/spectral-functions';
 
-describe('setupSpectral', function () {
+describe('setupSpectral Utils:', function () {
 
   let ruleset;
 

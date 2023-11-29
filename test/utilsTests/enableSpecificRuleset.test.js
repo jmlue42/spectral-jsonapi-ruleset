@@ -4,7 +4,7 @@ const { Spectral } = pkg;
 import { truthy } from '@stoplight/spectral-functions';
 import { enableSpecificRuleset } from '../utils/enableSpecificRuleset.js';
 
-describe('enableSpecificRuleset', function () {
+describe('enableSpecificRuleset Utils:', function () {
 
   let spectral;
 

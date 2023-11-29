@@ -1,7 +1,7 @@
 import mockApiDocument from '../docs/utilsTests/mockApiDocument.js';
 import { resolveRef } from '../utils/refResolver.js';
 
-describe('resolveRef in OpenAPI:', function () {
+describe('resolveRef Utils In OpenAPI:', function () {
 
   let dereferenceDocument;
 

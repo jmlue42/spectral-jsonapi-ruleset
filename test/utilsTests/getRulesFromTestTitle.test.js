@@ -1,6 +1,6 @@
 import { getRulesFromTestTitle } from '../utils/getRulesFromTestTitle.js';
 
-describe('getRulesFromTestTitle', function () {
+describe('getRulesFromTestTitle Utils:', function () {
 
   it('should return an array with a single rule name if it is in the rules list', function () {
 
