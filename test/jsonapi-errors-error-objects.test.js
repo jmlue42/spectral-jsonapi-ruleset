@@ -18,12 +18,23 @@ import invalidApiDocumentObjectStructure from './docs/errors/errorObjects/invali
 import invalidApiDocumentItemsIdType from './docs/errors/errorObjects/invalidApiDocumentItemsIdType.js';
 import invalidApiDocumentObjectStructureLength from './docs/errors/errorObjects/invalidApiDocumentObjectStructureLength.js';
 import invalidApiDocumentItemsLinksType from './docs/errors/errorObjects/invalidApiDocumentItemsLinksType.js';
-import invalidApiDocumentItemsLinks from './docs/errors/errorObjects/invalidApiDocumentItemsLinks.js';
+import invalidApiDocumentItemsLinksMembers from './docs/errors/errorObjects/invalidApiDocumentItemsLinksMembers.js';
 import invalidApiDocumentItemsLinksStructureLength from './docs/errors/errorObjects/invalidApiDocumentItemsLinksStructureLength.js';
 import invalidApiDocumentItemsLinksAboutType from './docs/errors/errorObjects/invalidApiDocumentItemsLinksAboutType.js';
 import invalidApiDocumentItemsLinksTypeType from './docs/errors/errorObjects/invalidApiDocumentItemsLinksTypeType.js';
 import invalidApiDocumentItemsLinksAboutFormat from './docs/errors/errorObjects/invalidApiDocumentItemsLinksAboutFormat.js';
 import invalidApiDocumentItemsLinksTypeFormat from './docs/errors/errorObjects/invalidApiDocumentItemsLinksTypeFormat.js';
+import invalidApiDocumentItemsStatusType from './docs/errors/errorObjects/invalidApiDocumentItemsStatusType.js';
+import invalidApiDocumentItemsCodeType from './docs/errors/errorObjects/invalidApiDocumentItemsCodeType.js';
+import invalidApiDocumentItemsTitleType from './docs/errors/errorObjects/invalidApiDocumentItemsTitleType.js';
+import invalidApiDocumentItemsDetailType from './docs/errors/errorObjects/invalidApiDocumentItemsDetailType.js';
+import invalidApiDocumentItemsSourceType from './docs/errors/errorObjects/invalidApiDocumentItemsSourceType.js';
+import invalidApiDocumentItemsSourceMembers from './docs/errors/errorObjects/invalidApiDocumentItemsSourceMembers.js';
+import invalidApiDocumentItemsSourcePointerType from './docs/errors/errorObjects/invalidApiDocumentItemsSourcePointerType.js';
+import invalidApiDocumentItemsSourceParameterType from './docs/errors/errorObjects/invalidApiDocumentItemsSourceParameterType.js';
+import invalidApiDocumentItemsSourceHeaderType from './docs/errors/errorObjects/invalidApiDocumentItemsSourceHeaderType.js';
+import invalidApiDocumentItemsSourceStructureLength from './docs/errors/errorObjects/invalidApiDocumentItemsSourceStructureLength.js';
+import invalidApiDocumentItemsMetaType from './docs/errors/errorObjects/invalidApiDocumentItemsMetaType.js';
 
 /**
  * @fileoverview This test suite validates the behavior of the JSON: API Errors.ErrorObjects ruleset
@@ -96,7 +107,7 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
       
     });
 
-    it('the rule should return "errors-error-objects-array-structure" errors if `errors` key is NOT type array', async function errorsErrorObjectsArrayStructureFailure() {
+    it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function errorsErrorObjectsArrayStructureFailure() {
 
       try {
     
@@ -106,11 +117,17 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
     
         debugLog(`  Confirmed Errors:`);
         debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
-    
-        const errorMessage = `\x1b[31mError count should be \x1b[33m3.\n\x1b[31m Failing Ruleset Details: \x1b[31m`;
-        const propsToInclude = ['message', 'path'];
-        const jsData = JSON.stringify(relevantResults, propsToInclude, 2);
-        expect(relevantResults.length).to.equal(3, `${errorMessage} \x1b[33m${jsData.replace(/", /gu, `",\n`)}\x1b[0m`);
+
+        relevantResults.forEach((result) => {
+
+          debugError(`\x1b[32mResults for '${testingRuleName}':\x1b[36m ${JSON.stringify(result, ['message', 'path'], 2)} \x1b[0m\n`);
+
+        });
+
+        const confirmedErrors = 3;
+        const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
+
+        expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
         
       } catch (error) {
     
@@ -128,10 +145,9 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
     
         debugLog(`  Confirmed Errors:`);
         debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
-    
-        const errorMessage = `\x1b[31mError count should be 0.\n\x1b[31m Failing Ruleset Details: \x1b[31m`;
-        const jsData = JSON.stringify(relevantResults, ['message', 'path'], 2);
-        expect(relevantResults.length).to.equal(0, `${errorMessage} \x1b[33m${jsData.replace(/", /gu, `",\n`)}\x1b[0m`);
+
+        const errorMessage = `\x1b[31mError count should be 0, ${ruleset.rules[testingRuleName].description}\x1b[0m`;
+        expect(relevantResults.length).to.equal(0, errorMessage);
         
       } catch (error) {
     
@@ -186,7 +202,7 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
 
     });
 
-    it('the rule should return "errors-error-objects-object-structure" errors if any error object type is NOT correct', async function errorsErrorObjectsObjectStructureFailure() {
+    it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function errorsErrorObjectsObjectStructureFailure() {
 
       try {
         
@@ -203,8 +219,8 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
 
         });
 
-        const errorMessage = `\x1b[31mError count should be 24 for Object Structure within OpenAPI structure.\x1b[0m`;
         const confirmedErrors = 24;
+        const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
 
         expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
         
@@ -225,7 +241,7 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
         debugLog(`  Confirmed Errors:`);
         debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
 
-        const errorMessage = `\x1b[31mError count should be 0 for Object Structure within OpenAPI structure.`;
+        const errorMessage = `\x1b[31mError count should be 0, ${ruleset.rules[testingRuleName].description}\x1b[0m`;
         expect(relevantResults.length).to.equal(0, errorMessage);
         
       } catch (error) {
@@ -281,7 +297,7 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
 
     });
 
-    it('the rule should return "errors-error-objects-object-structure-length" errors if the incorrect amount of error objects are NOT the `errors` array', async function errorsErrorObjectsObjectStructureLengthFailure() {
+    it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function errorsErrorObjectsObjectStructureLengthFailure() {
 
       try {
 
@@ -298,8 +314,8 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
 
         });
 
-        const errorMessage = `\x1b[31mError count should be 3.\x1b[0m`;
         const confirmedErrors = 3;
+        const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
 
         expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
         
@@ -320,12 +336,8 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
         debugLog(`  Confirmed Errors:`);
         debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
 
-        const errorMessage = `
-                  \x1b[31mError count should be 0 for Object Structure within OpenAPI structure.\n
-                  \x1b[31mFailing Ruleset Details: \x1b[0m
-              `;
-        const jsData = JSON.stringify(relevantResults, null, 2);
-        expect(relevantResults.length).to.equal(0, errorMessage + jsData.replace(/", /gu, `",\n`));
+        const errorMessage = `\x1b[31mError count should be 0, ${ruleset.rules[testingRuleName].description}\x1b[0m`;
+        expect(relevantResults.length).to.equal(0, errorMessage);
         
       } catch (error) {
 
@@ -380,7 +392,7 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
 
     });
 
-    it('the rule should return "errors-error-objects-items-id-type" errors if the `id` member type is not an `string`', async function errorsErrorObjectsItemsIdTypeFailure() {
+    it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function errorsErrorObjectsItemsIdTypeFailure() {
 
       try {
 
@@ -397,8 +409,8 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
 
         });
 
-        const errorMessage = `\x1b[31mError count should be 3.\x1b[0m`;
         const confirmedErrors = 3;
+        const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
 
         expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
         
@@ -419,7 +431,7 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
         debugLog(`  Confirmed Errors:`);
         debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
 
-        const errorMessage = `\x1b[31mError count should be 0 for Object Structure within OpenAPI structure.`;
+        const errorMessage = `\x1b[31mError count should be 0, ${ruleset.rules[testingRuleName].description}\x1b[0m`;
         expect(relevantResults.length).to.equal(0, errorMessage);
         
       } catch (error) {
@@ -475,7 +487,7 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
 
     });
 
-    it('the rule should return "errors-error-objects-items-links-type" errors if the `links` member type is not an `object`', async function errorsErrorObjectsItemsLinksTypeFailure() {
+    it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function errorsErrorObjectsItemsLinksTypeFailure() {
 
       try {
 
@@ -492,8 +504,8 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
 
         });
 
-        const errorMessage = `\x1b[31mError count should be 3.\x1b[0m`;
         const confirmedErrors = 3;
+        const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
 
         expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
         
@@ -514,7 +526,7 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
         debugLog(`  Confirmed Errors:`);
         debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
 
-        const errorMessage = `\x1b[31mError count should be 0 for Object Structure within OpenAPI structure.`;
+        const errorMessage = `\x1b[31mError count should be 0, ${ruleset.rules[testingRuleName].description}\x1b[0m`;
         expect(relevantResults.length).to.equal(0, errorMessage);
         
       } catch (error) {
@@ -528,15 +540,15 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
   });
 
   /**
-   * Ruleset: errors-error-objects-items-links
+   * Ruleset: errors-error-objects-items-links-members
    */
-  describe('errors-error-objects-items-links:', function errorsErrorObjectsItemsLinks() {
+  describe('errors-error-objects-items-links-members:', function errorsErrorObjectsItemsLinksMembers() {
 
-    const testingRuleName = 'errors-error-objects-items-links';
+    const testingRuleName = 'errors-error-objects-items-links-members';
 
     beforeEach(setupSpectralBeforeEach(ruleset, [testingRuleName]));
 
-    it('the json path expression should find the correct paths from the given document', function errorsErrorObjectsItemsLinksPath() {
+    it('the json path expression should find the correct paths from the given document', function errorsErrorObjectsItemsLinksMembersPath() {
 
       try {
 
@@ -570,11 +582,11 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
 
     });
 
-    it('the rule should return "errors-error-objects-items-links" errors if the `links` member does NOT contain one of the following, `about` and/or `type` members', async function errorsErrorObjectsItemsLinksFailure() {
+    it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function errorsErrorObjectsItemsLinksMembersFailure() {
 
       try {
 
-        const dereferencedOpenApiDocument = resolveRef(invalidApiDocumentItemsLinks, invalidApiDocumentItemsLinks);
+        const dereferencedOpenApiDocument = resolveRef(invalidApiDocumentItemsLinksMembers, invalidApiDocumentItemsLinksMembers);
 
         const relevantResults = await handleSpectralResults(this.spectral, dereferencedOpenApiDocument, testingRuleName);
 
@@ -587,8 +599,8 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
 
         });
 
-        const errorMessage = `\x1b[31mError count should be 3.\x1b[0m`;
         const confirmedErrors = 3;
+        const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
 
         expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
         
@@ -600,7 +612,7 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
 
     });
 
-    it('the rule should pass with NO errors', async function errorsErrorObjectsItemsLinksPassing() {
+    it('the rule should pass with NO errors', async function errorsErrorObjectsItemsLinksMembersPassing() {
 
       try {
 
@@ -609,7 +621,7 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
         debugLog(`  Confirmed Errors:`);
         debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
 
-        const errorMessage = `\x1b[31mError count should be 0 for Object Structure within OpenAPI structure.`;
+        const errorMessage = `\x1b[31mError count should be 0, ${ruleset.rules[testingRuleName].description}\x1b[0m`;
         expect(relevantResults.length).to.equal(0, errorMessage);
         
       } catch (error) {
@@ -665,7 +677,7 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
 
     });
 
-    it('the rule should return "errors-error-objects-items-links-structure-length" errors if the `links` member object is empty or exceeds more than 2 members.', async function errorsErrorObjectsItemsLinksStructureLengthFailure() {
+    it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function errorsErrorObjectsItemsLinksStructureLengthFailure() {
 
       try {
 
@@ -682,8 +694,8 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
 
         });
 
-        const errorMessage = `\x1b[31mError count should be 3.\x1b[0m`;
         const confirmedErrors = 3;
+        const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
 
         expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
         
@@ -704,7 +716,7 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
         debugLog(`  Confirmed Errors:`);
         debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
 
-        const errorMessage = `\x1b[31mError count should be 0 for Object Structure within OpenAPI structure.`;
+        const errorMessage = `\x1b[31mError count should be 0, ${ruleset.rules[testingRuleName].description}\x1b[0m`;
         expect(relevantResults.length).to.equal(0, errorMessage);
         
       } catch (error) {
@@ -760,7 +772,7 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
 
     });
 
-    it('the rule should return "errors-error-objects-items-links-about-type" errors if the `about` member in the `links` object does not  have type `string` in the format of an `URI`', async function errorsErrorObjectsItemsLinksAboutTypeFailure() {
+    it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function errorsErrorObjectsItemsLinksAboutTypeFailure() {
 
       try {
 
@@ -777,8 +789,8 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
 
         });
 
-        const errorMessage = `\x1b[31mError count should be 3.\x1b[0m`;
         const confirmedErrors = 3;
+        const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
 
         expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
         
@@ -799,7 +811,7 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
         debugLog(`  Confirmed Errors:`);
         debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
 
-        const errorMessage = `\x1b[31mError count should be 0 for Object Structure within OpenAPI structure.`;
+        const errorMessage = `\x1b[31mError count should be 0, ${ruleset.rules[testingRuleName].description}\x1b[0m`;
         expect(relevantResults.length).to.equal(0, errorMessage);
         
       } catch (error) {
@@ -856,7 +868,7 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
 
     });
 
-    it('the rule should return "errors-error-objects-items-links-about-format" errors if the `about` member in the `links` object does NOT have correct format of an `URI`', async function errorsErrorObjectsItemsLinksAboutFormatFailure() {
+    it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function errorsErrorObjectsItemsLinksAboutFormatFailure() {
 
       try {
 
@@ -873,8 +885,8 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
 
         });
 
-        const errorMessage = `\x1b[31mError count should be 3.\x1b[0m`;
         const confirmedErrors = 3;
+        const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
 
         expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
         
@@ -895,7 +907,7 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
         debugLog(`  Confirmed Errors:`);
         debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
 
-        const errorMessage = `\x1b[31mError count should be 0 for Object Structure within OpenAPI structure.`;
+        const errorMessage = `\x1b[31mError count should be 0, ${ruleset.rules[testingRuleName].description}\x1b[0m`;
         expect(relevantResults.length).to.equal(0, errorMessage);
         
       } catch (error) {
@@ -951,7 +963,7 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
 
     });
 
-    it('the rule should return "errors-error-objects-items-links-type-type" errors if the `type` member in the `links` object does not  have type `string` in the format of an `URI`', async function errorsErrorObjectsItemsLinksTypeTypeFailure() {
+    it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function errorsErrorObjectsItemsLinksTypeTypeFailure() {
 
       try {
 
@@ -968,8 +980,8 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
 
         });
 
-        const errorMessage = `\x1b[31mError count should be 3.\x1b[0m`;
         const confirmedErrors = 3;
+        const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
 
         expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
         
@@ -990,7 +1002,7 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
         debugLog(`  Confirmed Errors:`);
         debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
 
-        const errorMessage = `\x1b[31mError count should be 0 for Object Structure within OpenAPI structure.`;
+        const errorMessage = `\x1b[31mError count should be 0, ${ruleset.rules[testingRuleName].description}\x1b[0m`;
         expect(relevantResults.length).to.equal(0, errorMessage);
         
       } catch (error) {
@@ -1046,7 +1058,7 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
 
     });
 
-    it('the rule should return "errors-error-objects-items-links-type-format" errors if the `type` member in the `links` object does not  have type `string` in the format of an `URI`', async function errorsErrorObjectsItemsLinksTypeFormatFailure() {
+    it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function errorsErrorObjectsItemsLinksTypeFormatFailure() {
 
       try {
 
@@ -1063,8 +1075,8 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
 
         });
 
-        const errorMessage = `\x1b[31mError count should be 3.\x1b[0m`;
         const confirmedErrors = 3;
+        const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
 
         expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
         
@@ -1085,7 +1097,1052 @@ describe('jsonapi-errors-error-objects ruleset:', function errorsErrorObjectsSui
         debugLog(`  Confirmed Errors:`);
         debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
 
-        const errorMessage = `\x1b[31mError count should be 0 for Object Structure within OpenAPI structure.`;
+        const errorMessage = `\x1b[31mError count should be 0, ${ruleset.rules[testingRuleName].description}\x1b[0m`;
+        expect(relevantResults.length).to.equal(0, errorMessage);
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+  });
+
+  /**
+   * Ruleset: errors-error-objects-items-status-type
+   */
+  describe('errors-error-objects-items-status-type:', function errorsErrorObjectsItemsStatusType() {
+
+    const testingRuleName = 'errors-error-objects-items-status-type';
+
+    beforeEach(setupSpectralBeforeEach(ruleset, [testingRuleName]));
+
+    it('the json path expression should find the correct paths from the given document', function errorsErrorObjectsItemsStatusTypePath() {
+
+      try {
+
+        const jsonPathExpression = ruleset.rules[testingRuleName].given;
+        const expectedExpressionPaths = [
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['400'].content['application/vnd.api+json'].schema.properties.errors.items.properties.status },
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['404'].content['application/vnd.api+json'].schema.properties.errors.items.properties.status },
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['500'].content['application/vnd.api+json'].schema.properties.errors.items.properties.status }
+        ];
+        
+        expectedExpressionPaths.forEach((path, index) => {
+
+          const result = JSONPath({ path: jsonPathExpression,
+            json: dereferenceValidApiDocument });
+
+          debugInfo(`Element found from JSONPath Expression: \x1b[32m${JSON.stringify(result[index], null, 2)}`);
+
+          // Check if the number of results matches the expected number
+          expect(result.length).to.equal(expectedExpressionPaths.length, `\x1b[31mExpected ${expectedExpressionPaths.length} elements to match in the OpenAPI Document.\x1b[0m\n`);
+          
+          // Check if each result matches the corresponding expected path
+          expect(result[index]).to.deep.equal(path.expected, '\x1b[31mThe wrong JSONPath Expression was provided.\x1b[0m');
+
+        });
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+    it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function errorsErrorObjectsItemsStatusTypeFailure() {
+
+      try {
+
+        const dereferencedOpenApiDocument = resolveRef(invalidApiDocumentItemsStatusType, invalidApiDocumentItemsStatusType);
+
+        const relevantResults = await handleSpectralResults(this.spectral, dereferencedOpenApiDocument, testingRuleName);
+
+        debugLog(`  Confirmed Errors:`);
+        debugLog(`     \x1b[31m- ${relevantResults.length}\x1b[0m\n`);
+
+        relevantResults.forEach((result) => {
+
+          debugError(`\x1b[32mResults for '${testingRuleName}':\x1b[36m ${JSON.stringify(result, ['message', 'path'], 2)} \x1b[0m\n`);
+
+        });
+
+        const confirmedErrors = 3;
+        const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
+
+        expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+    it('the rule should pass with NO errors', async function errorsErrorObjectsItemsStatusTypePassing() {
+
+      try {
+
+        const relevantResults = await handleSpectralResults(this.spectral, dereferenceValidApiDocument, testingRuleName);
+
+        debugLog(`  Confirmed Errors:`);
+        debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
+
+        const errorMessage = `\x1b[31mError count should be 0, ${ruleset.rules[testingRuleName].description}\x1b[0m`;
+        expect(relevantResults.length).to.equal(0, errorMessage);
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+  });
+
+  /**
+   * Ruleset: errors-error-objects-items-code-type
+   */
+  describe('errors-error-objects-items-code-type:', function errorsErrorObjectsItemsCodeType() {
+
+    const testingRuleName = 'errors-error-objects-items-code-type';
+
+    beforeEach(setupSpectralBeforeEach(ruleset, [testingRuleName]));
+
+    it('the json path expression should find the correct paths from the given document', function errorsErrorObjectsItemsCodeTypePath() {
+
+      try {
+
+        const jsonPathExpression = ruleset.rules[testingRuleName].given;
+        const expectedExpressionPaths = [
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['400'].content['application/vnd.api+json'].schema.properties.errors.items.properties.code },
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['404'].content['application/vnd.api+json'].schema.properties.errors.items.properties.code },
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['500'].content['application/vnd.api+json'].schema.properties.errors.items.properties.code }
+        ];
+        
+        expectedExpressionPaths.forEach((path, index) => {
+
+          const result = JSONPath({ path: jsonPathExpression,
+            json: dereferenceValidApiDocument });
+
+          debugInfo(`Element found from JSONPath Expression: \x1b[32m${JSON.stringify(result[index], null, 2)}`);
+
+          // Check if the number of results matches the expected number
+          expect(result.length).to.equal(expectedExpressionPaths.length, `\x1b[31mExpected ${expectedExpressionPaths.length} elements to match in the OpenAPI Document.\x1b[0m\n`);
+          
+          // Check if each result matches the corresponding expected path
+          expect(result[index]).to.deep.equal(path.expected, '\x1b[31mThe wrong JSONPath Expression was provided.\x1b[0m');
+
+        });
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+    it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function errorsErrorObjectsItemsCodeTypeFailure() {
+
+      try {
+
+        const dereferencedOpenApiDocument = resolveRef(invalidApiDocumentItemsCodeType, invalidApiDocumentItemsCodeType);
+
+        const relevantResults = await handleSpectralResults(this.spectral, dereferencedOpenApiDocument, testingRuleName);
+
+        debugLog(`  Confirmed Errors:`);
+        debugLog(`     \x1b[31m- ${relevantResults.length}\x1b[0m\n`);
+
+        relevantResults.forEach((result) => {
+
+          debugError(`\x1b[32mResults for '${testingRuleName}':\x1b[36m ${JSON.stringify(result, ['message', 'path'], 2)} \x1b[0m\n`);
+
+        });
+
+        const confirmedErrors = 3;
+        const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
+
+        expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+    it('the rule should pass with NO errors', async function errorsErrorObjectsItemsCodeTypePassing() {
+
+      try {
+
+        const relevantResults = await handleSpectralResults(this.spectral, dereferenceValidApiDocument, testingRuleName);
+
+        debugLog(`  Confirmed Errors:`);
+        debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
+
+        const errorMessage = `\x1b[31mError count should be 0, ${ruleset.rules[testingRuleName].description}\x1b[0m`;
+        expect(relevantResults.length).to.equal(0, errorMessage);
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+  });
+
+  /**
+   * Ruleset: errors-error-objects-items-title-type
+   */
+  describe('errors-error-objects-items-title-type:', function errorsErrorObjectsItemsTitleType() {
+
+    const testingRuleName = 'errors-error-objects-items-title-type';
+
+    beforeEach(setupSpectralBeforeEach(ruleset, [testingRuleName]));
+
+    it('the json path expression should find the correct paths from the given document', function errorsErrorObjectsItemsTitleTypePath() {
+
+      try {
+
+        const jsonPathExpression = ruleset.rules[testingRuleName].given;
+        const expectedExpressionPaths = [
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['400'].content['application/vnd.api+json'].schema.properties.errors.items.properties.title },
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['404'].content['application/vnd.api+json'].schema.properties.errors.items.properties.title },
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['500'].content['application/vnd.api+json'].schema.properties.errors.items.properties.title }
+        ];
+        
+        expectedExpressionPaths.forEach((path, index) => {
+
+          const result = JSONPath({ path: jsonPathExpression,
+            json: dereferenceValidApiDocument });
+
+          debugInfo(`Element found from JSONPath Expression: \x1b[32m${JSON.stringify(result[index], null, 2)}`);
+
+          // Check if the number of results matches the expected number
+          expect(result.length).to.equal(expectedExpressionPaths.length, `\x1b[31mExpected ${expectedExpressionPaths.length} elements to match in the OpenAPI Document.\x1b[0m\n`);
+          
+          // Check if each result matches the corresponding expected path
+          expect(result[index]).to.deep.equal(path.expected, '\x1b[31mThe wrong JSONPath Expression was provided.\x1b[0m');
+
+        });
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+    it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function errorsErrorObjectsItemsTitleTypeFailure() {
+
+      try {
+
+        const dereferencedOpenApiDocument = resolveRef(invalidApiDocumentItemsTitleType, invalidApiDocumentItemsTitleType);
+
+        const relevantResults = await handleSpectralResults(this.spectral, dereferencedOpenApiDocument, testingRuleName);
+
+        debugLog(`  Confirmed Errors:`);
+        debugLog(`     \x1b[31m- ${relevantResults.length}\x1b[0m\n`);
+
+        relevantResults.forEach((result) => {
+
+          debugError(`\x1b[32mResults for '${testingRuleName}':\x1b[36m ${JSON.stringify(result, ['message', 'path'], 2)} \x1b[0m\n`);
+
+        });
+
+        const confirmedErrors = 3;
+        const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
+
+        expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+    it('the rule should pass with NO errors', async function errorsErrorObjectsItemsTitleTypePassing() {
+
+      try {
+
+        const relevantResults = await handleSpectralResults(this.spectral, dereferenceValidApiDocument, testingRuleName);
+
+        debugLog(`  Confirmed Errors:`);
+        debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
+
+        const errorMessage = `\x1b[31mError count should be 0, ${ruleset.rules[testingRuleName].description}\x1b[0m`;
+        expect(relevantResults.length).to.equal(0, errorMessage);
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+  });
+
+  /**
+   * Ruleset: errors-error-objects-items-detail-type
+   */
+  describe('errors-error-objects-items-detail-type:', function errorsErrorObjectsItemsDetailType() {
+
+    const testingRuleName = 'errors-error-objects-items-detail-type';
+
+    beforeEach(setupSpectralBeforeEach(ruleset, [testingRuleName]));
+
+    it('the json path expression should find the correct paths from the given document', function errorsErrorObjectsItemsDetailTypePath() {
+
+      try {
+
+        const jsonPathExpression = ruleset.rules[testingRuleName].given;
+        const expectedExpressionPaths = [
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['400'].content['application/vnd.api+json'].schema.properties.errors.items.properties.detail },
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['404'].content['application/vnd.api+json'].schema.properties.errors.items.properties.detail },
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['500'].content['application/vnd.api+json'].schema.properties.errors.items.properties.detail }
+        ];
+        
+        expectedExpressionPaths.forEach((path, index) => {
+
+          const result = JSONPath({ path: jsonPathExpression,
+            json: dereferenceValidApiDocument });
+
+          debugInfo(`Element found from JSONPath Expression: \x1b[32m${JSON.stringify(result[index], null, 2)}`);
+
+          // Check if the number of results matches the expected number
+          expect(result.length).to.equal(expectedExpressionPaths.length, `\x1b[31mExpected ${expectedExpressionPaths.length} elements to match in the OpenAPI Document.\x1b[0m\n`);
+          
+          // Check if each result matches the corresponding expected path
+          expect(result[index]).to.deep.equal(path.expected, '\x1b[31mThe wrong JSONPath Expression was provided.\x1b[0m');
+
+        });
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+    it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function errorsErrorObjectsItemsDetailTypeFailure() {
+
+      try {
+
+        const dereferencedOpenApiDocument = resolveRef(invalidApiDocumentItemsDetailType, invalidApiDocumentItemsDetailType);
+
+        const relevantResults = await handleSpectralResults(this.spectral, dereferencedOpenApiDocument, testingRuleName);
+
+        debugLog(`  Confirmed Errors:`);
+        debugLog(`     \x1b[31m- ${relevantResults.length}\x1b[0m\n`);
+
+        relevantResults.forEach((result) => {
+
+          debugError(`\x1b[32mResults for '${testingRuleName}':\x1b[36m ${JSON.stringify(result, ['message', 'path'], 2)} \x1b[0m\n`);
+
+        });
+
+        const confirmedErrors = 3;
+        const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
+
+        expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+    it('the rule should pass with NO errors', async function errorsErrorObjectsItemsDetailTypePassing() {
+
+      try {
+
+        const relevantResults = await handleSpectralResults(this.spectral, dereferenceValidApiDocument, testingRuleName);
+
+        debugLog(`  Confirmed Errors:`);
+        debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
+
+        const errorMessage = `\x1b[31mError count should be 0, ${ruleset.rules[testingRuleName].description}\x1b[0m`;
+        expect(relevantResults.length).to.equal(0, errorMessage);
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+  });
+
+  /**
+   * Ruleset: errors-error-objects-items-source-type
+   */
+  describe('errors-error-objects-items-source-type:', function errorsErrorObjectsItemsSourceType() {
+
+    const testingRuleName = 'errors-error-objects-items-source-type';
+
+    beforeEach(setupSpectralBeforeEach(ruleset, [testingRuleName]));
+
+    it('the json path expression should find the correct paths from the given document', function errorsErrorObjectsItemsSourceTypePath() {
+
+      try {
+
+        const jsonPathExpression = ruleset.rules[testingRuleName].given;
+        const expectedExpressionPaths = [
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['400'].content['application/vnd.api+json'].schema.properties.errors.items.properties.source },
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['404'].content['application/vnd.api+json'].schema.properties.errors.items.properties.source },
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['500'].content['application/vnd.api+json'].schema.properties.errors.items.properties.source }
+        ];
+        
+        expectedExpressionPaths.forEach((path, index) => {
+
+          const result = JSONPath({ path: jsonPathExpression,
+            json: dereferenceValidApiDocument });
+
+          debugInfo(`Element found from JSONPath Expression: \x1b[32m${JSON.stringify(result[index], null, 2)}`);
+
+          // Check if the number of results matches the expected number
+          expect(result.length).to.equal(expectedExpressionPaths.length, `\x1b[31mExpected ${expectedExpressionPaths.length} elements to match in the OpenAPI Document.\x1b[0m\n`);
+          
+          // Check if each result matches the corresponding expected path
+          expect(result[index]).to.deep.equal(path.expected, '\x1b[31mThe wrong JSONPath Expression was provided.\x1b[0m');
+
+        });
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+    it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function errorsErrorObjectsItemsSourceTypeFailure() {
+
+      try {
+
+        const dereferencedOpenApiDocument = resolveRef(invalidApiDocumentItemsSourceType, invalidApiDocumentItemsSourceType);
+
+        const relevantResults = await handleSpectralResults(this.spectral, dereferencedOpenApiDocument, testingRuleName);
+
+        debugLog(`  Confirmed Errors:`);
+        debugLog(`     \x1b[31m- ${relevantResults.length}\x1b[0m\n`);
+
+        relevantResults.forEach((result) => {
+
+          debugError(`\x1b[32mResults for '${testingRuleName}':\x1b[36m ${JSON.stringify(result, ['message', 'path'], 2)} \x1b[0m\n`);
+
+        });
+
+        const confirmedErrors = 3;
+        const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
+
+        expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+    it('the rule should pass with NO errors', async function errorsErrorObjectsItemsSourceTypePassing() {
+
+      try {
+
+        const relevantResults = await handleSpectralResults(this.spectral, dereferenceValidApiDocument, testingRuleName);
+
+        debugLog(`  Confirmed Errors:`);
+        debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
+
+        const errorMessage = `\x1b[31mError count should be 0, ${ruleset.rules[testingRuleName].description}\x1b[0m`;
+        expect(relevantResults.length).to.equal(0, errorMessage);
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+  });
+
+  /**
+   * Ruleset: errors-error-objects-items-source-members
+   */
+  describe('errors-error-objects-items-source-members:', function errorsErrorObjectsItemsSourceMembers() {
+
+    const testingRuleName = 'errors-error-objects-items-source-members';
+
+    beforeEach(setupSpectralBeforeEach(ruleset, [testingRuleName]));
+
+    it('the json path expression should find the correct paths from the given document', function errorsErrorObjectsItemsSourceMembersPath() {
+
+      try {
+
+        const jsonPathExpression = ruleset.rules[testingRuleName].given;
+        const expectedExpressionPaths = [
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['400'].content['application/vnd.api+json'].schema.properties.errors.items.properties.source.properties },
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['404'].content['application/vnd.api+json'].schema.properties.errors.items.properties.source.properties },
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['500'].content['application/vnd.api+json'].schema.properties.errors.items.properties.source.properties }
+        ];
+        
+        expectedExpressionPaths.forEach((path, index) => {
+
+          const result = JSONPath({ path: jsonPathExpression,
+            json: dereferenceValidApiDocument });
+
+          debugInfo(`Element found from JSONPath Expression: \x1b[32m${JSON.stringify(result[index], null, 2)}`);
+
+          // Check if the number of results matches the expected number
+          expect(result.length).to.equal(expectedExpressionPaths.length, `\x1b[31mExpected ${expectedExpressionPaths.length} elements to match in the OpenAPI Document.\x1b[0m\n`);
+          
+          // Check if each result matches the corresponding expected path
+          expect(result[index]).to.deep.equal(path.expected, '\x1b[31mThe wrong JSONPath Expression was provided.\x1b[0m');
+
+        });
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+    it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function errorsErrorObjectsItemsSourceMembersFailure() {
+
+      try {
+
+        const dereferencedOpenApiDocument = resolveRef(invalidApiDocumentItemsSourceMembers, invalidApiDocumentItemsSourceMembers);
+
+        const relevantResults = await handleSpectralResults(this.spectral, dereferencedOpenApiDocument, testingRuleName);
+
+        debugLog(`  Confirmed Errors:`);
+        debugLog(`     \x1b[31m- ${relevantResults.length}\x1b[0m\n`);
+
+        relevantResults.forEach((result) => {
+
+          debugError(`\x1b[32mResults for '${testingRuleName}':\x1b[36m ${JSON.stringify(result, ['message', 'path'], 2)} \x1b[0m\n`);
+
+        });
+
+        const confirmedErrors = 3;
+        const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
+
+        expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+    it('the rule should pass with NO errors', async function errorsErrorObjectsItemsSourceMembersPassing() {
+
+      try {
+
+        const relevantResults = await handleSpectralResults(this.spectral, dereferenceValidApiDocument, testingRuleName);
+
+        debugLog(`  Confirmed Errors:`);
+        debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
+
+        const errorMessage = `\x1b[31mError count should be 0, ${ruleset.rules[testingRuleName].description}\x1b[0m`;
+        expect(relevantResults.length).to.equal(0, errorMessage);
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+  });
+
+  /**
+   * Ruleset: errors-error-objects-items-source-pointer-type
+   */
+  describe('errors-error-objects-items-source-pointer-type:', function errorsErrorObjectsItemsSourcePointerType() {
+
+    const testingRuleName = 'errors-error-objects-items-source-pointer-type';
+
+    beforeEach(setupSpectralBeforeEach(ruleset, [testingRuleName]));
+
+    it('the json path expression should find the correct paths from the given document', function errorsErrorObjectsItemsSourcePointerTypePath() {
+
+      try {
+
+        const jsonPathExpression = ruleset.rules[testingRuleName].given;
+        const expectedExpressionPaths = [
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['400'].content['application/vnd.api+json'].schema.properties.errors.items.properties.source.properties.pointer },
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['404'].content['application/vnd.api+json'].schema.properties.errors.items.properties.source.properties.pointer },
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['500'].content['application/vnd.api+json'].schema.properties.errors.items.properties.source.properties.pointer }
+        ];
+        
+        expectedExpressionPaths.forEach((path, index) => {
+
+          const result = JSONPath({ path: jsonPathExpression,
+            json: dereferenceValidApiDocument });
+
+          debugInfo(`Element found from JSONPath Expression: \x1b[32m${JSON.stringify(result[index], null, 2)}`);
+
+          // Check if the number of results matches the expected number
+          expect(result.length).to.equal(expectedExpressionPaths.length, `\x1b[31mExpected ${expectedExpressionPaths.length} elements to match in the OpenAPI Document.\x1b[0m\n`);
+          
+          // Check if each result matches the corresponding expected path
+          expect(result[index]).to.deep.equal(path.expected, '\x1b[31mThe wrong JSONPath Expression was provided.\x1b[0m');
+
+        });
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+    it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function errorsErrorObjectsItemsSourcePointerTypeFailure() {
+
+      try {
+
+        const dereferencedOpenApiDocument = resolveRef(invalidApiDocumentItemsSourcePointerType, invalidApiDocumentItemsSourcePointerType);
+
+        const relevantResults = await handleSpectralResults(this.spectral, dereferencedOpenApiDocument, testingRuleName);
+
+        debugLog(`  Confirmed Errors:`);
+        debugLog(`     \x1b[31m- ${relevantResults.length}\x1b[0m\n`);
+
+        relevantResults.forEach((result) => {
+
+          debugError(`\x1b[32mResults for '${testingRuleName}':\x1b[36m ${JSON.stringify(result, ['message', 'path'], 2)} \x1b[0m\n`);
+
+        });
+
+        const confirmedErrors = 3;
+        const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
+
+        expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+    it('the rule should pass with NO errors', async function errorsErrorObjectsItemsSourcePointerTypePassing() {
+
+      try {
+
+        const relevantResults = await handleSpectralResults(this.spectral, dereferenceValidApiDocument, testingRuleName);
+
+        debugLog(`  Confirmed Errors:`);
+        debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
+
+        const errorMessage = `\x1b[31mError count should be 0, ${ruleset.rules[testingRuleName].description}\x1b[0m`;
+        expect(relevantResults.length).to.equal(0, errorMessage);
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+  });
+
+  /**
+   * Ruleset: errors-error-objects-items-source-parameter-type
+   */
+  describe('errors-error-objects-items-source-parameter-type:', function errorsErrorObjectsItemsSourceParameterType() {
+
+    const testingRuleName = 'errors-error-objects-items-source-parameter-type';
+
+    beforeEach(setupSpectralBeforeEach(ruleset, [testingRuleName]));
+
+    it('the json path expression should find the correct paths from the given document', function errorsErrorObjectsItemsSourceParameterTypePath() {
+
+      try {
+
+        const jsonPathExpression = ruleset.rules[testingRuleName].given;
+        const expectedExpressionPaths = [
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['400'].content['application/vnd.api+json'].schema.properties.errors.items.properties.source.properties.parameter },
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['404'].content['application/vnd.api+json'].schema.properties.errors.items.properties.source.properties.parameter },
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['500'].content['application/vnd.api+json'].schema.properties.errors.items.properties.source.properties.parameter }
+        ];
+        
+        expectedExpressionPaths.forEach((path, index) => {
+
+          const result = JSONPath({ path: jsonPathExpression,
+            json: dereferenceValidApiDocument });
+
+          debugInfo(`Element found from JSONPath Expression: \x1b[32m${JSON.stringify(result[index], null, 2)}`);
+
+          // Check if the number of results matches the expected number
+          expect(result.length).to.equal(expectedExpressionPaths.length, `\x1b[31mExpected ${expectedExpressionPaths.length} elements to match in the OpenAPI Document.\x1b[0m\n`);
+          
+          // Check if each result matches the corresponding expected path
+          expect(result[index]).to.deep.equal(path.expected, '\x1b[31mThe wrong JSONPath Expression was provided.\x1b[0m');
+
+        });
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+    it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function errorsErrorObjectsItemsSourceParameterTypeFailure() {
+
+      try {
+
+        const dereferencedOpenApiDocument = resolveRef(invalidApiDocumentItemsSourceParameterType, invalidApiDocumentItemsSourceParameterType);
+
+        const relevantResults = await handleSpectralResults(this.spectral, dereferencedOpenApiDocument, testingRuleName);
+
+        debugLog(`  Confirmed Errors:`);
+        debugLog(`     \x1b[31m- ${relevantResults.length}\x1b[0m\n`);
+
+        relevantResults.forEach((result) => {
+
+          debugError(`\x1b[32mResults for '${testingRuleName}':\x1b[36m ${JSON.stringify(result, ['message', 'path'], 2)} \x1b[0m\n`);
+
+        });
+
+        const confirmedErrors = 3;
+        const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
+
+        expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+    it('the rule should pass with NO errors', async function errorsErrorObjectsItemsSourceParameterTypePassing() {
+
+      try {
+
+        const relevantResults = await handleSpectralResults(this.spectral, dereferenceValidApiDocument, testingRuleName);
+
+        debugLog(`  Confirmed Errors:`);
+        debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
+
+        const errorMessage = `\x1b[31mError count should be 0, ${ruleset.rules[testingRuleName].description}\x1b[0m`;
+        expect(relevantResults.length).to.equal(0, errorMessage);
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+  });
+
+  /**
+   * Ruleset: errors-error-objects-items-source-header-type
+   */
+  describe('errors-error-objects-items-source-header-type:', function errorsErrorObjectsItemsSourceHeaderType() {
+
+    const testingRuleName = 'errors-error-objects-items-source-header-type';
+
+    beforeEach(setupSpectralBeforeEach(ruleset, [testingRuleName]));
+
+    it('the json path expression should find the correct paths from the given document', function errorsErrorObjectsItemsSourceHeaderTypePath() {
+
+      try {
+
+        const jsonPathExpression = ruleset.rules[testingRuleName].given;
+        const expectedExpressionPaths = [
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['400'].content['application/vnd.api+json'].schema.properties.errors.items.properties.source.properties.header },
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['404'].content['application/vnd.api+json'].schema.properties.errors.items.properties.source.properties.header },
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['500'].content['application/vnd.api+json'].schema.properties.errors.items.properties.source.properties.header }
+        ];
+        
+        expectedExpressionPaths.forEach((path, index) => {
+
+          const result = JSONPath({ path: jsonPathExpression,
+            json: dereferenceValidApiDocument });
+
+          debugInfo(`Element found from JSONPath Expression: \x1b[32m${JSON.stringify(result[index], null, 2)}`);
+
+          // Check if the number of results matches the expected number
+          expect(result.length).to.equal(expectedExpressionPaths.length, `\x1b[31mExpected ${expectedExpressionPaths.length} elements to match in the OpenAPI Document.\x1b[0m\n`);
+          
+          // Check if each result matches the corresponding expected path
+          expect(result[index]).to.deep.equal(path.expected, '\x1b[31mThe wrong JSONPath Expression was provided.\x1b[0m');
+
+        });
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+    it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function errorsErrorObjectsItemsSourceHeaderTypeFailure() {
+
+      try {
+
+        const dereferencedOpenApiDocument = resolveRef(invalidApiDocumentItemsSourceHeaderType, invalidApiDocumentItemsSourceHeaderType);
+
+        const relevantResults = await handleSpectralResults(this.spectral, dereferencedOpenApiDocument, testingRuleName);
+
+        debugLog(`  Confirmed Errors:`);
+        debugLog(`     \x1b[31m- ${relevantResults.length}\x1b[0m\n`);
+
+        relevantResults.forEach((result) => {
+
+          debugError(`\x1b[32mResults for '${testingRuleName}':\x1b[36m ${JSON.stringify(result, ['message', 'path'], 2)} \x1b[0m\n`);
+
+        });
+
+        const confirmedErrors = 3;
+        const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
+
+        expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+    it('the rule should pass with NO errors', async function errorsErrorObjectsItemsSourceHeaderTypePassing() {
+
+      try {
+
+        const relevantResults = await handleSpectralResults(this.spectral, dereferenceValidApiDocument, testingRuleName);
+
+        debugLog(`  Confirmed Errors:`);
+        debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
+
+        const errorMessage = `\x1b[31mError count should be 0, ${ruleset.rules[testingRuleName].description}\x1b[0m`;
+        expect(relevantResults.length).to.equal(0, errorMessage);
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+  });
+
+  /**
+   * Ruleset: errors-error-objects-items-source-structure-length
+   */
+  describe('errors-error-objects-items-source-structure-length:', function errorsErrorObjectsItemsSourceStructureLength() {
+
+    const testingRuleName = 'errors-error-objects-items-source-structure-length';
+
+    beforeEach(setupSpectralBeforeEach(ruleset, [testingRuleName]));
+
+    it('the json path expression should find the correct paths from the given document', function errorsErrorObjectsItemsSourceStructureLengthPath() {
+
+      try {
+
+        const jsonPathExpression = ruleset.rules[testingRuleName].given;
+        const expectedExpressionPaths = [
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['400'].content['application/vnd.api+json'].schema.properties.errors.items.properties.source },
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['404'].content['application/vnd.api+json'].schema.properties.errors.items.properties.source },
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['500'].content['application/vnd.api+json'].schema.properties.errors.items.properties.source }
+        ];
+        
+        expectedExpressionPaths.forEach((path, index) => {
+
+          const result = JSONPath({ path: jsonPathExpression,
+            json: dereferenceValidApiDocument });
+
+          debugInfo(`Element found from JSONPath Expression: \x1b[32m${JSON.stringify(result[index], null, 2)}`);
+
+          // Check if the number of results matches the expected number
+          expect(result.length).to.equal(expectedExpressionPaths.length, `\x1b[31mExpected ${expectedExpressionPaths.length} elements to match in the OpenAPI Document.\x1b[0m\n`);
+          
+          // Check if each result matches the corresponding expected path
+          expect(result[index]).to.deep.equal(path.expected, '\x1b[31mThe wrong JSONPath Expression was provided.\x1b[0m');
+
+        });
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+    it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function errorsErrorObjectsItemsSourceStructureLengthFailure() {
+
+      try {
+
+        const dereferencedOpenApiDocument = resolveRef(invalidApiDocumentItemsSourceStructureLength, invalidApiDocumentItemsSourceStructureLength);
+
+        const relevantResults = await handleSpectralResults(this.spectral, dereferencedOpenApiDocument, testingRuleName);
+
+        debugLog(`  Confirmed Errors:`);
+        debugLog(`     \x1b[31m- ${relevantResults.length}\x1b[0m\n`);
+
+        relevantResults.forEach((result) => {
+
+          debugError(`\x1b[32mResults for '${testingRuleName}':\x1b[36m ${JSON.stringify(result, ['message', 'path'], 2)} \x1b[0m\n`);
+
+        });
+
+        const confirmedErrors = 3;
+        const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
+
+        expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+    it('the rule should pass with NO errors', async function errorsErrorObjectsItemsSourceStructureLengthPassing() {
+
+      try {
+
+        const relevantResults = await handleSpectralResults(this.spectral, dereferenceValidApiDocument, testingRuleName);
+
+        debugLog(`  Confirmed Errors:`);
+        debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
+
+        const errorMessage = `\x1b[31mError count should be 0, ${ruleset.rules[testingRuleName].description}\x1b[0m`;
+        expect(relevantResults.length).to.equal(0, errorMessage);
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+  });
+
+  /**
+   * Ruleset: errors-error-objects-items-meta-type
+   */
+  describe('errors-error-objects-items-meta-type:', function errorsErrorObjectsItemsMetaType() {
+
+    const testingRuleName = 'errors-error-objects-items-meta-type';
+
+    beforeEach(setupSpectralBeforeEach(ruleset, [testingRuleName]));
+
+    it('the json path expression should find the correct paths from the given document', function errorsErrorObjectsItemsMetaTypePath() {
+
+      try {
+
+        const jsonPathExpression = ruleset.rules[testingRuleName].given;
+        const expectedExpressionPaths = [
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['400'].content['application/vnd.api+json'].schema.properties.errors.items.properties.meta },
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['404'].content['application/vnd.api+json'].schema.properties.errors.items.properties.meta },
+          { expected: dereferenceValidApiDocument.paths['/users/{userId}'].get.responses['500'].content['application/vnd.api+json'].schema.properties.errors.items.properties.meta }
+        ];
+        
+        expectedExpressionPaths.forEach((path, index) => {
+
+          const result = JSONPath({ path: jsonPathExpression,
+            json: dereferenceValidApiDocument });
+
+          debugInfo(`Element found from JSONPath Expression: \x1b[32m${JSON.stringify(result[index], null, 2)}`);
+
+          // Check if the number of results matches the expected number
+          expect(result.length).to.equal(expectedExpressionPaths.length, `\x1b[31mExpected ${expectedExpressionPaths.length} elements to match in the OpenAPI Document.\x1b[0m\n`);
+          
+          // Check if each result matches the corresponding expected path
+          expect(result[index]).to.deep.equal(path.expected, '\x1b[31mThe wrong JSONPath Expression was provided.\x1b[0m');
+
+        });
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+    it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function errorsErrorObjectsItemsMetaTypeFailure() {
+
+      try {
+
+        const dereferencedOpenApiDocument = resolveRef(invalidApiDocumentItemsMetaType, invalidApiDocumentItemsMetaType);
+
+        const relevantResults = await handleSpectralResults(this.spectral, dereferencedOpenApiDocument, testingRuleName);
+
+        debugLog(`  Confirmed Errors:`);
+        debugLog(`     \x1b[31m- ${relevantResults.length}\x1b[0m\n`);
+
+        relevantResults.forEach((result) => {
+
+          debugError(`\x1b[32mResults for '${testingRuleName}':\x1b[36m ${JSON.stringify(result, ['message', 'path'], 2)} \x1b[0m\n`);
+
+        });
+
+        const confirmedErrors = 3;
+        const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
+
+        expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
+        
+      } catch (error) {
+
+        processErrors(error);
+        
+      }
+
+    });
+
+    it('the rule should pass with NO errors', async function errorsErrorObjectsItemsMetaTypehPassing() {
+
+      try {
+
+        const relevantResults = await handleSpectralResults(this.spectral, dereferenceValidApiDocument, testingRuleName);
+
+        debugLog(`  Confirmed Errors:`);
+        debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
+
+        const errorMessage = `\x1b[31mError count should be 0, ${ruleset.rules[testingRuleName].description}\x1b[0m`;
         expect(relevantResults.length).to.equal(0, errorMessage);
         
       } catch (error) {

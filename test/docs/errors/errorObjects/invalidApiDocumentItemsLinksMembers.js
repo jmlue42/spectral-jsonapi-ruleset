@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 /* eslint-disable quotes */
-const invalidApiDocumentObjectStructure = {
+const invalidApiDocumentItemsLinksMembers = {
   "openapi": "3.1.0",
   "info": {
     "title": "User Information API",
@@ -122,7 +122,13 @@ const invalidApiDocumentObjectStructure = {
         "type": "object",
         "properties": {
           "errors": {
-            "type": "array",
+
+            /**
+             * validating here
+             *  original: array
+             *    Fail: object
+             *  */ 
+            "type": "object",
             "items": {
               "$ref": "#/components/schemas/ErrorObject"
             }
@@ -132,39 +138,39 @@ const invalidApiDocumentObjectStructure = {
       "ErrorObject": {
         "type": "object",
         "properties": {
-          // Original: "id"
-          "idd": {
-            "type": "string"
+          "id": {
+            // Original: "string"
+            "type": "object"
           },
-          // Original: "links"
-          "linkss": {
+          "links": {
+            // Original: "object"
             "type": "object",
             "properties": {
-              "about": {
+              "aboutt": {
                 "type": "string",
                 "format": "uri"
               }
             }
           },
-          // Original: "status"
-          "statuss": {
-            "type": "string"
+          "status": {
+            // Original: "string"
+            "type": "object"
           },
-          // Original: "code"
-          "codee": {
-            "type": "string"
+          "code": {
+            // Original: "string"
+            "type": "object"
           },
-          // Original: "title"
-          "titlee": {
-            "type": "string"
+          "title": {
+            // Original: "string"
+            "type": "object"
           },
-          // Original: "detail"
-          "detaill": {
-            "type": "string"
+          "detail": {
+            // Original: "string"
+            "type": "object"
           },
-          // Original: "source"
-          "sourcee": {
-            "type": "object",
+          "source": {
+            // Original: "object"
+            "type": "string",
             "properties": {
               "pointer": {
                 "type": "string"
@@ -177,9 +183,9 @@ const invalidApiDocumentObjectStructure = {
               }
             }
           },
-          // Original: "meta"
-          "metaa": {
-            "type": "object",
+          "meta": {
+            // Original: "object"
+            "type": "string",
             "additionalProperties": true
           }
         },
@@ -191,4 +197,4 @@ const invalidApiDocumentObjectStructure = {
   }
 };
 
-export default invalidApiDocumentObjectStructure;
+export default invalidApiDocumentItemsLinksMembers;

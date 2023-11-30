@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 /* eslint-disable quotes */
-const invalidApiDocumentItemsLinks = {
+const invalidApiDocumentItemsSourceStructureLength = {
   "openapi": "3.1.0",
   "info": {
     "title": "User Information API",
@@ -118,17 +118,19 @@ const invalidApiDocumentItemsLinks = {
   },
   "components": {
     "schemas": {
+      "Test": {
+        "type": "object",
+        "properties": {
+          "test": {
+            "type": "string"
+          }
+        }
+      },
       "JsonApiError": {
         "type": "object",
         "properties": {
           "errors": {
-
-            /**
-             * validating here
-             *  original: array
-             *    Fail: object
-             *  */ 
-            "type": "object",
+            "type": "array",
             "items": {
               "$ref": "#/components/schemas/ErrorObject"
             }
@@ -139,39 +141,37 @@ const invalidApiDocumentItemsLinks = {
         "type": "object",
         "properties": {
           "id": {
-            // Original: "string"
-            "type": "object"
+            "type": "string"
           },
           "links": {
-            // Original: "object"
             "type": "object",
             "properties": {
-              "aboutt": {
+              "about": {
+                "type": "string",
+                "format": "uri"
+              },
+              "type": {
                 "type": "string",
                 "format": "uri"
               }
             }
           },
           "status": {
-            // Original: "string"
-            "type": "object"
+            "type": "string"
           },
           "code": {
-            // Original: "string"
-            "type": "object"
+            "type": "string"
           },
           "title": {
-            // Original: "string"
-            "type": "object"
+            "type": "string"
           },
           "detail": {
-            // Original: "string"
-            "type": "object"
+            "type": "string"
           },
           "source": {
-            // Original: "object"
-            "type": "string",
+            "type": "object",
             "properties": {
+              // Removing all members will also fail the rule
               "pointer": {
                 "type": "string"
               },
@@ -180,12 +180,15 @@ const invalidApiDocumentItemsLinks = {
               },
               "header": {
                 "type": "string"
+              },
+              // Adding this member makes the rule fail
+              "failingMember": {
+                "type": "string"
               }
             }
           },
           "meta": {
-            // Original: "object"
-            "type": "string",
+            "type": "object",
             "additionalProperties": true
           }
         },
@@ -197,4 +200,4 @@ const invalidApiDocumentItemsLinks = {
   }
 };
 
-export default invalidApiDocumentItemsLinks;
+export default invalidApiDocumentItemsSourceStructureLength;
