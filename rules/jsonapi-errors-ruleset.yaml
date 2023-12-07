@@ -1,0 +1,8 @@
+# Errors
+# https://jsonapi.org/format/#error-objects
+
+# *-ruleset.yaml files generally SHOULD NOT contain any testable rules.
+# all rules in this file MUST have corresponding tests.
+
+extends:
+  - jsonapi-errors-error-object.js
