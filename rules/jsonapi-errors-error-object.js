@@ -2,7 +2,7 @@
 
 // All rules in the file MUST have corresponding tests
 
-import { enumeration, length, truthy } from '@stoplight/spectral-functions';
+import { enumeration, length } from '@stoplight/spectral-functions';
 
 export default {
   documentationUrl: 'https://jsonapi.org/format/#error-objects',
@@ -271,7 +271,7 @@ export default {
         functionOptions: {
           values: [
             'pointer',
-            'parameter',
+            'parameter'
           ]
         }
       }
@@ -334,7 +334,7 @@ export default {
           max: 2
         }
       }
-    },
+    }
 
   }
 
