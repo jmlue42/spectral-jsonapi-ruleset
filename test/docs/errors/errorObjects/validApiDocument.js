@@ -149,10 +149,6 @@ const validApiDocument = {
               "about": {
                 "type": "string",
                 "format": "uri"
-              },
-              "type": {
-                "type": "string",
-                "format": "uri"
               }
             }
           },
@@ -175,9 +171,6 @@ const validApiDocument = {
                 "type": "string"
               },
               "parameter": {
-                "type": "string"
-              },
-              "header": {
                 "type": "string"
               }
             }

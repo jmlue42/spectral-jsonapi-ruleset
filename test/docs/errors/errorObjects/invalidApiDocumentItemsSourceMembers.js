@@ -149,10 +149,6 @@ const invalidApiDocumentItemsSourceMembers = {
               "about": {
                 "type": "string",
                 "format": "uri"
-              },
-              "type": {
-                "type": "string",
-                "format": "uri"
               }
             }
           },
@@ -177,9 +173,6 @@ const invalidApiDocumentItemsSourceMembers = {
                 "type": "string"
               },
               "parameter": {
-                "type": "string"
-              },
-              "header": {
                 "type": "string"
               }
             }

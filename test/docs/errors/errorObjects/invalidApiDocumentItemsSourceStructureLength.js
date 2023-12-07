@@ -149,10 +149,6 @@ const invalidApiDocumentItemsSourceStructureLength = {
               "about": {
                 "type": "string",
                 "format": "uri"
-              },
-              "type": {
-                "type": "string",
-                "format": "uri"
               }
             }
           },
@@ -176,9 +172,6 @@ const invalidApiDocumentItemsSourceStructureLength = {
                 "type": "string"
               },
               "parameter": {
-                "type": "string"
-              },
-              "header": {
                 "type": "string"
               },
               // Adding this member makes the rule fail

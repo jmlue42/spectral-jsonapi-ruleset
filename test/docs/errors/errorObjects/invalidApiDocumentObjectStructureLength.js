@@ -175,9 +175,6 @@ const invalidApiDocumentObjectStructureLength = {
               },
               "parameter": {
                 "type": "string"
-              },
-              "header": {
-                "type": "string"
               }
             }
           },

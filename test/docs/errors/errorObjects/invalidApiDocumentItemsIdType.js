@@ -171,9 +171,6 @@ const invalidApiDocumentItemsIdType = {
               },
               "parameter": {
                 "type": "string"
-              },
-              "header": {
-                "type": "string"
               }
             }
           },

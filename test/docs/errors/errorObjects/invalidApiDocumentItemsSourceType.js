@@ -149,10 +149,6 @@ const invalidApiDocumentItemsSourceType = {
               "about": {
                 "type": "string",
                 "format": "uri"
-              },
-              "type": {
-                "type": "string",
-                "format": "uri"
               }
             }
           },

@@ -15,7 +15,7 @@ export default {
      */
     'errors-error-objects-array-structure': {
       description: '`error` objects MUST be returned in an array under `errors` key',
-      message: '{{path}} - {{error}}',
+      message: '{{path}} - {{description}}',
       severity: 'error',
       given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]]",
       then: {
@@ -131,8 +131,7 @@ export default {
         function: enumeration,
         functionOptions: {
           values: [
-            'about',
-            'type'
+            'about'
           ]
         }
       }
@@ -152,103 +151,9 @@ export default {
         function: length,
         functionOptions: {
           min: 1,
-          max: 2
+          max: 1
         }
       }
-    },
-
-    /**
-     * Checks that the 'about' member in 'links' objects is a the correct type, string.
-     * This rule is essential for ensuring that reference URLs in error objects are valid.
-     */
-    'errors-error-objects-items-links-about-type': {
-      description: '`about` member in the `links` object MUST be of type `string`',
-      message: '{{path}} - {{description}}',
-      severity: 'error',
-      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items.properties.links.properties.about",
-      then: {
-        field: 'type',
-        function: enumeration,
-        functionOptions: {
-          values: [
-            'string'
-          ]
-        }
-      }
-    },
-
-    /**
-     * Checks that the 'about' member in 'links' objects is a well-formed URI string.
-     * This rule is essential for ensuring that reference URLs in error objects are valid.
-     */
-    'errors-error-objects-items-links-about-format': {
-      description: '`about` member in the `links` object MUST be in the format of an `URI`',
-      message: '{{path}} - {{description}}',
-      severity: 'error',
-      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items.properties.links.properties.about",
-      then: [
-        {
-          field: 'format',
-          function: truthy
-        },
-        {
-          field: 'format',
-          function: enumeration,
-          functionOptions: {
-            values: [
-              'uri'
-            ]
-          }
-        }
-      ]
-    },
-
-    /**
-     * Validates te structure of the 'type' member in 'links' objects within error arrays.
-     * Ensures that it is a string, aligning with JSON:API specifications.
-     */
-    'errors-error-objects-items-links-type-type': {
-      description: '`type` member in the `links` object MUST be of type `string`',
-      message: '{{path}} - {{description}}',
-      severity: 'error',
-      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items.properties.links.properties.type",
-      then: [
-        {
-          field: 'type',
-          function: enumeration,
-          functionOptions: {
-            values: [
-              'string'
-            ]
-          }
-        }
-      ]
-    },
-
-    /**
-     * Validates te structure of the 'type' member in 'links' objects within error arrays.
-     * Ensures that it is a string formatted as a URI, aligning with JSON:API specifications.
-     */
-    'errors-error-objects-items-links-type-format': {
-      description: '`type` member in the `links` object MUST have format of an `URI`',
-      message: '{{path}} - {{description}}',
-      severity: 'error',
-      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items.properties.links.properties.type",
-      then: [
-        {
-          field: 'format',
-          function: truthy
-        },
-        {
-          field: 'format',
-          function: enumeration,
-          functionOptions: {
-            values: [
-              'uri'
-            ]
-          }
-        }
-      ]
     },
 
     /**
@@ -367,7 +272,6 @@ export default {
           values: [
             'pointer',
             'parameter',
-            'header'
           ]
         }
       }
@@ -414,26 +318,6 @@ export default {
     },
 
     /**
-     * Checks that the 'header' member in 'source' objects is of type 'string'.
-     * It ensures accurate identification of headers related to errors in requests.
-     */
-    'errors-error-objects-items-source-header-type': {
-      description: '`header` member in the `source` object MUST be of type `string`',
-      message: '{{path}} - {{description}}',
-      severity: 'error',
-      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items.properties.source.properties.header",
-      then: {
-        field: 'type',
-        function: enumeration,
-        functionOptions: {
-          values: [
-            'string'
-          ]
-        }
-      }
-    },
-
-    /**
      * Validates the number of members in 'source' objects within error objects.
      * Ensures that each 'source' object has between one and three members.
      */
@@ -447,30 +331,10 @@ export default {
         function: length,
         functionOptions: {
           min: 1,
-          max: 3
+          max: 2
         }
       }
     },
-
-    /**
-     * Ensures that the 'meta' member in error objects is of type 'object'.
-     * This rule checks the structure of 'meta' objects. which may contain additional error information.
-     */
-    'errors-error-objects-items-meta-type': {
-      description: '`meta` member in `errors` array MUST by of type `object`',
-      message: '{{path}} - {{description}}',
-      severity: 'error',
-      given: "$..[?(@property >= '400' && @property <= '599')]..[*[?(@property === 'errors')]].items.properties.meta",
-      then: {
-        field: 'type',
-        function: enumeration,
-        functionOptions: {
-          values: [
-            'object'
-          ]
-        }
-      }
-    }
 
   }
 

@@ -149,10 +149,6 @@ const invalidApiDocumentItemsStatusType = {
               "about": {
                 "type": "string",
                 "format": "uri"
-              },
-              "type": {
-                "type": "string",
-                "format": "uri"
               }
             }
           },
@@ -176,9 +172,6 @@ const invalidApiDocumentItemsStatusType = {
                 "type": "string"
               },
               "parameter": {
-                "type": "string"
-              },
-              "header": {
                 "type": "string"
               }
             }

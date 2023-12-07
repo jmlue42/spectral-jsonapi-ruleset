@@ -149,10 +149,6 @@ const invalidApiDocumentItemsSourceParameterType = {
               "about": {
                 "type": "string",
                 "format": "uri"
-              },
-              "type": {
-                "type": "string",
-                "format": "uri"
               }
             }
           },
@@ -177,9 +173,6 @@ const invalidApiDocumentItemsSourceParameterType = {
               "parameter": {
                 // Original: "string"
                 "type": "object"
-              },
-              "header": {
-                "type": "string"
               }
             }
           },

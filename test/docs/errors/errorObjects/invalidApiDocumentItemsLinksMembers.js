@@ -177,9 +177,6 @@ const invalidApiDocumentItemsLinksMembers = {
               },
               "parameter": {
                 "type": "string"
-              },
-              "header": {
-                "type": "string"
               }
             }
           },

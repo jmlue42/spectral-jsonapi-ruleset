@@ -171,9 +171,6 @@ const invalidApiDocumentObjectStructure = {
               },
               "parameter": {
                 "type": "string"
-              },
-              "header": {
-                "type": "string"
               }
             }
           },

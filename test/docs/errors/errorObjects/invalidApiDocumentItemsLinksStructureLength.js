@@ -177,9 +177,6 @@ const invalidApiDocumentItemsLinksStructureLength = {
               },
               "parameter": {
                 "type": "string"
-              },
-              "header": {
-                "type": "string"
               }
             }
           },

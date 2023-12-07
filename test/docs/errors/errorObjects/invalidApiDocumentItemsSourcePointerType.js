@@ -149,10 +149,6 @@ const invalidApiDocumentItemsSourcePointerType = {
               "about": {
                 "type": "string",
                 "format": "uri"
-              },
-              "type": {
-                "type": "string",
-                "format": "uri"
               }
             }
           },
@@ -176,9 +172,6 @@ const invalidApiDocumentItemsSourcePointerType = {
                 "type": "object"
               },
               "parameter": {
-                "type": "string"
-              },
-              "header": {
                 "type": "string"
               }
             }
