@@ -84,9 +84,6 @@ paths:
                             aboutt:
                               type: string
                               format: uri
-                            type:
-                              type: object
-                              format: urii
                         status:
                           type: object
                         code:
@@ -102,10 +99,8 @@ paths:
                               type: object
                             parameter:
                               type: object
-                            header:
+                            parameterr:
                               type: object
-                            headerr:
-                              type: string
                         meta:
                           type: string
                           additionalProperties: true
@@ -146,8 +141,6 @@ paths:
                               type: string
                             parameter:
                               type: string
-                            header:
-                              type: string
                         meta:
                           type: object
                           additionalProperties: true
@@ -187,8 +180,6 @@ paths:
                             pointer:
                               type: string
                             parameter:
-                              type: string
-                            header:
                               type: string
                         meta:
                           type: object

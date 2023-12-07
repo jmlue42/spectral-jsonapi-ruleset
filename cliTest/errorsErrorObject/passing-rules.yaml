@@ -94,8 +94,6 @@ paths:
                               type: string
                             parameter:
                               type: string
-                            header:
-                              type: string
                         meta:
                           type: object
                           additionalProperties: true
@@ -136,8 +134,6 @@ paths:
                               type: string
                             parameter:
                               type: string
-                            header:
-                              type: string
                         meta:
                           type: object
                           additionalProperties: true
@@ -177,8 +173,6 @@ paths:
                             pointer:
                               type: string
                             parameter:
-                              type: string
-                            header:
                               type: string
                         meta:
                           type: object
