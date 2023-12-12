@@ -64,7 +64,7 @@ export default {
       description: 'A single `Resource Object` MAY contain between two or six specified members',
       message: `{{path}} - {{description}}`,
       severity: 'error',
-      given: "$..[?(@property == 'get' || @property == 'delete' || @property == 'put' || @property == 'patch' || @property == 'post')]..[?(@property == 'responses' || @property == 'requestBody')]..content['application/vnd.api+json'].schema.properties.data",
+      given: "$..[?(@property == 'get' || @property == 'delete' || @property == 'put' || @property == 'patch' || @property == 'post')]..[?(@property == 'responses' || @property == 'requestBody')]..content['application/vnd.api+json'].schema.properties.data.properties",
       then: {
         field: 'properties',
         function: length,
