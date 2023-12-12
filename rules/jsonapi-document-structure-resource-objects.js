@@ -66,7 +66,6 @@ export default {
       severity: 'error',
       given: "$..[?(@property == 'get' || @property == 'delete' || @property == 'put' || @property == 'patch' || @property == 'post')]..[?(@property == 'responses' || @property == 'requestBody')]..content['application/vnd.api+json'].schema.properties.data.properties",
       then: {
-        field: 'properties',
         function: length,
         functionOptions: {
           min: 2,
@@ -118,7 +117,7 @@ export default {
       description: '`id` member in a single `Resource Object` MUST be of type `string`',
       message: `{{path}} - {{description}}`,
       severity: 'error',
-      given: "$..[?(@property == 'get' || @property == 'delete' || @property == 'put' || @property == 'patch' || @property == 'post')]..[?(@property == 'responses' || @property == 'requestBody')]..content['application/vnd.api+json'].schema.properties.data",
+      given: "$..[?(@property == 'get' || @property == 'delete' || @property == 'put' || @property == 'patch' || @property == 'post')]..[?(@property == 'responses' || @property == 'requestBody')]..content['application/vnd.api+json'].schema.properties.data.properties.id",
       then: {
         field: 'type',
         function: enumeration,
@@ -172,30 +171,6 @@ export default {
     },
 
     /**
-     * Checks the presence of 'id' and 'type' within an array of resource objects.
-     */
-    'document-structure-resource-objects-array-required-fields': {
-      description: 'An array of `Resource Objects` MUST contain `id` and `type` members',
-      message: `{{path}} - {{description}}`,
-      severity: 'error',
-      given: "$..[?(@property == 'get' || @property == 'delete' || @property == 'put' || @property == 'patch' || @property == 'post')]..[?(@property == 'responses' || @property == 'requestBody')]..content['application/vnd.api+json'].schema.properties.data",
-      then: {
-        field: '@key',
-        function: enumeration,
-        functionOptions: {
-          values: [
-            'id',
-            'type',
-            'attributes',
-            'relationships',
-            'links',
-            'meta'
-          ]
-        }
-      }
-    },
-
-    /**
      * Checks the presence of 'id' and 'type' within an array of `Resource Objects`.
      */
     'document-structure-resource-objects-array-structure': {
@@ -220,19 +195,18 @@ export default {
     },
 
     /**
-   * Ensures that the an array of `Resource Objects` contains an appropriate number of members.
-   * This rule checks that an array of `Resource Objects` has a minmum of two members and a 
-   * maximum of 6 members. This will even include for when an `id` member is not required
-   * Exception because when creating a new resource, typically the `attributes` and/or
-   * `relationships` objects are provided to supply the data needed to create the resource.
-   */
+     * Ensures that the an array of `Resource Objects` contains an appropriate number of members.
+     * This rule checks that an array of `Resource Objects` has a minmum of two members and a 
+     * maximum of 6 members. This will even include for when an `id` member is not required
+     * Exception because when creating a new resource, typically the `attributes` and/or
+     * `relationships` objects are provided to supply the data needed to create the resource.
+     */
     'document-structure-resource-objects-array-structure-length': {
       description: 'An array of `Resource Objects` MAY contain between two or six specified members',
       message: `{{path}} - {{description}}`,
       severity: 'error',
-      given: "$..[?(@property == 'get' || @property == 'delete' || @property == 'put' || @property == 'patch' || @property == 'post')]..[?(@property == 'responses' || @property == 'requestBody')]..content['application/vnd.api+json'].schema.properties.data.items",
+      given: "$..[?(@property == 'get' || @property == 'delete' || @property == 'put' || @property == 'patch' || @property == 'post')]..[?(@property == 'responses' || @property == 'requestBody')]..content['application/vnd.api+json'].schema.properties.data.items.properties",
       then: {
-        field: 'properties',
         function: length,
         functionOptions: {
           min: 2,
