@@ -15,7 +15,6 @@ export default {
       description: 'A `Resource Object` MUST be of type `object` or `array`',
       message: `{{path}} - {{description}}`,
       severity: 'error',
-      // given: "$..[?(@.get || @.delete || @.put || @.patch || @.post)]..[?(@.responses || @.requestBody)]..content['application/vnd.api+json'].schema.properties.data.properties",
       given: "$..[?(@property == 'get' || @property == 'delete' || @property == 'put' || @property == 'patch' || @property == 'post')]..[?(@property == 'responses' || @property == 'requestBody')]..content['application/vnd.api+json'].schema.properties.data",
       then: {
         field: 'type',
