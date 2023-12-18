@@ -745,6 +745,21 @@ const validApiDocument = {
               }
             }
           },
+          
+          /**
+           * Commonly used HTTP status codes:
+           * 
+           * `400` Bad Request: The request was unacceptable, often due o missing a required parameter
+           * `401` Unauthorized: No valid authentication credentials provided.
+           * `403` Forbidden: The client does not have access rights to the content.
+           * `404` Not Found: The requested resource does not exist.
+           * `406` Not Acceptable: The requested format is not available.
+           * `409` Conflict: The request could not be completed due to a conflict.
+           * `422` Unprocessable Entity: The request was well-formed but was unable to be followed due to semantic errors.
+           * `500` Internal Server Error: A generic error message for unexpected server errors.
+           * `502` Bad Gateway: The server received an invalid response from the upstream server.
+           * `503` Service Unavailable: The server is currently unavailable (overloaded or down).
+           */
           "status": {
             "type": "string",
             "enum": [
