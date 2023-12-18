@@ -3,17 +3,36 @@
 #   - `jsonapi-document-structure-resource-objects.js`
 #
 # Usage (From Repo Root Location):
-#   - spectral lint cliTest/passing-rules.yaml --ruleset rules/jsonapi-errors-error-object.js
-#   - spectral lint cliTest/passing-rules.yaml --ruleset rules/jsonapi-document-structure-resource-objects.js
+#   - spectral lint cliTest/passing-rules.yaml --ruleset rules/jsonapi-errors-error-object.js --verbose
+#   - spectral lint cliTest/passing-rules.yaml --ruleset rules/jsonapi-document-structure-resource-objects.js --verbose
+#   - spectral lint cliTest/passing-rules.yaml --ruleset rules/jsonapi-document-structure-resource-attributes.js --verbose
 #
 # This document will generate `0 errors` as expected for each ruleset ran
 openapi: 3.1.0
 info:
-  title: User Management API
-  description: This API manages user information, conforming to JSON:API v1.0 standards.
-  version: 1.1.0
+  title: OpenAPI Management Template
+  description: |-
+    This API manages information pertaining to users
+    which is adhereing to JSON:API v1.0 standards. The goal of this template is
+    to provide a universal temaplte for testing all of the JSON:API v1.0
+    specifications. This document adheres to the following sections:
+      - ContentNegotiation.ClientResponsibilities
+      - ContentNegotiation.ServerResponsibilities
+      - DocumentStructure
+      - DocumentStructure.TopLevel
+      - DocumentStructure.ResourceObjects
+      - DocumentStructure.ResourceObjects.Attributes
+      - DocumentStructure.Links
+      - DocumentStructure.MetaInformation
+      - DocumentStructure.MemberNames
+      - FetchingData.Sorting
+      - FetchingData.Pagination
+      - FetchingData.Filtering
+      - Errors.ProcessingErrors
+      - Errors.ErrorObjects
+  version: 1.2.0
 servers:
-  - url: https://api.usermanagement.com/v1
+  - url: https://api.template.com/v1
 x-jsonapi-object:
   type: object
   properties:
@@ -89,21 +108,34 @@ paths:
                   links:
                     type: object
                     properties:
-                      self:
-                        type: string
-                        format: uri
                       first:
                         type: string
                         format: uri
+                        nullable: true
+                        description: >-
+                          The link to the first page of data. Null if not
+                          available.
                       last:
                         type: string
                         format: uri
+                        nullable: true
+                        description: >-
+                          The link to the last page of data. Null if not
+                          available.
                       prev:
                         type: string
                         format: uri
+                        nullable: true
+                        description: >-
+                          The link to the previous page of data. Null if not
+                          available.
                       next:
                         type: string
                         format: uri
+                        nullable: true
+                        description: >-
+                          The link to the next page of data. Null if not
+                          available.
               examples:
                 userListExample:
                   summary: Example response for user list
@@ -114,6 +146,136 @@ paths:
                         attributes:
                           name: John Doe
                           email: john@example.com
+        '400':
+          description: Bad Request
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                  - errors
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        links:
+                          type: object
+                          properties:
+                            about:
+                              type: string
+                              format: uri
+                        status:
+                          type: string
+                          enum:
+                            - '400'
+                            - '401'
+                            - '403'
+                            - '404'
+                            - '405'
+                            - '406'
+                            - '409'
+                            - '422'
+                            - '500'
+                            - '502'
+                            - '503'
+                          description: >-
+                            HTTP status code applicable to this error, given as
+                            a string value.
+                        code:
+                          type: string
+                        title:
+                          type: string
+                        detail:
+                          type: string
+                        source:
+                          type: object
+                          properties:
+                            pointer:
+                              type: string
+                            parameter:
+                              type: string
+                        meta:
+                          type: object
+                          additionalProperties: true
+              examples:
+                badRequest:
+                  summary: Example of a bad request error
+                  value:
+                    errors:
+                      - id: error-102
+                        status: '400'
+                        title: Bad Request
+                        detail: The request is invalid.
+        '500':
+          description: Internal Server Error - Indicates a server-side error.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                  - errors
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        links:
+                          type: object
+                          properties:
+                            about:
+                              type: string
+                              format: uri
+                        status:
+                          type: string
+                          enum:
+                            - '400'
+                            - '401'
+                            - '403'
+                            - '404'
+                            - '405'
+                            - '406'
+                            - '409'
+                            - '422'
+                            - '500'
+                            - '502'
+                            - '503'
+                          description: >-
+                            HTTP status code applicable to this error, given as
+                            a string value.
+                        code:
+                          type: string
+                        title:
+                          type: string
+                        detail:
+                          type: string
+                        source:
+                          type: object
+                          properties:
+                            pointer:
+                              type: string
+                            parameter:
+                              type: string
+                        meta:
+                          type: object
+                          additionalProperties: true
+              examples:
+                internalServerErrorExample:
+                  summary: Example of an internal server error response
+                  value:
+                    errors:
+                      - id: error-500
+                        status: '500'
+                        title: Internal Server Error
+                        detail: >-
+                          The server encountered an unexpected condition that
+                          prevented it from fulfilling the request.
       parameters:
         - name: page[number]
           in: query
@@ -522,74 +684,6 @@ paths:
                       attributes:
                         name: John Doe
                         email: john.doe@example.com
-        '400':
-          description: Bad Request
-          content:
-            application/vnd.api+json:
-              schema:
-                type: object
-                required:
-                  - errors
-                properties:
-                  errors:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                        links:
-                          type: object
-                          properties:
-                            about:
-                              type: string
-                              format: uri
-                        status:
-                          type: string
-                          enum:
-                            - '400'
-                            - '401'
-                            - '403'
-                            - '404'
-                            - '405'
-                            - '406'
-                            - '409'
-                            - '422'
-                            - '500'
-                            - '502'
-                            - '503'
-                          description: >-
-                            HTTP status code applicable to this error, given as
-                            a string value.
-                        code:
-                          type: string
-                        title:
-                          type: string
-                        detail:
-                          type: string
-                        source:
-                          type: object
-                          properties:
-                            pointer:
-                              type: string
-                            parameter:
-                              type: string
-                        meta:
-                          type: object
-                          additionalProperties: true
-              examples:
-                badRequest:
-                  summary: Example of a bad request error
-                  value:
-                    errors:
-                      id: error-456
-                      status: '400'
-                      title: Bad Request
-                      detail: >-
-                        The request could not be understood due to malformed
-                        syntax.
-                      links:
-                        about: https://api.usermanagement.com/docs/errors/400
         '404':
           description: User Not Found
           content:
@@ -858,8 +952,8 @@ paths:
                         type: string
                         format: date-time
                         description: The timestamp of the last update.
-        '401':
-          description: Unauthorized - Authentication credentials were missing or invalid.
+        '400':
+          description: Bad Request
           content:
             application/vnd.api+json:
               schema:
@@ -914,22 +1008,17 @@ paths:
                           type: object
                           additionalProperties: true
               examples:
-                unauthorizedError:
-                  summary: Example of a 401 Unauthorized error
+                badRequestExample:
+                  summary: Example of a Bad Request response
                   value:
                     errors:
-                      - id: error-443
-                        status: '401'
-                        title: Unauthorized
+                      - status: 400
+                        title: Bad Request
                         detail: >-
-                          Authentication credentials were not provided or are
-                          invalid.
-                        links:
-                          about: https://api.usermanagement.com/docs/errors/401
-        '403':
-          description: >-
-            Forbidden - The request was valid, but the server is refusing action
-            due to insufficient permissions.
+                          The request payload is invalid. Please check the
+                          request data.
+        '500':
+          description: Internal Server Error
           content:
             application/vnd.api+json:
               schema:
@@ -984,16 +1073,16 @@ paths:
                           type: object
                           additionalProperties: true
               examples:
-                forbiddenError:
-                  summary: Example of a 403 Forbidden error
+                badRequest:
+                  summary: Example of a bad request error
                   value:
                     errors:
-                      - id: error-333
-                        status: '403'
-                        title: Unauthorized
-                        detail: You do not have permission to perform this aciton.
+                      - id: error-032
+                        status: '500'
+                        title: Internal Server Error
+                        detail: The server encountered an unexpected condition.
                         links:
-                          about: https://api.usermanagement.com/docs/errors/403
+                          about: https://api.usermanagement.com/docs/errors/500
     delete:
       tags:
         - users
@@ -1007,142 +1096,6 @@ paths:
       responses:
         '204':
           description: The user was successfully deleted.
-        '401':
-          description: Unauthorized - Authentication credentials were missing or invalid.
-          content:
-            application/vnd.api+json:
-              schema:
-                type: object
-                required:
-                  - errors
-                properties:
-                  errors:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                        links:
-                          type: object
-                          properties:
-                            about:
-                              type: string
-                              format: uri
-                        status:
-                          type: string
-                          enum:
-                            - '400'
-                            - '401'
-                            - '403'
-                            - '404'
-                            - '405'
-                            - '406'
-                            - '409'
-                            - '422'
-                            - '500'
-                            - '502'
-                            - '503'
-                          description: >-
-                            HTTP status code applicable to this error, given as
-                            a string value.
-                        code:
-                          type: string
-                        title:
-                          type: string
-                        detail:
-                          type: string
-                        source:
-                          type: object
-                          properties:
-                            pointer:
-                              type: string
-                            parameter:
-                              type: string
-                        meta:
-                          type: object
-                          additionalProperties: true
-              examples:
-                unauthorizedError:
-                  summary: Example of a 401 Unauthorized error
-                  value:
-                    errors:
-                      - id: error-223
-                        status: '401'
-                        title: Unauthorized
-                        detail: >-
-                          Authentication credentials were not provided or are
-                          invalid.
-                        links:
-                          about: https://api.usermanagement.com/docs/errors/401
-        '403':
-          description: >-
-            Forbidden - The request was valid, but the server is refusing action
-            due to insufficient permissions.
-          content:
-            application/vnd.api+json:
-              schema:
-                type: object
-                required:
-                  - errors
-                properties:
-                  errors:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                        links:
-                          type: object
-                          properties:
-                            about:
-                              type: string
-                              format: uri
-                        status:
-                          type: string
-                          enum:
-                            - '400'
-                            - '401'
-                            - '403'
-                            - '404'
-                            - '405'
-                            - '406'
-                            - '409'
-                            - '422'
-                            - '500'
-                            - '502'
-                            - '503'
-                          description: >-
-                            HTTP status code applicable to this error, given as
-                            a string value.
-                        code:
-                          type: string
-                        title:
-                          type: string
-                        detail:
-                          type: string
-                        source:
-                          type: object
-                          properties:
-                            pointer:
-                              type: string
-                            parameter:
-                              type: string
-                        meta:
-                          type: object
-                          additionalProperties: true
-              examples:
-                forbiddenError:
-                  summary: Example of a 403 Forbidden error
-                  value:
-                    errors:
-                      - id: error-543
-                        status: '403'
-                        title: Unauthorized
-                        detail: You do not have permission to perform this aciton.
-                        links:
-                          about: https://api.usermanagement.com/docs/errors/403
         '404':
           description: The specified user was not found.
           content:
@@ -1209,6 +1162,72 @@ paths:
                         detail: The user with the specified ID was not found.
                         links:
                           about: https://api.usermanagement.com/docs/errors/404
+        '500':
+          description: Internal Server Error - Indicates a server-side error.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                  - errors
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        links:
+                          type: object
+                          properties:
+                            about:
+                              type: string
+                              format: uri
+                        status:
+                          type: string
+                          enum:
+                            - '400'
+                            - '401'
+                            - '403'
+                            - '404'
+                            - '405'
+                            - '406'
+                            - '409'
+                            - '422'
+                            - '500'
+                            - '502'
+                            - '503'
+                          description: >-
+                            HTTP status code applicable to this error, given as
+                            a string value.
+                        code:
+                          type: string
+                        title:
+                          type: string
+                        detail:
+                          type: string
+                        source:
+                          type: object
+                          properties:
+                            pointer:
+                              type: string
+                            parameter:
+                              type: string
+                        meta:
+                          type: object
+                          additionalProperties: true
+              examples:
+                internalServerErrorExample:
+                  summary: Example of an internal server error response
+                  value:
+                    errors:
+                      - id: error-500
+                        status: '500'
+                        title: Internal Server Error
+                        detail: >-
+                          The server encountered an unexpected condition that
+                          prevented it from fulfilling the request.
 components:
   schemas: {}
   securitySchemes:
