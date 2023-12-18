@@ -12,4 +12,4 @@ extends:
   - jsonapi-document-structure-meta-information.js
   - jsonapi-document-structure-links.js
   - jsonapi-document-structure-jsonapi-object.js
-  - jsonapi-document-structure-resource-object.js
+  - jsonapi-document-structure-resource-objects.js

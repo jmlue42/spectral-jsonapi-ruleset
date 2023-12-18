@@ -30,15 +30,21 @@ import invalidApiDocumentArrayTypeType from './docs/documentStructure/resourceOb
 import invalidApiDocumentArrayAttributesType from './docs/documentStructure/resourceObjects/invalidApiDocumentArrayAttributesType.js';
 
 /**
- * @fileoverview This test suite validates the behavior of the JSON: API Errors.ErrorObjects ruleset
- * when given OpenAPI documents. It tests the different rules defined in jsonapi-errors-error-object.js
+ * @fileoverview This test suite validates the behavior of the JSON: API DocumentStructure.ResourceObjects ruleset
+ * when given OpenAPI documents. It tests the different rules defined in jsonapi-document-structure-resource-objects.js
  * against various OpenAPI documents that are valid based on JSON: API standards
  * 
  * The tests leverage several helper methods:
- *  - `setupSpectralBeforeEach`: Creates a beforeEach function for Mocha tests, setting up Spectral with a given ruleset and enabling specific rules.
+ *  - `setupSpectralBeforeEach`: Creates a beforeEach function for Mocha tests, setting up Spectral with a given ruleset
+ *      and enabling specific rules.
  *  - `handleSpectralResults`: Filters and handles the results of the spectral run.
- *  - `processErrors`: Processes and logs errors, specifically handling AggregateErrors separately. This function checks if the provided error is an instance of AggregateError. If so, it iterates over each individual error within the aggregate and logs them separately. For all other types of errors, it logs them as unexpected errors. This utility is particularly useful for handling and debugging multiple errors that can occur during Spectral setup or execution.
- *  - `resolveRef`: Recursively resolves $ref references in an OpenAPI document. This function handles objects and arrays, resolving all $ref references found within. It supports nested structures and arrays, handles circular references, and removes resolved references from the components section if they are no longer needed.
+ *  - `processErrors`: Processes and logs errors, specifically handling AggregateErrors separately. This function checks
+ *      if the provided error is an instance of AggregateError. If so, it iterates over each individual error within the
+ *      aggregate and logs them separately. For all other types of errors, it logs them as unexpected errors. This utility
+ *      is particularly useful for handling and debugging multiple errors that can occur during Spectral setup or execution.
+ *  - `resolveRef`: Recursively resolves $ref references in an OpenAPI document. This function handles objects and arrays,
+ *      resolving all $ref references found within. It supports nested structures and arrays, handles circular references,
+ *      and removes resolved references from the components section if they are no longer needed.
  * 
  * The suite uses Mocha for test execution and Chai for assertions.
  * 
