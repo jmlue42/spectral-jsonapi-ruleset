@@ -3,7 +3,7 @@
 
 // All rules in the file MUST have corresponding tests
 
-import { enumeration,length } from '@stoplight/spectral-functions';
+import { enumeration,length,falsy } from '@stoplight/spectral-functions';
 
 
 export default {
@@ -22,7 +22,8 @@ export default {
       description: '`attributes` name in an array of `Resource Objects` MUST NOT contain a `id` name',
       message: `{{path}} - {{description}}`,
       severity: 'error',
-      given: "$..[?@property=='attributes']..[?(@property == 'id')]",
+      //given: "$..[?@property=='attributes']..[?(@property == 'id')]",
+      given:"$..[?(@property == 'get')]..[?(@property == 'responses')]..properties.[?(@property=='attributes')]..[?(@property == 'id')]",
       then: {
         function: falsy
       }
@@ -40,7 +41,7 @@ export default {
       description: '`relationship` member in an array of `Resource Objects` MUST NOT contain a `type` name',
       message: `{{path}} - {{description}}`,
       severity: 'error',
-      given: "$..[?@property=='attributes']..[?(@property == 'type')]",
+      given: "$..[?(@property == 'get')]..[?(@property == 'responses')]..properties.[?(@property=='attributes')]..[?(@property == 'type')]",
       then: {
         function: falsy
       }
@@ -56,7 +57,7 @@ export default {
       description: '`relationship` name in an array of `Resource Objects` MUST NOT contain a `id` name',
       message: `{{path}} - {{description}}`,
       severity: 'error',
-      given: "$..[?@property=='relationships']..[?(@property == 'id')]",
+      given:"$..[?(@property == 'get')]..[?(@property == 'responses')]..properties.[?(@property=='relationships')]..[?(@property == 'id')]",
       then: {
         function: falsy
       }
@@ -72,7 +73,7 @@ export default {
       description: '`relationship` name in an array of `Resource Objects` MUST NOT contain a `type` name',
       message: `{{path}} - {{description}}`,
       severity: 'error',
-      given: "$..[?@property=='relationships']..[?(@property == 'type')]",
+      given:"$..[?(@property == 'get')]..[?(@property == 'responses')]..properties.[?(@property=='relationships')]..[?(@property == 'type')]",
       then: {
         function: falsy
       }
@@ -85,11 +86,14 @@ export default {
      * per JSON:API v1.0. This rule will also conduct a check for deeply nested
      * objects to ensure that a `type` name is not present.
      */
+
+
 'document-structure-resource-array-attributes-relationships-unique-name': {
   description: '`attributes and relationship name in an array of `Resource Objects MUST NOT contain a same name`',
   message: `{{path}} - {{description}}`,
   severity: 'error',
-  given:"$..[?(components.schema.properties.[?(@property=='attributes' && @property == 'relationships')]..[?(@property == 'user')]",
+  given:"$..[?(@property=='attributes' && @property == 'relationships')]..[?(@property == 'user')]",
+ // given:"$..[?(@property == 'get')]..[?(@property == 'responses')]..properties.[?(@property=='relationships')]..[?(@property == 'id')]",
   //given: "$..[?(@property == 'get' || @property == 'delete' || @property == 'put' || @property == 'patch' || @property == 'post')]..[?(@property == 'responses' || @property == 'requestBody')]..content['application/vnd.api+json'].schema.properties.data.items.properties.[?(@property=='attributes' && @property == 'relationships')]..[?(@property == 'user')]",
   then: {
     function: falsy

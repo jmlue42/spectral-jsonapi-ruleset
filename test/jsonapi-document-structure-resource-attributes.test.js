@@ -3,7 +3,7 @@ import { JSONPath } from 'jsonpath-plus';
 import { expect } from 'chai';
 
 // Rules to test
-import ruleset from '../rules/jsonapi-errors-processing-error.js';
+import ruleset from '../rules/jsonapi-document-structure-resource-fields-attributes.js';
 
 // Helper Functions
 import { resolveRef } from './utils/refResolver.js';
@@ -149,7 +149,7 @@ describe('errors-process-errors-general ruleset:', function errorsProcessErrorsS
         debugDebug(`JSONPath Expression: ${jsonPathExpression}`);
 
         const expectedExpressionPaths = [
-          {expected: dereferenceValidApiDocument.paths['/users'].get.responses.properties.attributes.type}
+          {expected: dereferenceValidApiDocument.paths['/users'].get.responses.properties.attributes}
           ];
 
         expectedExpressionPaths.forEach((path, index) => {
@@ -193,7 +193,7 @@ describe('errors-process-errors-general ruleset:', function errorsProcessErrorsS
 
         });
 
-        const confirmedErrors = 1;
+        const confirmedErrors = 13;
         const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
 
         expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
@@ -249,7 +249,7 @@ describe('document-structure-resource-array-relationships-no-id-name:', function
 
       
       const expectedExpressionPaths = [
-        { expected: dereferenceValidApiDocument.paths['/users'].get.responses.properties.relationships.id},
+        { expected: dereferenceValidApiDocument.properties.relationships},
         ];
 
       expectedExpressionPaths.forEach((path, index) => {
@@ -295,7 +295,105 @@ describe('document-structure-resource-array-relationships-no-id-name:', function
 
       });
 
-      const confirmedErrors = 1;
+      const confirmedErrors = 12;
+      const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
+
+      expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
+    
+    } catch (error) {
+
+      processErrors(error);
+    
+    }
+  
+  });
+
+  it('the rule should pass with NO errors', async function documentStructureResourceArrayAttributesNoIdNamePassing() {
+
+    try {
+
+      const relevantResults = await handleSpectralResults(this.spectral, dereferenceValidApiDocument, testingRuleName);
+
+      debugLog(`Confirmed Errors:`);
+      debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
+
+      const errorMessage = `\x1b[31mError count should be 0, ${ruleset.rules[testingRuleName].description}\x1b[0m`;
+      expect(relevantResults.length).to.equal(0, errorMessage);
+    
+    } catch (error) {
+
+      processErrors(error);
+  
+    }
+
+  });
+});
+
+
+/ * Ruleset: document-structure-resource-array-relationships-no-type-name */
+describe('document-structure-resource-array-relationships-no-id-name:', function documentStructureResourceArrayRelationshipsNoIdName() {
+
+  const testingRuleName = 'document-structure-resource-array-attributes-no-id-name';
+
+  beforeEach(setupSpectralBeforeEach(ruleset, [testingRuleName]));
+
+  it('the json path expression should find the correct paths from the given document', function documentStructureResourceArrayRelationshipsNoIdNamePath() {
+
+    try
+     {
+    
+      const jsonPathExpression = ruleset.rules[testingRuleName].given;
+      debugDebug(`JSONPath Expression: ${jsonPathExpression}`);
+
+      
+      const expectedExpressionPaths = [
+        { expected: dereferenceValidApiDocument.properties.relationships},
+        ];
+
+      expectedExpressionPaths.forEach((path, index) => {
+
+        const result = JSONPath({ path: jsonPathExpression,
+          json: dereferenceValidApiDocument });
+
+        debugInfo(`Element ${index + 1} found from JSONPath Expression: \x1b[32m${JSON.stringify(result[index], null, 2)}`);
+
+        // Check if the number of results matches the expected number
+        expect(result.length).to.equal(expectedExpressionPaths.length, `\x1b[31mExpected ${expectedExpressionPaths.length} elements to match in the OpenAPI Document.\x1b[0m\n`);
+      
+        // Check if each result matches the corresponding expected path
+        expect(result[index]).to.deep.equal(path.expected, `\x1b[31mThe wrong JSONPath Expression was provided in expected path: ${index + 1}\x1b[0m`);
+
+      });
+    }
+    
+     catch (error) {
+
+      processErrors(error);
+    
+    }
+  });
+  
+    
+
+  it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function documentStructureResourceArrayAttributesNoIdNameFailure() {
+
+    try {
+
+      const dereferencedOpenApiDocument = resolveRef(invalidApiDocumentRelationshipsIdNotRequired, invalidApiDocumentRelationshipsIdNotRequired);
+
+      
+      const relevantResults = await handleSpectralResults(this.spectral, dereferencedOpenApiDocument, testingRuleName);
+
+      debugLog(`  Confirmed Errors:`);
+      debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
+
+      relevantResults.forEach((result) => {
+
+        debugError(`\x1b[32mResults for '\x1b[33m${testingRuleName}\x1b[32m':\x1b[36m ${JSON.stringify(result, ['message', 'path'], 2)} \x1b[0m\n`);
+
+      });
+
+      const confirmedErrors = 12;
       const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
 
       expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
@@ -331,11 +429,11 @@ describe('document-structure-resource-array-relationships-no-id-name:', function
 
 
 /**
-* Ruleset: document-structure-resource-array-relationships-no-type-name
+* Ruleset: document-structure-resource-array-attributes-relationships-unique-name
 */
-describe('document-structure-resource-array-attributes-no-type-name:', function documentStructureResourceArrayRelationshipsNoTypeName() {
+describe('document-structure-resource-array-attributes-relationships-unique-name:', function documentStructureResourceArrayRelationshipsNoTypeName() {
 
-  const testingRuleName = 'document-structure-resource-array-relationships-no-type-name';
+  const testingRuleName = 'document-structure-resource-array-attributes-relationships-unique-name';
 
   beforeEach(setupSpectralBeforeEach(ruleset, [testingRuleName]));
 
@@ -349,7 +447,7 @@ describe('document-structure-resource-array-attributes-no-type-name:', function 
       debugDebug(`JSONPath Expression: ${jsonPathExpression}`);
 
       const expectedExpressionPaths = [
-        {expected: dereferenceValidApiDocument.paths['/users'].get.responses.properties.attributes.type}
+        {expected: dereferenceValidApiDocument.properties.relationships}
         ];
 
       expectedExpressionPaths.forEach((path, index) => {
@@ -445,6 +543,7 @@ describe('document-structure-resource-array-attributes-relationships-unique-name
 
       debugDebug(`JSONPath Expression: ${jsonPathExpression}`);
 
+      //cannot read prperties
       const expectedExpressionPaths = [
         {expected: dereferenceValidApiDocument.components.schema.properties.attributes.user},
         {expected: dereferenceValidApiDocument.components.schema.properties.relationships.user}
