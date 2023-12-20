@@ -6,3 +6,4 @@ extends:
   - jsonapi-content-negotiation-ruleset.yaml
   - jsonapi-document-structure-ruleset.yaml
   - jsonapi-errors-ruleset.yaml
+  - jsonapi-fetching-data-ruleset.yaml
