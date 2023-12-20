@@ -1,5 +1,5 @@
 # This OpenAPI Document provides a way of testing rulesets using using Spectrals CLI Command. Covered ruleset include:
-#   - `jsonapi-errors-error-object.js` 
+#   - `jsonapi-document-structure-resource-objects.js` 
 #
 # Usage (From Repo Root Location):
 #   spectral lint cliTest/documentStructure/resourceObjects/failing-rules.yaml --ruleset rules/jsonapi-document-structure-resource-objects.js

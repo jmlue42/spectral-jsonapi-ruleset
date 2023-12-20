@@ -1,11 +1,11 @@
-// Document Structure - Resource Objects - https://jsonapi.org/format/#document-resource-objects
+// Document Structure - Resource Objects - https://jsonapi.org/format/1.0/#document-resource-objects
 
 // All rules in the file MUST have corresponding tests
 
 import { enumeration, length, truthy } from '@stoplight/spectral-functions';
 
 export default {
-  documentationUrl: 'https://jsonapi.org/format/#document-resource-objects',
+  documentationUrl: 'https://jsonapi.org/format/1.0/#document-resource-objects',
   rules: {
 
     /**
