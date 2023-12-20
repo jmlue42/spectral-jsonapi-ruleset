@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 /* eslint-disable quotes */
-const validApiDocument = {
+const invalidApiDocumentSingleTypeMember = {
   "openapi": "3.1.0",
   "info": {
     "title": "OpenAPI Management Template",
@@ -528,10 +528,11 @@ const validApiDocument = {
             "type": "string",
             "description": "Unique identifier for the user"
           },
-          "type": {
-            "type": "string",
-            "description": "Type of the resource (users)"
-          },
+          // Removing `type` member to generate a failing scenario for rule `document-structure-resource-single-identification-type-member`
+          // "type": {
+          //   "type": "string",
+          //   "description": "Type of the resource (users)"
+          // },
           "attributes": {
             "$ref": "#/components/schemas/UserAttributes"
           },
@@ -589,9 +590,10 @@ const validApiDocument = {
               "attributes"
             ],
             "properties": {
-              "type": {
-                "type": "string"
-              },
+              // Removing `type` member to generate a failing scenario for rule `document-structure-resource-single-identification-type-member`
+              // "type": {
+              //   "type": "string"
+              // },
               "attributes": {
                 "$ref": "#/components/schemas/UserAttributes"
               }
@@ -614,9 +616,10 @@ const validApiDocument = {
               "id": {
                 "type": "string"
               },
-              "type": {
-                "type": "string"
-              },
+              // Removing `type` member to generate a failing scenario for rule `document-structure-resource-single-identification-type-member`
+              // "type": {
+              //   "type": "string"
+              // },
               "attributes": {
                 "$ref": "#/components/schemas/UserAttributes"
               }
@@ -829,4 +832,4 @@ const validApiDocument = {
   ]
 };
 
-export default validApiDocument;
+export default invalidApiDocumentSingleTypeMember;

@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 /* eslint-disable quotes */
-const validApiDocument = {
+const invalidApiDocumentArrayIdMember = {
   "openapi": "3.1.0",
   "info": {
     "title": "OpenAPI Management Template",
@@ -524,10 +524,11 @@ const validApiDocument = {
           "type"
         ],
         "properties": {
-          "id": {
-            "type": "string",
-            "description": "Unique identifier for the user"
-          },
+          // Removing the `id` member to generate a failing scenario for rule `document-structure-resource-array-identification-id-member`
+          // "id": {
+          //   "type": "string",
+          //   "description": "Unique identifier for the user"
+          // },
           "type": {
             "type": "string",
             "description": "Type of the resource (users)"
@@ -611,9 +612,10 @@ const validApiDocument = {
               "attributes"
             ],
             "properties": {
-              "id": {
-                "type": "string"
-              },
+              // Removing `id` member to generate a failing scenario for rule `document-structure-resource-array-identification-id-member`
+              // "id": {
+              //   "type": "string"
+              // },
               "type": {
                 "type": "string"
               },
@@ -829,4 +831,4 @@ const validApiDocument = {
   ]
 };
 
-export default validApiDocument;
+export default invalidApiDocumentArrayIdMember;

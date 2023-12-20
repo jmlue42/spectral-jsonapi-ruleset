@@ -1,0 +1,805 @@
+# This OpenAPI Document provides a way of testing rulesets using using Spectrals CLI Command. Covered ruleset include:
+#   - `jsonapi-document-structure-resource-identification.js` 
+#
+# Usage (From Repo Root Location):
+#   spectral lint cliTest/documentStructure/resourceObjects/identification/failing-rules.yaml --ruleset rules/jsonapi-document-structure-resource-identification.js --verbose
+#
+# This document will generate `8 errors` as expected for each rule.
+openapi: 3.1.0
+info:
+  title: OpenAPI Management Template
+  description: |-
+    This API manages information pertaining to users and articles
+    which is adhereing to JSON:API v1.0 standards. The goal of this template is
+    to provide a universal temaplte for testing all of the JSON:API v1.0
+    specifications. This is to generate a failing scenario for the following section:
+      - DocumentStructure.ResourceObjects.identification
+  version: 1.2.2
+servers:
+  - url: https://api.template.com/v1
+x-jsonapi-object:
+  type: object
+  properties:
+    version:
+      type: string
+    meta:
+      type: object
+      additionalProperties: false
+  additionalProperties: false
+paths:
+  /users:
+    get:
+      tags:
+        - users
+      summary: List all users
+      description: >-
+        Retrieve a list of users with pagination and optional filters for
+        sorting and searching.
+      security: []
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                description: Response schema for a list of users with pagination details.
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - id
+                        - type
+                      properties:
+                        # Removing `id` member to trigger rule `document-structure-resource-array-identification-id-member`
+                        # id:
+                        #   type: string
+                        #   description: Unique identifier for the user
+                        # Removing `id` member to trigger rule `document-structure-resource-array-identification-type-member`
+                        # type:
+                        #   type: string
+                        #   description: Type of the resource (users)
+                        attributes:
+                          type: object
+                          required:
+                            - name
+                            - email
+                          properties:
+                            name:
+                              type: string
+                              description: Name of the user
+                            email:
+                              type: string
+                              format: email
+                              description: >-
+                                Email address of the user, must follow standard
+                                email format.
+                            role:
+                              type: string
+                              description: Role of the user in the system
+                        relationships:
+                          type: object
+                          properties:
+                            posts:
+                              type: object
+                              properties:
+                                self:
+                                  type: string
+                                  format: uri
+                                related:
+                                  type: string
+                                  format: uri
+                  links:
+                    type: object
+                    properties:
+                      first:
+                        type: string
+                        format: uri
+                        nullable: true
+                        description: >-
+                          The link to the first page of data. Null if not
+                          available.
+                      last:
+                        type: string
+                        format: uri
+                        nullable: true
+                        description: >-
+                          The link to the last page of data. Null if not
+                          available.
+                      prev:
+                        type: string
+                        format: uri
+                        nullable: true
+                        description: >-
+                          The link to the previous page of data. Null if not
+                          available.
+                      next:
+                        type: string
+                        format: uri
+                        nullable: true
+                        description: >-
+                          The link to the next page of data. Null if not
+                          available.
+              examples:
+                userListExample:
+                  summary: Example response for user list
+                  value:
+                    data:
+                      - type: users
+                        id: '1'
+                        attributes:
+                          name: John Doe
+                          email: john@example.com
+      parameters:
+        - name: page[number]
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          description: Page number for pagination
+        - name: page[size]
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 20
+          description: Number of items per page
+        - name: filter
+          in: query
+          schema:
+            type: string
+          description: Filter string to narrow down the search
+        - name: sort
+          in: query
+          schema:
+            type: string
+          description: >-
+            Sorting criteria. E.g., `name,-email` for ascending by name and
+            descending by email.
+        - name: fields
+          in: query
+          schema:
+            type: string
+          description: Comma-separated list of fields to include in the response.
+    post:
+      tags:
+        - users
+      summary: Create a new user
+      requestBody:
+        description: Payload to create a new user, containing user details.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+              description: Request schema for creating a new user.
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - attributes
+                  properties:
+                    type:
+                      type: string
+                    attributes:
+                      type: object
+                      required:
+                        - name
+                        - email
+                      properties:
+                        name:
+                          type: string
+                          description: Name of the user
+                        email:
+                          type: string
+                          format: email
+                          description: >-
+                            Email address of the user, must follow standard
+                            email format.
+                        role:
+                          type: string
+                          description: Role of the user in the system
+      responses:
+        '201':
+          description: New user created
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                description: Response schema for a single user or a newly created user.
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - id
+                      - type
+                    properties:
+                      # Removing `id` member to trigger the rule `document-structure-resource-single-identification-id-member`
+                      # id:
+                      #   type: string
+                      #   description: Unique identifier for the user
+                      type:
+                        type: string
+                        description: Type of the resource (users)
+                      attributes:
+                        type: object
+                        required:
+                          - name
+                          - email
+                        properties:
+                          name:
+                            type: string
+                            description: Name of the user
+                          email:
+                            type: string
+                            format: email
+                            description: >-
+                              Email address of the user, must follow standard
+                              email format.
+                          role:
+                            type: string
+                            description: Role of the user in the system
+                      relationships:
+                        type: object
+                        properties:
+                          posts:
+                            type: object
+                            properties:
+                              self:
+                                type: string
+                                format: uri
+                              related:
+                                type: string
+                                format: uri
+                  included:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        type:
+                          type: string
+                        attributes:
+                          type: object
+                          required:
+                            - name
+                            - email
+                          properties:
+                            name:
+                              type: string
+                              description: Name of the user
+                            email:
+                              type: string
+                              format: email
+                              description: >-
+                                Email address of the user, must follow standard
+                                email format.
+                            role:
+                              type: string
+                              description: Role of the user in the system
+                  meta:
+                    type: object
+                    properties:
+                      totalCount:
+                        type: integer
+                        description: Total number of resources available.
+                      lastUpdated:
+                        type: string
+                        format: date-time
+                        description: The timestamp of the last update.
+  /users/{userId}:
+    get:
+      tags:
+        - users
+      summary: Get User by ID
+      security: []
+      description: Retrieves information for a specific user by their ID.
+      operationId: getUserById
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: Unique identifier of the user
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Details of a user
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                description: Response schema for a single user or a newly created user.
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - id
+                      - type
+                    properties:
+                      id:
+                        # Changing the type from 'string' to 'fail' to trigger rule `document-structure-resource-single-identification-id-type`
+                        type: fail
+                        description: Unique identifier for the user
+                      # Removing `type` member to trigger rule `document-structure-resource-single-identification-type-member`
+                      # type:
+                      #   type: string
+                      #   description: Type of the resource (users)
+                      attributes:
+                        type: object
+                        required:
+                          - name
+                          - email
+                        properties:
+                          name:
+                            type: string
+                            description: Name of the user
+                          email:
+                            type: string
+                            format: email
+                            description: >-
+                              Email address of the user, must follow standard
+                              email format.
+                          role:
+                            type: string
+                            description: Role of the user in the system
+                      relationships:
+                        type: object
+                        properties:
+                          posts:
+                            type: object
+                            properties:
+                              self:
+                                type: string
+                                format: uri
+                              related:
+                                type: string
+                                format: uri
+                  included:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        type:
+                          type: string
+                        attributes:
+                          type: object
+                          required:
+                            - name
+                            - email
+                          properties:
+                            name:
+                              type: string
+                              description: Name of the user
+                            email:
+                              type: string
+                              format: email
+                              description: >-
+                                Email address of the user, must follow standard
+                                email format.
+                            role:
+                              type: string
+                              description: Role of the user in the system
+                  meta:
+                    type: object
+                    properties:
+                      totalCount:
+                        type: integer
+                        description: Total number of resources available.
+                      lastUpdated:
+                        type: string
+                        format: date-time
+                        description: The timestamp of the last update.
+              examples:
+                user:
+                  summary: User Example
+                  value:
+                    data:
+                      id: '12345'
+                      type: user
+                      attributes:
+                        name: John Doe
+                        email: john.doe@example.com
+    put:
+      tags:
+        - users
+      summary: Update a user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Payload to update an existing user.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+              description: Request schema for updating an existing user's details.
+              properties:
+                data:
+                  type: object
+                  required:
+                    - id
+                    - type
+                    - attributes
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      # Changing the type from 'string' to 'fail' to trigger rule `document-structure-resource-single-identification-type-type`
+                      type: fail
+                    attributes:
+                      type: object
+                      required:
+                        - name
+                        - email
+                      properties:
+                        name:
+                          type: string
+                          description: Name of the user
+                        email:
+                          type: string
+                          format: email
+                          description: >-
+                            Email address of the user, must follow standard
+                            email format.
+                        role:
+                          type: string
+                          description: Role of the user in the system
+      responses:
+        '200':
+          description: User updated
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                description: Response schema for a single user or a newly created user.
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - id
+                      - type
+                    properties:
+                      id:
+                        type: string
+                        description: Unique identifier for the user
+                      type:
+                        type: string
+                        description: Type of the resource (users)
+                      attributes:
+                        type: object
+                        required:
+                          - name
+                          - email
+                        properties:
+                          name:
+                            type: string
+                            description: Name of the user
+                          email:
+                            type: string
+                            format: email
+                            description: >-
+                              Email address of the user, must follow standard
+                              email format.
+                          role:
+                            type: string
+                            description: Role of the user in the system
+                      relationships:
+                        type: object
+                        properties:
+                          posts:
+                            type: object
+                            properties:
+                              self:
+                                type: string
+                                format: uri
+                              related:
+                                type: string
+                                format: uri
+                  included:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        type:
+                          type: string
+                        attributes:
+                          type: object
+                          required:
+                            - name
+                            - email
+                          properties:
+                            name:
+                              type: string
+                              description: Name of the user
+                            email:
+                              type: string
+                              format: email
+                              description: >-
+                                Email address of the user, must follow standard
+                                email format.
+                            role:
+                              type: string
+                              description: Role of the user in the system
+                  meta:
+                    type: object
+                    properties:
+                      totalCount:
+                        type: integer
+                        description: Total number of resources available.
+                      lastUpdated:
+                        type: string
+                        format: date-time
+                        description: The timestamp of the last update.
+    delete:
+      tags:
+        - users
+      summary: Delete a user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: The user was successfully deleted.
+  /articles:
+    get:
+      tags:
+        - articles
+      summary: List all articles
+      description: >-
+        Retrieve a list of articles with pagination and optional filters for
+        sorting and searching.
+      operationId: listArticles
+      security: []
+      parameters:
+        - name: page[number]
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          description: Page number for pagination
+        - name: page[size]
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 20
+          description: Number of items per page
+        - name: filter
+          in: query
+          schema:
+            type: string
+          description: Filter string to narrow down the search
+        - name: sort
+          in: query
+          schema:
+            type: string
+          description: >-
+            Sorting criteria, e.g., `title,-author` for ascending by title and
+            descending by author.
+        - name: fields
+          in: query
+          schema:
+            type: string
+          description: Comma-separated list of fields to include in the response.
+      responses:
+        '200':
+          description: A list of articles
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - id
+                        - type
+                      properties:
+                        id:
+                          # Changing the type from 'string' to 'fail' to trigger rule `document-structure-resource-array-identification-id-type`
+                          type: fail
+                          description: Unique identifier for the article
+                        type:
+                          # Changing the type from 'string' to 'fail' to trigger rule `document-structure-resource-array-identification-type-type`
+                          type: fail
+                          description: Type of the resource (articles)
+                        attributes:
+                          type: object
+                          required:
+                            - title
+                            - author
+                            - content
+                          properties:
+                            title:
+                              type: string
+                              description: Title of the article
+                            author:
+                              type: string
+                              description: Author of the article
+                            content:
+                              type: string
+                              description: Content of the article
+                  links:
+                    type: object
+                    properties:
+                      first:
+                        type: string
+                        format: uri
+                        nullable: true
+                        description: >-
+                          The link to the first page of data. Null if not
+                          available.
+                      last:
+                        type: string
+                        format: uri
+                        nullable: true
+                        description: >-
+                          The link to the last page of data. Null if not
+                          available.
+                      prev:
+                        type: string
+                        format: uri
+                        nullable: true
+                        description: >-
+                          The link to the previous page of data. Null if not
+                          available.
+                      next:
+                        type: string
+                        format: uri
+                        nullable: true
+                        description: >-
+                          The link to the next page of data. Null if not
+                          available.
+              examples:
+                articleListExample:
+                  summary: Example response for article list
+                  value:
+                    data:
+                      - type: articles
+                        id: '301'
+                        attributes:
+                          title: Article Title
+                          author: Author Name
+                          content: Article content here.
+    post:
+      tags:
+        - articles
+      summary: Create a new article
+      description: Add a new article to the collection.
+      operationId: createArticle
+      security: []
+      requestBody:
+        description: Payload to create a new article, containing article details.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - attributes
+                  properties:
+                    type:
+                      type: string
+                    attributes:
+                      type: object
+                      required:
+                        - title
+                        - author
+                        - content
+                      properties:
+                        title:
+                          type: string
+                          description: Title of the article
+                        author:
+                          type: string
+                          description: Author of the article
+                        content:
+                          type: string
+                          description: Content of the article
+            examples:
+              articleCreateExample:
+                summary: Example request for creating an article
+                value:
+                  data:
+                    type: articles
+                    attributes:
+                      title: New Article Title
+                      author: Author Name
+                      content: Content of the new article.
+      responses:
+        '201':
+          description: New article created
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - id
+                      - type
+                    properties:
+                      id:
+                        type: string
+                        description: Unique identifier for the article
+                      type:
+                        type: string
+                        description: Type of the resource (articles)
+                      attributes:
+                        type: object
+                        required:
+                          - title
+                          - author
+                          - content
+                        properties:
+                          title:
+                            type: string
+                            description: Title of the article
+                          author:
+                            type: string
+                            description: Author of the article
+                          content:
+                            type: string
+                            description: Content of the article
+                  meta:
+                    type: object
+                    properties:
+                      totalCount:
+                        type: integer
+                        description: Total number of resources available.
+                      lastUpdated:
+                        type: string
+                        format: date-time
+                        description: The timestamp of the last update.
+              examples:
+                articleCreatedExample:
+                  summary: Example response for a created article
+                  value:
+                    data:
+                      id: '302'
+                      type: articles
+                      attributes:
+                        title: New Article Title
+                        author: Author Name
+                        content: Content of the new article.
+components:
+  schemas: {}
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Bearer token authentication
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+      description: API Key based authentication
+security:
+  - BearerAuth: []
+  - ApiKeyAuth: []

@@ -13,3 +13,4 @@ extends:
   - jsonapi-document-structure-links.js
   - jsonapi-document-structure-jsonapi-object.js
   - jsonapi-document-structure-resource-objects.js
+  - jsonapi-document-structure-resource-identification.js

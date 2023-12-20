@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 /* eslint-disable quotes */
-const validApiDocument = {
+const invalidApiDocumentArrayTypeType = {
   "openapi": "3.1.0",
   "info": {
     "title": "OpenAPI Management Template",
@@ -529,7 +529,8 @@ const validApiDocument = {
             "description": "Unique identifier for the user"
           },
           "type": {
-            "type": "string",
+            // changing `type` member type from 'string' to 'fail to generate a failing scenario for rule `document-structure-resource-array-identification-type-type`
+            "type": "fail",
             "description": "Type of the resource (users)"
           },
           "attributes": {
@@ -590,7 +591,8 @@ const validApiDocument = {
             ],
             "properties": {
               "type": {
-                "type": "string"
+                // changing `type` member type from 'string' to 'fail to generate a failing scenario for rule `document-structure-resource-array-identification-type-type`
+                "type": "fail"
               },
               "attributes": {
                 "$ref": "#/components/schemas/UserAttributes"
@@ -615,7 +617,8 @@ const validApiDocument = {
                 "type": "string"
               },
               "type": {
-                "type": "string"
+                // changing `type` member type from 'string' to 'fail to generate a failing scenario for rule `document-structure-resource-array-identification-type-type`
+                "type": "fail"
               },
               "attributes": {
                 "$ref": "#/components/schemas/UserAttributes"
@@ -829,4 +832,4 @@ const validApiDocument = {
   ]
 };
 
-export default validApiDocument;
+export default invalidApiDocumentArrayTypeType;
