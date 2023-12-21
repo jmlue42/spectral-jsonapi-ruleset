@@ -175,7 +175,116 @@ describe('resolveRef Utils In OpenAPI:', function () {
 
   it('should handle resolution when $ref is at the root of the document', function () {
 
-    const expectedResolvedSchema = { };
+    const expectedResolvedSchema = {
+      'JsonApiError': {
+        'type': 'object',
+        'properties': {
+          'errors': {
+            'type': 'array',
+            'items': {
+              'type': 'object',
+              'properties': {
+                'id': {
+                  'type': 'string'
+                },
+                'links': {
+                  'type': 'object',
+                  'properties': {
+                    'about': {
+                      'type': 'string',
+                      'format': 'uri'
+                    }
+                  }
+                },
+                'status': {
+                  'type': 'string'
+                },
+                'code': {
+                  'type': 'string'
+                },
+                'title': {
+                  'type': 'string'
+                },
+                'detail': {
+                  'type': 'string'
+                },
+                'source': {
+                  'type': 'object',
+                  'properties': {
+                    'pointer': {
+                      'type': 'string'
+                    },
+                    'parameter': {
+                      'type': 'string'
+                    },
+                    'header': {
+                      'type': 'string'
+                    }
+                  }
+                },
+                'meta': {
+                  'type': 'object',
+                  'additionalProperties': true
+                }
+              },
+              'required': [
+                'detail'
+              ]
+            }
+          }
+        }
+      },
+      'ErrorObject': {
+        'type': 'object',
+        'properties': {
+          'id': {
+            'type': 'string'
+          },
+          'links': {
+            'type': 'object',
+            'properties': {
+              'about': {
+                'type': 'string',
+                'format': 'uri'
+              }
+            }
+          },
+          'status': {
+            'type': 'string'
+          },
+          'code': {
+            'type': 'string'
+          },
+          'title': {
+            'type': 'string'
+          },
+          'detail': {
+            'type': 'string'
+          },
+          'source': {
+            'type': 'object',
+            'properties': {
+              'pointer': {
+                'type': 'string'
+              },
+              'parameter': {
+                'type': 'string'
+              },
+              'header': {
+                'type': 'string'
+              }
+            }
+          },
+          'meta': {
+            'type': 'object',
+            'additionalProperties': true
+          }
+        },
+        'required': [
+          'detail'
+        ]
+      }
+    };
 
     expect(dereferenceDocument.components.schemas).to.deep.equal(expectedResolvedSchema);
 
