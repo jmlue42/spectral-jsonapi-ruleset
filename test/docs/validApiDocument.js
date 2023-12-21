@@ -1,15 +1,55 @@
 /* eslint-env mocha */
 /* eslint-disable quotes */
+/**
+ * This validApiDocument is utilized for a centralized dereferencing document which is used in test suites as a global scope.
+ * This will provide performance optimiation and resolve any issues related to mutliple derferencing. 
+ * 
+ * Key Reason:
+ *  1. Performance Optimization:
+ *      - As our API template grows, the number of test cases that require a dereferenced version of validApiDocument is increasing.
+ *      - Previously, each test file was individually dereferencing this document, which is a resource-intensive process. 
+ *        By dereferencing it once globally, we reduce the computational overhead significantly.
+ *      - This global approach ensures that all tests use the same dereferenced instance, improving the overall efficiency of our
+ *        test execution.
+ *  2. Resolving Multiple Dereferencing Issues:
+ *      - In our prior setup, attempting to dereference an already dereferenced document in different test files led to inconsistencies
+ *        and potential errors.
+ *      - By having a single, globally dereferenced document, we eliminate the risk of such issues. This ensures that all tests work
+ *        with a consistent and stable version of the API document.
+ *  3. Maintainability and Consistency:
+ *      - This refactor simplifies the test setup by removing redundant dereferencing logic in multiple files.
+ *      - It also enhances the consistency across our test suites, making it easier for the team to write and maintain tests.
+ * 
+ * Use Case:
+ *      - Inside of your test case suite you will need to create a variable that will call the globally scoped document
+ *      - @see {@link ../jsonapi-fetching-data-fetching-resources.test.js} for live usage 
+ *      - Below is a setup example:
+ * 
+ * 
+ * describe('your-custom-rule-file ruleset:', function yourCustomTestSuite() {
+ *
+ *  let dereferenceValidApiDocument;
+ *
+ *  before(function () {
+ *
+ *    // Access the globally dereferenced document
+ *    dereferenceValidApiDocument = global.dereferencedValidOpenApiDocument;
+ *    
+ *  });
+ * 
+ * });
+ * 
+ */
 const validApiDocument = {
   "openapi": "3.1.0",
   "info": {
-    "title": "User Management API",
-    "description": "This API manages user information, conforming to JSON:API v1.0 standards.",
-    "version": "1.1.0"
+    "title": "OpenAPI Management Template",
+    "description": "This API manages information pertaining to users\nwhich is adhereing to JSON:API v1.0 standards. The goal of this template is\nto provide a universal temaplte for testing all of the JSON:API v1.0\nspecifications. This document adheres to the following sections:\n  - ContentNegotiation.ClientResponsibilities\n  - ContentNegotiation.ServerResponsibilities\n  - DocumentStructure\n  - DocumentStructure.TopLevel\n  - DocumentStructure.ResourceObjects\n  - DocumentStructure.ResourceObjects.Attributes\n  - DocumentStructure.Links\n  - DocumentStructure.MetaInformation\n  - DocumentStructure.MemberNames\n  - FetchingData.FetchingResources\n  - FetchingData.Sorting\n  - FetchingData.Pagination\n  - FetchingData.Filtering\n  - Errors.ProcessingErrors\n  - Errors.ErrorObjects",
+    "version": "1.2.2"
   },
   "servers": [
     {
-      "url": "https://api.usermanagement.com/v1"
+      "url": "https://api.template.com/v1"
     }
   ],
   "x-jsonapi-object": {
@@ -54,6 +94,56 @@ const validApiDocument = {
                             "name": "John Doe",
                             "email": "john@example.com"
                           }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiError"
+                },
+                "examples": {
+                  "badRequest": {
+                    "summary": "Example of a bad request error",
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "error-102",
+                          "status": "400",
+                          "title": "Bad Request",
+                          "detail": "The request is invalid."
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error - Indicates a server-side error.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiError"
+                },
+                "examples": {
+                  "internalServerErrorExample": {
+                    "summary": "Example of an internal server error response",
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "error-500",
+                          "status": "500",
+                          "title": "Internal Server Error",
+                          "detail": "The server encountered an unexpected condition that prevented it from fulfilling the request."
                         }
                       ]
                     }
@@ -242,32 +332,6 @@ const validApiDocument = {
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/vnd.api+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonApiError"
-                },
-                "examples": {
-                  "badRequest": {
-                    "summary": "Example of a bad request error",
-                    "value": {
-                      "errors": {
-                        "id": "error-456",
-                        "status": "400",
-                        "title": "Bad Request",
-                        "detail": "The request could not be understood due to malformed syntax.",
-                        "links": {
-                          "about": "https://api.usermanagement.com/docs/errors/400"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
           "404": {
             "description": "User Not Found",
             "content": {
@@ -361,26 +425,22 @@ const validApiDocument = {
               }
             }
           },
-          "401": {
-            "description": "Unauthorized - Authentication credentials were missing or invalid.",
+          "400": {
+            "description": "Bad Request",
             "content": {
               "application/vnd.api+json": {
                 "schema": {
                   "$ref": "#/components/schemas/JsonApiError"
                 },
                 "examples": {
-                  "unauthorizedError": {
-                    "summary": "Example of a 401 Unauthorized error",
+                  "badRequestExample": {
+                    "summary": "Example of a Bad Request response",
                     "value": {
                       "errors": [
                         {
-                          "id": "error-443",
-                          "status": "401",
-                          "title": "Unauthorized",
-                          "detail": "Authentication credentials were not provided or are invalid.",
-                          "links": {
-                            "about": "https://api.usermanagement.com/docs/errors/401"
-                          }
+                          "status": 400,
+                          "title": "Bad Request",
+                          "detail": "The request payload is invalid. Please check the request data."
                         }
                       ]
                     }
@@ -389,25 +449,25 @@ const validApiDocument = {
               }
             }
           },
-          "403": {
-            "description": "Forbidden - The request was valid, but the server is refusing action due to insufficient permissions.",
+          "500": {
+            "description": "Internal Server Error",
             "content": {
               "application/vnd.api+json": {
                 "schema": {
                   "$ref": "#/components/schemas/JsonApiError"
                 },
                 "examples": {
-                  "forbiddenError": {
-                    "summary": "Example of a 403 Forbidden error",
+                  "badRequest": {
+                    "summary": "Example of a bad request error",
                     "value": {
                       "errors": [
                         {
-                          "id": "error-333",
-                          "status": "403",
-                          "title": "Unauthorized",
-                          "detail": "You do not have permission to perform this aciton.",
+                          "id": "error-032",
+                          "status": "500",
+                          "title": "Internal Server Error",
+                          "detail": "The server encountered an unexpected condition.",
                           "links": {
-                            "about": "https://api.usermanagement.com/docs/errors/403"
+                            "about": "https://api.usermanagement.com/docs/errors/500"
                           }
                         }
                       ]
@@ -438,62 +498,6 @@ const validApiDocument = {
           "204": {
             "description": "The user was successfully deleted."
           },
-          "401": {
-            "description": "Unauthorized - Authentication credentials were missing or invalid.",
-            "content": {
-              "application/vnd.api+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonApiError"
-                },
-                "examples": {
-                  "unauthorizedError": {
-                    "summary": "Example of a 401 Unauthorized error",
-                    "value": {
-                      "errors": [
-                        {
-                          "id": "error-223",
-                          "status": "401",
-                          "title": "Unauthorized",
-                          "detail": "Authentication credentials were not provided or are invalid.",
-                          "links": {
-                            "about": "https://api.usermanagement.com/docs/errors/401"
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden - The request was valid, but the server is refusing action due to insufficient permissions.",
-            "content": {
-              "application/vnd.api+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonApiError"
-                },
-                "examples": {
-                  "forbiddenError": {
-                    "summary": "Example of a 403 Forbidden error",
-                    "value": {
-                      "errors": [
-                        {
-                          "id": "error-543",
-                          "status": "403",
-                          "title": "Unauthorized",
-                          "detail": "You do not have permission to perform this aciton.",
-                          "links": {
-                            "about": "https://api.usermanagement.com/docs/errors/403"
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          },
           "404": {
             "description": "The specified user was not found.",
             "content": {
@@ -514,6 +518,31 @@ const validApiDocument = {
                           "links": {
                             "about": "https://api.usermanagement.com/docs/errors/404"
                           }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error - Indicates a server-side error.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiError"
+                },
+                "examples": {
+                  "internalServerErrorExample": {
+                    "summary": "Example of an internal server error response",
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "error-500",
+                          "status": "500",
+                          "title": "Internal Server Error",
+                          "detail": "The server encountered an unexpected condition that prevented it from fulfilling the request."
                         }
                       ]
                     }
@@ -544,7 +573,16 @@ const validApiDocument = {
             "description": "Type of the resource (users)"
           },
           "attributes": {
-            "$ref": "#/components/schemas/AttributesObject"
+            "$ref": "#/components/schemas/UserAttributes"
+          },
+          "links": {
+            "type": "object",
+            "properties": {
+              "self": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
           },
           "relationships": {
             "type": "object",
@@ -585,29 +623,7 @@ const validApiDocument = {
             }
           },
           "links": {
-            "type": "object",
-            "properties": {
-              "self": {
-                "type": "string",
-                "format": "uri"
-              },
-              "first": {
-                "type": "string",
-                "format": "uri"
-              },
-              "last": {
-                "type": "string",
-                "format": "uri"
-              },
-              "prev": {
-                "type": "string",
-                "format": "uri"
-              },
-              "next": {
-                "type": "string",
-                "format": "uri"
-              }
-            }
+            "$ref": "#/components/schemas/PaginationLinks"
           }
         }
       },
@@ -626,7 +642,7 @@ const validApiDocument = {
                 "type": "string"
               },
               "attributes": {
-                "$ref": "#/components/schemas/AttributesObject"
+                "$ref": "#/components/schemas/UserAttributes"
               }
             }
           }
@@ -651,13 +667,13 @@ const validApiDocument = {
                 "type": "string"
               },
               "attributes": {
-                "$ref": "#/components/schemas/AttributesObject"
+                "$ref": "#/components/schemas/UserAttributes"
               }
             }
           }
         }
       },
-      "AttributesObject": {
+      "UserAttributes": {
         "type": "object",
         "required": [
           "name",
@@ -702,7 +718,7 @@ const validApiDocument = {
             "type": "string"
           },
           "attributes": {
-            "$ref": "#/components/schemas/AttributesObject"
+            "$ref": "#/components/schemas/UserAttributes"
           }
         }
       },
@@ -717,6 +733,39 @@ const validApiDocument = {
             "type": "string",
             "format": "date-time",
             "description": "The timestamp of the last update."
+          }
+        }
+      },
+      "PaginationLinks": {
+        "type": "object",
+        "properties": {
+          "self": {
+            "type": "string",
+            "format": "uri"
+          },
+          "first": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true,
+            "description": "The link to the first page of data. Null if not available."
+          },
+          "last": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true,
+            "description": "The link to the last page of data. Null if not available."
+          },
+          "prev": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true,
+            "description": "The link to the previous page of data. Null if not available."
+          },
+          "next": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true,
+            "description": "The link to the next page of data. Null if not available."
           }
         }
       },
