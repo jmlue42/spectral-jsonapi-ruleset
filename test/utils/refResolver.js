@@ -103,23 +103,25 @@ export function resolveRef(obj, root, resolvedRefs = new Set(), resolvedObjects 
 
     if ('$ref' in obj) {
 
-      const resolved = getRefObject(obj.$ref, root, resolvedRefs, resolvedObjects);
-      // Remove the reference from 'components' if it's there
-      if (obj.$ref.startsWith('#/components/')) {
+      // const resolved = getRefObject(obj.$ref, root, resolvedRefs, resolvedObjects);
+      // // Remove the reference from 'components' if it's there
+      // if (obj.$ref.startsWith('#/components/')) {
 
-        const path = obj.$ref.replace(/^#\/components\//u, '').split('/');
-        let current = root.components;
-        const lastSegment = path.pop();
-        for (const segment of path) {
+      //   const path = obj.$ref.replace(/^#\/components\//u, '').split('/');
+      //   let current = root.components;
+      //   const lastSegment = path.pop();
+      //   for (const segment of path) {
 
-          current = current[segment];
+      //     current = current[segment];
         
-        }
-        delete current[lastSegment];
+      //   }
+      //   delete current[lastSegment];
       
-      }
+      // }
       
-      return resolved;
+      // return resolved;
+
+      return getRefObject(obj.$ref, root, resolvedRefs, resolvedObjects);
     
     }
     
