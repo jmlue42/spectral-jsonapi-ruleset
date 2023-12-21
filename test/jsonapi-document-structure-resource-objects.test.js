@@ -12,7 +12,6 @@ import { debugLog, debugError, debugInfo, debugDebug } from './utils/debugUtils.
 import { setupSpectralBeforeEach } from './utils/setupSpectralBeforeEach.js';
 
 // OpenAPI Documents
-import validApiDocument from './docs/validApiDocument.js';
 import invalidApiDocumentType from './docs/documentStructure/resourceObjects/invalidApiDocumentType.js';
 import invalidApiDocumentSingleStructure from './docs/documentStructure/resourceObjects/invalidApiDocumentSingleStructure.js';
 import invalidApiDocumentSingleStructureLength from './docs/documentStructure/resourceObjects/invalidApiDocumentSingleStructureLength.js';
@@ -58,8 +57,9 @@ describe('jsonapi-document-structure-resource-objects ruleset:', function docume
   let dereferenceValidApiDocument;
 
   before(function () {
-
-    dereferenceValidApiDocument = resolveRef(validApiDocument, validApiDocument);
+    
+    // Access the globally dereferenced document
+    dereferenceValidApiDocument = global.dereferencedValidOpenApiDocument;
 
   });
 
