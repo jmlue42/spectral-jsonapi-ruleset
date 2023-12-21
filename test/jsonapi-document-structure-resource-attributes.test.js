@@ -18,7 +18,7 @@ import invalidApiDocumentAttributesIdNotRequired from './docs/errors/resourceObj
 import invalidApiDocumentAttributesTypeNotRequired from './docs/errors/resourceObjectFields/invalidApiDocumentAttributesTypeNotRequired.js';
 import invalidApiDocumentRelationshipsIdNotRequired from './docs/errors/resourceObjectFields/invalidApiDocumentRelationshipsIdNotRequired.js';
 import invalidApiDocumentRelationshipsTypeNotRequired from './docs/errors/resourceObjectFields/invalidApiDocumentRelationshipsTypeNotRequired.js';
-import invalidApiDocumentAttributesRelationshipsSameName from './docs/errors/resourceObjectFields/invalidApiDocumentAttributesRelationshipsSameName.js';
+import invalidApiDocumentAttributesRelationshipsUniqueName from './docs/errors/resourceObjectFields/invalidApiDocumentAttributesRelationshipsUniqueName.js';
 
 describe('errors-process-errors-general ruleset:', function errorsProcessErrorsSuite() {
 
@@ -45,25 +45,31 @@ describe('errors-process-errors-general ruleset:', function errorsProcessErrorsS
        {
       
         const jsonPathExpression = ruleset.rules[testingRuleName].given;
+
+        const actualresult = JSONPath({ path: jsonPathExpression,
+          json: dereferenceValidApiDocument });
+
+
+
         debugDebug(`JSONPath Expression: ${jsonPathExpression}`);
 
-        
+      
         const expectedExpressionPaths = [
-          { expected: dereferenceValidApiDocument.paths['/users'].get.responses.properties.attributes.id},
+          { expected: dereferenceValidApiDocument.paths['/users'].get.responses[200].content['application/vnd.api+json'].schema.properties.data.items.properties.attributes.properties,}
           ];
+
+          debugLog(expectedExpressionPaths.length);
 
         expectedExpressionPaths.forEach((path, index) => {
 
-          const result = JSONPath({ path: jsonPathExpression,
-            json: dereferenceValidApiDocument });
-
-          debugInfo(`Element ${index + 1} found from JSONPath Expression: \x1b[32m${JSON.stringify(result[index], null, 2)}`);
+    
+          debugInfo(`Element ${index + 1} found from JSONPath Expression: \x1b[32m${JSON.stringify(actualresult[index], null, 2)}`);
 
           // Check if the number of results matches the expected number
-          expect(result.length).to.equal(expectedExpressionPaths.length, `\x1b[31mExpected ${expectedExpressionPaths.length} elements to match in the OpenAPI Document.\x1b[0m\n`);
+          expect(actualresult.length).to.equal(expectedExpressionPaths.length, `\x1b[31mExpected ${expectedExpressionPaths.length} elements to match in the OpenAPI Document.\x1b[0m\n`);
         
           // Check if each result matches the corresponding expected path
-          expect(result[index]).to.deep.equal(path.expected, `\x1b[31mThe wrong JSONPath Expression was provided in expected path: ${index + 1}\x1b[0m`);
+          expect(actualresult[index]).to.deep.equal(path.expected, `\x1b[31mThe wrong JSONPath Expression was provided in expected path: ${index + 1}\x1b[0m`);
 
         });
       }
@@ -149,7 +155,7 @@ describe('errors-process-errors-general ruleset:', function errorsProcessErrorsS
         debugDebug(`JSONPath Expression: ${jsonPathExpression}`);
 
         const expectedExpressionPaths = [
-          {expected: dereferenceValidApiDocument.paths['/users'].get.responses.properties.attributes}
+          { expected: dereferenceValidApiDocument.paths['/users'].get.responses[200].content['application/vnd.api+json'].schema.properties.data.items.properties.attributes.properties,}
           ];
 
         expectedExpressionPaths.forEach((path, index) => {
@@ -193,7 +199,7 @@ describe('errors-process-errors-general ruleset:', function errorsProcessErrorsS
 
         });
 
-        const confirmedErrors = 13;
+        const confirmedErrors = 1;
         const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
 
         expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
@@ -235,7 +241,7 @@ describe('errors-process-errors-general ruleset:', function errorsProcessErrorsS
  */
 describe('document-structure-resource-array-relationships-no-id-name:', function documentStructureResourceArrayRelationshipsNoIdName() {
 
-  const testingRuleName = 'document-structure-resource-array-attributes-no-id-name';
+  const testingRuleName = 'document-structure-resource-array-relationships-no-id-name';
 
   beforeEach(setupSpectralBeforeEach(ruleset, [testingRuleName]));
 
@@ -245,17 +251,19 @@ describe('document-structure-resource-array-relationships-no-id-name:', function
      {
     
       const jsonPathExpression = ruleset.rules[testingRuleName].given;
+      const result = JSONPath({ path: jsonPathExpression,
+        json: dereferenceValidApiDocument });
+
       debugDebug(`JSONPath Expression: ${jsonPathExpression}`);
 
       
       const expectedExpressionPaths = [
-        { expected: dereferenceValidApiDocument.properties.relationships},
+        { expected: dereferenceValidApiDocument.paths['/users'].get.responses[200].content['application/vnd.api+json'].schema.properties.data.items.properties.relationships.properties,}
         ];
 
       expectedExpressionPaths.forEach((path, index) => {
 
-        const result = JSONPath({ path: jsonPathExpression,
-          json: dereferenceValidApiDocument });
+        
 
         debugInfo(`Element ${index + 1} found from JSONPath Expression: \x1b[32m${JSON.stringify(result[index], null, 2)}`);
 
@@ -277,7 +285,7 @@ describe('document-structure-resource-array-relationships-no-id-name:', function
   
     
 
-  it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function documentStructureResourceArrayAttributesNoIdNameFailure() {
+  it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function documentStructureResourceArrayRelationshipsNoIdNameFailure() {
 
     try {
 
@@ -295,7 +303,7 @@ describe('document-structure-resource-array-relationships-no-id-name:', function
 
       });
 
-      const confirmedErrors = 12;
+      const confirmedErrors = 1;
       const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
 
       expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
@@ -308,7 +316,7 @@ describe('document-structure-resource-array-relationships-no-id-name:', function
   
   });
 
-  it('the rule should pass with NO errors', async function documentStructureResourceArrayAttributesNoIdNamePassing() {
+  it('the rule should pass with NO errors', async function documentStructureResourceArrayRelationshipsNoIdNamePassing() {
 
     try {
 
@@ -330,14 +338,18 @@ describe('document-structure-resource-array-relationships-no-id-name:', function
 });
 
 
-/ * Ruleset: document-structure-resource-array-relationships-no-type-name */
-describe('document-structure-resource-array-relationships-no-id-name:', function documentStructureResourceArrayRelationshipsNoIdName() {
+/**
+ * Ruleset: document-structure-resource-array-relationships-no-type-name
+ */
 
-  const testingRuleName = 'document-structure-resource-array-attributes-no-id-name';
+
+describe('document-structure-resource-array-relationships-no-type-name:', function documentStructureResourceArrayRelationshipsNoTypeName() {
+
+  const testingRuleName = 'document-structure-resource-array-relationships-no-type-name';
 
   beforeEach(setupSpectralBeforeEach(ruleset, [testingRuleName]));
 
-  it('the json path expression should find the correct paths from the given document', function documentStructureResourceArrayRelationshipsNoIdNamePath() {
+  it('the json path expression should find the correct paths from the given document', function documentStructureResourceArrayRelationshipsNoTypeNamePath() {
 
     try
      {
@@ -347,7 +359,8 @@ describe('document-structure-resource-array-relationships-no-id-name:', function
 
       
       const expectedExpressionPaths = [
-        { expected: dereferenceValidApiDocument.properties.relationships},
+       
+           {  expected: dereferenceValidApiDocument.paths['/users'].get.responses[200].content['application/vnd.api+json'].schema.properties.data.items.properties.relationships.properties,}
         ];
 
       expectedExpressionPaths.forEach((path, index) => {
@@ -375,11 +388,11 @@ describe('document-structure-resource-array-relationships-no-id-name:', function
   
     
 
-  it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function documentStructureResourceArrayAttributesNoIdNameFailure() {
+  it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function documentStructureResourceArrayRelationshipsNoTypeNameFailure() {
 
     try {
 
-      const dereferencedOpenApiDocument = resolveRef(invalidApiDocumentRelationshipsIdNotRequired, invalidApiDocumentRelationshipsIdNotRequired);
+      const dereferencedOpenApiDocument = resolveRef(invalidApiDocumentRelationshipsTypeNotRequired, invalidApiDocumentRelationshipsTypeNotRequired);
 
       
       const relevantResults = await handleSpectralResults(this.spectral, dereferencedOpenApiDocument, testingRuleName);
@@ -393,7 +406,7 @@ describe('document-structure-resource-array-relationships-no-id-name:', function
 
       });
 
-      const confirmedErrors = 12;
+      const confirmedErrors = 1;
       const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
 
       expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
@@ -406,7 +419,7 @@ describe('document-structure-resource-array-relationships-no-id-name:', function
   
   });
 
-  it('the rule should pass with NO errors', async function documentStructureResourceArrayAttributesNoIdNamePassing() {
+  it('the rule should pass with NO errors', async function documentStructureResourceArrayRelationshipsNoTypeNamePassing() {
 
     try {
 
@@ -447,7 +460,8 @@ describe('document-structure-resource-array-attributes-relationships-unique-name
       debugDebug(`JSONPath Expression: ${jsonPathExpression}`);
 
       const expectedExpressionPaths = [
-        {expected: dereferenceValidApiDocument.properties.relationships}
+        { expected: dereferenceValidApiDocument.paths['/users'].get.responses[200].content['application/vnd.api+json'].schema.properties.data.items.properties.attributes.properties,},
+        {  expected: dereferenceValidApiDocument.paths['/users'].get.responses[200].content['application/vnd.api+json'].schema.properties.data.items.properties.relationships.properties,}
         ];
 
       expectedExpressionPaths.forEach((path, index) => {
@@ -477,7 +491,7 @@ describe('document-structure-resource-array-attributes-relationships-unique-name
 
     try {
 
-      const dereferencedOpenApiDocument = resolveRef(invalidApiDocumentRelationshipsTypeNotRequired, invalidApiDocumentRelationshipsTypeNotRequired);
+      const dereferencedOpenApiDocument = resolveRef(invalidApiDocumentAttributesRelationshipsUniqueName, invalidApiDocumentAttributesRelationshipsUniqueName);
 
     
       const relevantResults = await handleSpectralResults(this.spectral, dereferencedOpenApiDocument, testingRuleName);
@@ -491,7 +505,7 @@ describe('document-structure-resource-array-attributes-relationships-unique-name
 
       });
 
-      const confirmedErrors = 1;
+      const confirmedErrors = 2;
       const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
 
       expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
@@ -523,108 +537,9 @@ describe('document-structure-resource-array-attributes-relationships-unique-name
     }
 
   });
-
-
-  /**
-* Ruleset: document-structure-resource-array-attributes-relationships-unique-name
-*/
-describe('document-structure-resource-array-attributes-relationships-unique-name:', function documentStructureResourceArrayAttributesRelationshipsUniqueName() {
-
-  const testingRuleName = 'document-structure-resource-array-attributes-relationships-unique-name';
-
-  beforeEach(setupSpectralBeforeEach(ruleset, [testingRuleName]));
-
-  it('the json path expression should find the correct paths from the given document', function documentStructureResourceArrayAttributesRelationshipsUniqueNamePath() {
-
-    try {
-
-    
-      const jsonPathExpression = ruleset.rules[testingRuleName].given;
-
-      debugDebug(`JSONPath Expression: ${jsonPathExpression}`);
-
-      //cannot read prperties
-      const expectedExpressionPaths = [
-        {expected: dereferenceValidApiDocument.components.schema.properties.attributes.user},
-        {expected: dereferenceValidApiDocument.components.schema.properties.relationships.user}
-        ];
-
-      expectedExpressionPaths.forEach((path, index) => {
-
-        const result = JSONPath({ path: jsonPathExpression,
-          json: dereferenceValidApiDocument });
-
-        debugInfo(`Element ${index + 1} found from JSONPath Expression: \x1b[32m${JSON.stringify(result[index], null, 2)}`);
-
-        // Check if the number of results matches the expected number
-        expect(result.length).to.equal(expectedExpressionPaths.length, `\x1b[31mExpected ${expectedExpressionPaths.length} elements to match in the OpenAPI Document.\x1b[0m\n`);
-      
-        // Check if each result matches the corresponding expected path
-        expect(result[index]).to.deep.equal(path.expected, `\x1b[31mThe wrong JSONPath Expression was provided in expected path: ${index + 1}\x1b[0m`);
-
-      });
-    
-    } catch (error) {
-
-      processErrors(error);
-    
-    }
-  
-  });
-
-  it(`the rule should return "${testingRuleName}" errors, if ${ruleset.rules[testingRuleName].description} is false`, async function documentStructureResourceArrayRelationshipsNoTypeNamePathFailure() {
-
-    try {
-
-      const dereferencedOpenApiDocument = resolveRef(invalidApiDocumentAttributesRelationshipsSameName, invalidApiDocumentAttributesRelationshipsSameName);
-
-    
-      const relevantResults = await handleSpectralResults(this.spectral, dereferencedOpenApiDocument, testingRuleName);
-
-      debugLog(`  Confirmed Errors:`);
-      debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
-
-      relevantResults.forEach((result) => {
-
-        debugError(`\x1b[32mResults for '\x1b[33m${testingRuleName}\x1b[32m':\x1b[36m ${JSON.stringify(result, ['message', 'path'], 2)} \x1b[0m\n`);
-
-      });
-
-      const confirmedErrors = 1;
-      const errorMessage = `\x1b[31mError count should be ${confirmedErrors}.\x1b[0m`;
-
-      expect(relevantResults.length).to.equal(confirmedErrors, errorMessage);
-    
-    } catch (error) {
-
-      processErrors(error);
-    
-    }
-  
-  });
-
-  it('the rule should pass with NO errors', async function documentStructureResourceArrayRelationshipsNoTypeNamePassing() {
-
-    try {
-
-      const relevantResults = await handleSpectralResults(this.spectral, dereferenceValidApiDocument, testingRuleName);
-
-      debugLog(`  Confirmed Errors:`);
-      debugLog(`\x1b[33m    - ${relevantResults.length}\x1b[0m\n`);
-
-      const errorMessage = `\x1b[31mError count should be 0, ${ruleset.rules[testingRuleName].description}\x1b[0m`;
-      expect(relevantResults.length).to.equal(0, errorMessage);
-    
-    } catch (error) {
-
-      processErrors(error);
-  
-    }
-
-  });
-})
 });
 });
+
 
 
 

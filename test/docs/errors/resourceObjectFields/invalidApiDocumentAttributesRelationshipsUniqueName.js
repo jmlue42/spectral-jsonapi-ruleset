@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 /* eslint-disable quotes */
-const validApiDocument ={
+const invalidApiDocumentAttributesRelationshipsUniqueName ={
   "openapi": "3.1.0",
   "info": {
     "title": "User Management API",
@@ -64,8 +64,9 @@ const validApiDocument ={
                             "type": "object",
                             "required": [
                               "name",
-                              "email"
-                            ],
+                              "email",
+                              "age"
+                              ],
                             "properties": {
                               "name": {
                                 "type": "string",
@@ -76,6 +77,10 @@ const validApiDocument ={
                                 "format": "email",
                                 "description": "Email address of the user, must follow standard email format."
                               },
+                              "age":{
+                                "type": "string",
+                                  "description": "Age of the user"
+                                },
                               "role": {
                                 "type": "string",
                                 "description": "Role of the user in the system"
@@ -97,8 +102,27 @@ const validApiDocument ={
                                     "format": "uri"
                                   }
                                 }
-                              }
-                            }
+                              },       
+                              
+                              "age":{
+                                "type": "string",
+                                  "description": "Age of the user"
+                                },
+                              // "age": {
+                              //   "type": "object",
+                              //   "properties": {
+                              //     "self": {
+                              //       "type": "string",
+                              //       "format": "uri"
+                              //     },
+                              //     "related": {
+                              //       "type": "string",
+                              //       "format": "uri"
+                              //     }
+                              //   }
+                              // },
+                            },
+                                                      
                           }
                         }
                       }
@@ -1708,4 +1732,4 @@ const validApiDocument ={
     }
   ]
 };
-export default validApiDocument;
+export default invalidApiDocumentAttributesRelationshipsUniqueName;

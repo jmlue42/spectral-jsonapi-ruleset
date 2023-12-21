@@ -5,7 +5,7 @@
   "main": "./rules/json-ruleset.yaml",
   "type": "module",
   "scripts": {
-    "test": "./node_modules/.bin/eslint **/*.js test/ && ./node_modules/.bin/mocha --file ./test/testsSetup.js  'test/*.test.js' 'test/utilsTests/*.test.js'",
+    "test": "./node_modules/.bin/eslint **/*.js test/ && ./node_modules/.bin/mocha --file ./test/testsSetup.js  'test/*.test.js' 'test/utilsTests/*.test.js' -- timeout 10000",
     "lint": "./node_modules/.bin/eslint **/*.js test/",
     "prepare": "husky install"
   },
