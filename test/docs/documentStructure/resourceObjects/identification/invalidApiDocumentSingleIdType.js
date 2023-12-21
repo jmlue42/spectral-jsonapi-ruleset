@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 /* eslint-disable quotes */
-const validApiDocument = {
+const invalidApiDocumentSingleIdType = {
   "openapi": "3.1.0",
   "info": {
     "title": "OpenAPI Management Template",
@@ -525,7 +525,8 @@ const validApiDocument = {
         ],
         "properties": {
           "id": {
-            "type": "string",
+            // Changing the `id` member type to generate a failing scenario for rule `document-structure-resource-single-identification-id-type`
+            "type": "fail",
             "description": "Unique identifier for the user"
           },
           "type": {
@@ -612,7 +613,8 @@ const validApiDocument = {
             ],
             "properties": {
               "id": {
-                "type": "string"
+                // Changing the `id` member type to generate a failing scenario for rule `document-structure-resource-single-identification-id-type`
+                "type": "fail"
               },
               "type": {
                 "type": "string"
@@ -829,4 +831,4 @@ const validApiDocument = {
   ]
 };
 
-export default validApiDocument;
+export default invalidApiDocumentSingleIdType;
