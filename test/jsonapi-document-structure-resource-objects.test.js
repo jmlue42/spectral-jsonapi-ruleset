@@ -57,7 +57,7 @@ describe('jsonapi-document-structure-resource-objects ruleset:', function docume
   let dereferenceValidApiDocument;
 
   before(function () {
-    
+
     // Access the globally dereferenced document
     dereferenceValidApiDocument = global.dereferencedValidOpenApiDocument;
 
