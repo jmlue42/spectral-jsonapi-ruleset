@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 /* eslint-disable quotes */
-const validApiDocument = {
+const invalidApiDocument5xx = {
   "openapi": "3.1.0",
   "info": {
     "title": "User Management API",
@@ -192,7 +192,65 @@ const validApiDocument = {
                 }
               }
             }
-          }
+          },
+
+          "501": {
+            "description": "Internal server error - Indicates a server-side error.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiError"
+                },
+                "examples": {
+                  "badRequest": {
+                    "summary": "Example of a bad request error",
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "error-902",
+                          "status": "501",
+                          "title": "Internal Server Error",
+                          "detail": "The server encountered an unexpected condition.",
+                          "links": {
+                            "about": "https://api.usermanagement.com/docs/errors/400"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Internal server error - Indicates a server-side error.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiError"
+                },
+                "examples": {
+                  "badRequest": {
+                    "summary": "Example of a bad request error",
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "error-902",
+                          "status": "502",
+                          "title": "Internal Server Error",
+                          "detail": "The server encountered an unexpected condition.",
+                          "links": {
+                            "about": "https://api.usermanagement.com/docs/errors/400"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+
         }
       }
     },
@@ -242,7 +300,116 @@ const validApiDocument = {
               }
             }
           },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiError"
+                },
+                "examples": {
+                  "badRequest": {
+                    "summary": "Example of a bad request error",
+                    "value": {
+                      "errors": {
+                        "id": "error-456",
+                        "status": "400",
+                        "title": "Bad Request",
+                        "detail": "The request could not be understood due to malformed syntax.",
+                        "links": {
+                          "about": "https://api.usermanagement.com/docs/errors/400"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User Not Found",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiError"
+                },
+                "examples": {
+                  "notFound": {
+                    "summary": "Example of a not found error",
+                    "value": {
+                      "errors": {
+                        "id": "error-444",
+                        "status": "404",
+                        "title": "Not Found",
+                        "detail": "The requested resource was not found.",
+                        "links": {
+                          "about": "https://api.usermanagement.com/docs/errors/404"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiError"
+                },
+                "examples": {
+                  "badRequest": {
+                    "summary": "Example of a bad request error",
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "error-032",
+                          "status": "500",
+                          "title": "Internal Server Error",
+                          "detail": "The server encountered an unexpected condition.",
+                          "links": {
+                            "about": "https://api.usermanagement.com/docs/errors/500"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "Not Implemented Error",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiError"
+                },
+                "examples": {
+                  "badRequest": {
+                    "summary": "Example of a not implemented error",
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "error-032",
+                          "status": "501",
+                          "title": "Not Implemented Error",
+                          "detail": "The server encountered an not implemented condition.",
+                          "links": {
+                            "about": "https://api.usermanagement.com/docs/errors/501"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
           }
+        },      
+        
       },
       "put": {
         "tags": [
@@ -281,7 +448,63 @@ const validApiDocument = {
               }
             }
           },
+          "401": {
+            "description": "Unauthorized - Authentication credentials were missing or invalid.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiError"
+                },
+                "examples": {
+                  "unauthorizedError": {
+                    "summary": "Example of a 401 Unauthorized error",
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "error-443",
+                          "status": "401",
+                          "title": "Unauthorized",
+                          "detail": "Authentication credentials were not provided or are invalid.",
+                          "links": {
+                            "about": "https://api.usermanagement.com/docs/errors/401"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - The request was valid, but the server is refusing action due to insufficient permissions.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiError"
+                },
+                "examples": {
+                  "forbiddenError": {
+                    "summary": "Example of a 403 Forbidden error",
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "error-333",
+                          "status": "403",
+                          "title": "Unauthorized",
+                          "detail": "You do not have permission to perform this aciton.",
+                          "links": {
+                            "about": "https://api.usermanagement.com/docs/errors/403"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
           }
+        }
       },
       "delete": {
         "tags": [
@@ -302,7 +525,90 @@ const validApiDocument = {
           "204": {
             "description": "The user was successfully deleted."
           },
-               
+          "401": {
+            "description": "Unauthorized - Authentication credentials were missing or invalid.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiError"
+                },
+                "examples": {
+                  "unauthorizedError": {
+                    "summary": "Example of a 401 Unauthorized error",
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "error-223",
+                          "status": "401",
+                          "title": "Unauthorized",
+                          "detail": "Authentication credentials were not provided or are invalid.",
+                          "links": {
+                            "about": "https://api.usermanagement.com/docs/errors/401"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - The request was valid, but the server is refusing action due to insufficient permissions.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiError"
+                },
+                "examples": {
+                  "forbiddenError": {
+                    "summary": "Example of a 403 Forbidden error",
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "error-543",
+                          "status": "403",
+                          "title": "Unauthorized",
+                          "detail": "You do not have permission to perform this aciton.",
+                          "links": {
+                            "about": "https://api.usermanagement.com/docs/errors/403"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The specified user was not found.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiError"
+                },
+                "examples": {
+                  "notFoundError": {
+                    "summary": "Example of a 404 Not Found error",
+                    "value": {
+                      "errors": [
+                        {
+                          "id": "error-123",
+                          "status": "404",
+                          "title": "Not Found",
+                          "detail": "The user with the specified ID was not found.",
+                          "links": {
+                            "about": "https://api.usermanagement.com/docs/errors/404"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -615,4 +921,4 @@ const validApiDocument = {
 }
 ;
 
-export default validApiDocument;
+export default invalidApiDocument5xx;
