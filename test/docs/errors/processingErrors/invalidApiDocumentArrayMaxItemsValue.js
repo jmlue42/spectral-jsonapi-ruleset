@@ -1,11 +1,11 @@
 /* eslint-env mocha */
 /* eslint-disable quotes */
-const validApiDocument = {
+const invalidApiDocumentArrayMaxItemsValue = {
   "openapi": "3.1.0",
   "info": {
     "title": "OpenAPI Management Template",
-    "description": "This API manages information pertaining to users\nwhich is adhereing to JSON:API v1.0 standards. The goal of this template is\nto provide a universal template for testing all of the JSON:API v1.0\nspecifications. This document adheres to the following sections:\n  - ContentNegotiation.ClientResponsibilities\n  - ContentNegotiation.ServerResponsibilities\n  - DocumentStructure\n  - DocumentStructure.TopLevel\n  - DocumentStructure.ResourceObjects\n  - DocumentStructure.ResourceObjects.Attributes\n  - DocumentStructure.Links\n  - DocumentStructure.MetaInformation\n  - DocumentStructure.MemberNames\n  - FetchingData.Sorting\n  - FetchingData.Pagination\n  - FetchingData.Filtering\n  - Errors.ProcessingErrors\n  - Errors.ErrorObjects",
-    "version": "1.2.3"
+    "description": "This API manages information pertaining to users\nwhich is adhereing to JSON:API v1.0 standards. The goal of this template is\nto provide a universal temaplte for testing all of the JSON:API v1.0\nspecifications. This document adheres to the following sections:\n  - ContentNegotiation.ClientResponsibilities\n  - ContentNegotiation.ServerResponsibilities\n  - DocumentStructure\n  - DocumentStructure.TopLevel\n  - DocumentStructure.ResourceObjects\n  - DocumentStructure.ResourceObjects.Attributes\n  - DocumentStructure.Links\n  - DocumentStructure.MetaInformation\n  - DocumentStructure.MemberNames\n  - FetchingData.Sorting\n  - FetchingData.Pagination\n  - FetchingData.Filtering\n  - Errors.ProcessingErrors\n  - Errors.ErrorObjects",
+    "version": "1.2.0"
   },
   "servers": [
     {
@@ -724,7 +724,8 @@ const validApiDocument = {
         "properties": {
           "errors": {
             "type": "array",
-            "maxItems": 1,
+            // The `maxItems` keyword is not providing the correct value which will generating a failing scenario for rule `errors-processing-errors-array-max-items-value`
+            "maxItems": 2,
             "items": {
               "$ref": "#/components/schemas/ErrorObject"
             }
@@ -830,4 +831,4 @@ const validApiDocument = {
   ]
 };
 
-export default validApiDocument;
+export default invalidApiDocumentArrayMaxItemsValue;
