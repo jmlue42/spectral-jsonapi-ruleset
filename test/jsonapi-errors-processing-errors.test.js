@@ -59,11 +59,11 @@ describe('jsonapi-errors-processing-errors ruleset:', function errorsProcessingE
 
     beforeEach(setupSpectralBeforeEach(ruleset, [testingRuleName]));
 
-    it.only('the json path expression should find the correct paths from the given document', function errorsProcessingErrorsArrayMaxItemsPath() {
+    it('the json path expression should find the correct paths from the given document', function errorsProcessingErrorsArrayMaxItemsPath() {
 
       try {
 
-        debugDebug(`Dereferenced Document: ${JSON.stringify(dereferenceValidApiDocument, null, 2)}`);
+        // debugDebug(`Dereferenced Document: ${JSON.stringify(dereferenceValidApiDocument, null, 2)}`);
 
         const jsonPathExpression = ruleset.rules[testingRuleName].given;
         debugDebug(`JSONPath Expression: ${jsonPathExpression}`);
