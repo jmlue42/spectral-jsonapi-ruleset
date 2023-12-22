@@ -6,3 +6,4 @@
 
 extends:
   - jsonapi-errors-error-object.js
+  - jsonapi-errors-processing-errors.js
