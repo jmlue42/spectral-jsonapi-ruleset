@@ -2,9 +2,9 @@
 # using Spectrals CLI Command
 #
 # Usage:
-#   spectral lint cliTest/errorsErrorObject/failing-rules.yaml --ruleset rules/jsonapi-errors-error-object.js
+#   spectral lint cliTest/errors/errorObjects/passing-rules.yaml --ruleset rules/jsonapi-errors-error-object.js --verbose
 #
-# This document will generate `22 errors` as expected for each rule.
+# This document will generate `0 errors` as expected for each rule.
 openapi: 3.1.0
 info:
   title: User Information API
@@ -67,42 +67,35 @@ paths:
                 type: object
                 properties:
                   errors:
-                    type: string
+                    type: array
                     items:
                       type: object
                       properties:
-                        idd:
-                          type: string
                         id:
-                          type: object
-                        links:
                           type: string
+                        links:
+                          type: object
                           properties:
                             about:
-                              type: object
-                              format: urie
-                            aboutt:
                               type: string
                               format: uri
                         status:
-                          type: object
-                        code:
-                          type: object
-                        title:
-                          type: object
-                        detail:
-                          type: object
-                        source:
                           type: string
+                        code:
+                          type: string
+                        title:
+                          type: string
+                        detail:
+                          type: string
+                        source:
+                          type: object
                           properties:
                             pointer:
-                              type: object
+                              type: string
                             parameter:
-                              type: object
-                            parameterr:
-                              type: object
+                              type: string
                         meta:
-                          type: string
+                          type: object
                           additionalProperties: true
                       required:
                         - detail

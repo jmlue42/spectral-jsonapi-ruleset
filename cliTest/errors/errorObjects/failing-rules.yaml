@@ -2,9 +2,9 @@
 # using Spectrals CLI Command
 #
 # Usage:
-#   spectral lint cliTest/errorsErrorObject/passing-rules.yaml --ruleset rules/jsonapi-errors-error-object.js
+#   spectral lint cliTest/errors/errorObjects/failing-rules.yaml --ruleset rules/jsonapi-errors-error-object.js --verbose
 #
-# This document will generate `0 errors` as expected for each rule.
+# This document will generate `22 errors` as expected for each rule.
 openapi: 3.1.0
 info:
   title: User Information API
@@ -67,35 +67,42 @@ paths:
                 type: object
                 properties:
                   errors:
-                    type: array
+                    type: string
                     items:
                       type: object
                       properties:
-                        id:
+                        idd:
                           type: string
-                        links:
+                        id:
                           type: object
+                        links:
+                          type: string
                           properties:
                             about:
+                              type: object
+                              format: urie
+                            aboutt:
                               type: string
                               format: uri
                         status:
-                          type: string
-                        code:
-                          type: string
-                        title:
-                          type: string
-                        detail:
-                          type: string
-                        source:
                           type: object
+                        code:
+                          type: object
+                        title:
+                          type: object
+                        detail:
+                          type: object
+                        source:
+                          type: string
                           properties:
                             pointer:
-                              type: string
+                              type: object
                             parameter:
-                              type: string
+                              type: object
+                            parameterr:
+                              type: object
                         meta:
-                          type: object
+                          type: string
                           additionalProperties: true
                       required:
                         - detail
