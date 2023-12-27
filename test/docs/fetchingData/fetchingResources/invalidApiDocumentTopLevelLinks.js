@@ -1,51 +1,11 @@
 /* eslint-env mocha */
 /* eslint-disable quotes */
-/**
- * This validApiDocument is utilized for a centralized dereferencing document which is used in test suites as a global scope.
- * This will provide performance optimiation and resolve any issues related to mutliple derferencing. 
- * 
- * Key Reason:
- *  1. Performance Optimization:
- *      - As our API template grows, the number of test cases that require a dereferenced version of validApiDocument is increasing.
- *      - Previously, each test file was individually dereferencing this document, which is a resource-intensive process. 
- *        By dereferencing it once globally, we reduce the computational overhead significantly.
- *      - This global approach ensures that all tests use the same dereferenced instance, improving the overall efficiency of our
- *        test execution.
- *  2. Resolving Multiple Dereferencing Issues:
- *      - In our prior setup, attempting to dereference an already dereferenced document in different test files led to inconsistencies
- *        and potential errors.
- *      - By having a single, globally dereferenced document, we eliminate the risk of such issues. This ensures that all tests work
- *        with a consistent and stable version of the API document.
- *  3. Maintainability and Consistency:
- *      - This refactor simplifies the test setup by removing redundant dereferencing logic in multiple files.
- *      - It also enhances the consistency across our test suites, making it easier for the team to write and maintain tests.
- * 
- * Use Case:
- *      - Inside of your test case suite you will need to create a variable that will call the globally scoped document
- *      - @see {@link ../jsonapi-fetching-data-fetching-resources.test.js} for live usage 
- *      - Below is a setup example:
- * 
- * 
- * describe('your-custom-rule-file ruleset:', function yourCustomTestSuite() {
- *
- *  let dereferenceValidApiDocument;
- *
- *  before(function () {
- *
- *    // Access the globally dereferenced document
- *    dereferenceValidApiDocument = global.dereferencedValidOpenApiDocument;
- *    
- *  });
- * 
- * });
- * 
- */
-const validApiDocument = {
+const invalidApiDocumentTopLevelLinks = {
   "openapi": "3.1.0",
   "info": {
     "title": "OpenAPI Management Template",
-    "description": "This API manages information pertaining to users\nwhich is adhereing to JSON:API v1.0 standards. The goal of this template is\nto provide a universal temaplte for testing all of the JSON:API v1.0\nspecifications. This document adheres to the following sections:\n  - ContentNegotiation.ClientResponsibilities\n  - ContentNegotiation.ServerResponsibilities\n  - DocumentStructure\n  - DocumentStructure.TopLevel\n  - DocumentStructure.ResourceObjects\n  - DocumentStructure.ResourceObjects.Attributes\n  - DocumentStructure.Links\n  - DocumentStructure.MetaInformation\n  - DocumentStructure.MemberNames\n  - FetchingData.FetchingResources\n  - FetchingData.Sorting\n  - FetchingData.Pagination\n  - FetchingData.Filtering\n  - Errors.ProcessingErrors\n  - Errors.ErrorObjects",
-    "version": "1.2.3"
+    "description": "This API manages information pertaining to users\nwhich is adhereing to JSON:API v1.0 standards. The goal of this template is\nto provide a universal temaplte for testing all of the JSON:API v1.0\nspecifications. This document adheres to the following sections:\n  - ContentNegotiation.ClientResponsibilities\n  - ContentNegotiation.ServerResponsibilities\n  - DocumentStructure\n  - DocumentStructure.TopLevel\n  - DocumentStructure.ResourceObjects\n  - DocumentStructure.ResourceObjects.Attributes\n  - DocumentStructure.Links\n  - DocumentStructure.MetaInformation\n  - DocumentStructure.MemberNames\n  - FetchingData.Sorting\n  - FetchingData.Pagination\n  - FetchingData.Filtering\n  - Errors.ProcessingErrors\n  - Errors.ErrorObjects",
+    "version": "1.2.2"
   },
   "servers": [
     {
@@ -575,15 +535,6 @@ const validApiDocument = {
           "attributes": {
             "$ref": "#/components/schemas/UserAttributes"
           },
-          "links": {
-            "type": "object",
-            "properties": {
-              "self": {
-                "type": "string",
-                "format": "uri"
-              }
-            }
-          },
           "relationships": {
             "type": "object",
             "properties": {
@@ -739,10 +690,11 @@ const validApiDocument = {
       "PaginationLinks": {
         "type": "object",
         "properties": {
-          "self": {
-            "type": "string",
-            "format": "uri"
-          },
+          // Removing this member to generate a failing scenario for rule `fetching-data-fetching-resources-top-level-links`
+          // "self": {
+          //   "type": "string",
+          //   "format": "uri"
+          // },
           "first": {
             "type": "string",
             "format": "uri",
@@ -777,7 +729,6 @@ const validApiDocument = {
         "properties": {
           "errors": {
             "type": "array",
-            "maxItems": 1,
             "items": {
               "$ref": "#/components/schemas/ErrorObject"
             }
@@ -883,4 +834,4 @@ const validApiDocument = {
   ]
 };
 
-export default validApiDocument;
+export default invalidApiDocumentTopLevelLinks;
