@@ -1,45 +1,19 @@
-# This OpenAPI Document provides a way of testing rulesets using Spectrals CLI Command. Covered rulesets include:
-#   - `jsonapi-errors-error-object.js`
-#   - `jsonapi-document-structure-resource-objects.js`
-#   - `jsonapi-fetching-data-fetching-resources.js`
-#   - `jsonapi-document-structure-resource-attributes.js`
-#   - `jsonapi-document-structure-resource-identification.js`
-#   - `jsonapi-document-structure-resource-fields.js`
+# This OpenAPI Document provides a way of testing rulesets using using Spectrals CLI Command. Covered ruleset include:
+#   - `jsonapi-document-structure-resource-sttributes.js` 
 #
 # Usage (From Repo Root Location):
-#   - spectral lint cliTest/passing-rules.yaml --ruleset rules/jsonapi-errors-error-object.js --verbose
-#   - spectral lint cliTest/passing-rules.yaml --ruleset rules/jsonapi-document-structure-resource-objects.js --verbose
-#   - spectral lint cliTest/passing-rules.yaml --ruleset rules/jsonapi-fetching-data-fetching-resources.js --verbose
-#   - spectral lint cliTest/passing-rules.yaml --ruleset rules/jsonapi-document-structure-resource-attributes.js --verbose
-#   - spectral lint cliTest/passing-rules.yaml --ruleset rules/jsonapi-document-structure-resource-identification.js --verbose
-#   - spectral lint cliTest/passing-rules.yaml --ruleset rules/jsonapi-document-structure-resource-fields.js --verbose
+#   spectral lint cliTest/documentStructure/resourceObjects/fields/failing-rules.yaml --ruleset rules/jsonapi-document-structure-resource-fields.js --verbose
 #
-# This document will generate `0 errors` as expected for each ruleset ran
+# This document will generate `1 errors` as expected for each rule.
 openapi: 3.1.0
 info:
   title: OpenAPI Management Template
   description: |-
-    This API manages information pertaining to users
+    This API manages information pertaining to users and articles
     which is adhereing to JSON:API v1.0 standards. The goal of this template is
     to provide a universal temaplte for testing all of the JSON:API v1.0
-    specifications. This document adheres to the following sections:
-      - ContentNegotiation.ClientResponsibilities
-      - ContentNegotiation.ServerResponsibilities
-      - DocumentStructure
-      - DocumentStructure.TopLevel
-      - DocumentStructure.ResourceObjects
-      - DocumentStructure.ResourceObjects.Attributes
-      - DocumentStructure.ResourceObjects.Identification
-      - DocumentStructure.ResourceObjects.Fields
-      - DocumentStructure.Links
-      - DocumentStructure.MetaInformation
-      - DocumentStructure.MemberNames
-      - FetchingData.FetchingResources
-      - FetchingData.Sorting
-      - FetchingData.Pagination
-      - FetchingData.Filtering
-      - Errors.ProcessingErrors
-      - Errors.ErrorObjects
+    specifications. This is to generate a failing scenario for the following section:
+      - DocumentStructure.ResourceObjects.fields
   version: 1.2.2
 servers:
   - url: https://api.template.com/v1
@@ -103,15 +77,12 @@ paths:
                             role:
                               type: string
                               description: Role of the user in the system
-                        links:
-                          type: object
-                          properties:
-                            self:
-                              type: string
-                              format: uri
                         relationships:
                           type: object
                           properties:
+                            # Inserting an `id` field to trigger rule `document-structure-resource-fields-no-type-or-id`
+                            id:
+                              type: string
                             posts:
                               type: object
                               properties:
@@ -124,9 +95,6 @@ paths:
                   links:
                     type: object
                     properties:
-                      self:
-                        type: string
-                        format: uri
                       first:
                         type: string
                         format: uri
@@ -405,12 +373,6 @@ paths:
                           role:
                             type: string
                             description: Role of the user in the system
-                      links:
-                        type: object
-                        properties:
-                          self:
-                            type: string
-                            format: uri
                       relationships:
                         type: object
                         properties:
@@ -650,12 +612,6 @@ paths:
                           role:
                             type: string
                             description: Role of the user in the system
-                      links:
-                        type: object
-                        properties:
-                          self:
-                            type: string
-                            format: uri
                       relationships:
                         type: object
                         properties:
@@ -934,12 +890,6 @@ paths:
                           role:
                             type: string
                             description: Role of the user in the system
-                      links:
-                        type: object
-                        properties:
-                          self:
-                            type: string
-                            format: uri
                       relationships:
                         type: object
                         properties:
