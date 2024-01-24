@@ -1,9 +1,0 @@
-# Main JSON:API Spectral RuleSet
-# https://jsonapi.org/format/1.0/
-
-# *-ruleset.yaml files SHOULD NOT contain any testable items.
-extends:
-  - jsonapi-content-negotiation-ruleset.yaml
-  - jsonapi-document-structure-ruleset.yaml
-  - jsonapi-errors-ruleset.yaml
-  - jsonapi-fetching-data-ruleset.yaml

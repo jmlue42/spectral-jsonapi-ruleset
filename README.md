@@ -9,21 +9,20 @@
 For ways to integrate this ruleset into your Spectral linting suite. See [Sharing & Distributing Rulesets](https://meta.stoplight.io/docs/spectral/docs/guides/7-sharing-rulesets.md) at <https://meta.stoplight.io/>
 
 ## Organization
-Rules and Rulesets are organized by section of the JSON:API specification:
-- Primary Ruleset
-  - `./rules/jsonapi-ruleset.yaml`
-- Main Sections
-  - `./rules/jsonapi-{name-of-section}-ruleset.yaml`
-- Sub Sections
-  - `./rules/jsonapi-{name-of-section}.js`
 
-Each file `extends` rules/rulesets contained in its corresponding subsections.
+`.spectral.yml` - Spectral Ruleset
+
+The ruleset `extends` - `spectral:oas`, spectral's built-in OAS linting rules.
+
+The rules are generally organized by the JSON:API specification section the rule is mentioned in. Each rule notes the section url it realates to.
+
+`examples` folder contains valid and invalid OAS3.1 examples
 
 ## Contributing
 In lieu of a formal style guide (I know... ironic :grin:):
-- Take care to maintain the existing coding style, including tests.
-- Add tests for all new/edited rules including JSONPath testing.
-- Verify all linting and tests PASS: `npm test`
+- Take care to maintain the existing coding format.
+- Make needed adjustments to valid example
+- Verify all linting PASS: `npm test`
 
 ## License
 [MIT License](https://github.com/jmlue42/spectral-jsonapi-ruleset/blob/main/LICENSE)
