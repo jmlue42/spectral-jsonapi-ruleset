@@ -5,8 +5,7 @@
   "main": "./rules/json-ruleset.yaml",
   "type": "module",
   "scripts": {
-    "test": "./node_modules/.bin/eslint **/*.js test/ && ./node_modules/.bin/mocha --file ./test/testsSetup.js  'test/*.test.js' 'test/utilsTests/*.test.js' --timeout 10000",
-    "lint": "./node_modules/.bin/eslint **/*.js test/",
+    "test": "./node_modules/.bin/spectral lint examples/valid/* -r ./.spectral.yml",
     "prepare": "husky install"
   },
   "repository": {
@@ -18,13 +17,15 @@
     "api",
     "linting",
     "spectral",
+    "stoplight",
     "ruleset",
     "jsonapi"
   ],
   "author": "Jeff Marquez <jmlue42@gmail.com> (https://www.linkedin.com/in/jeffmarquez)",
   "contributors": [
     "Ali Fazal (https://ca.linkedin.com/in/ali-fazal-424904140)",
-    "Ananya Poddar"
+    "Ananya Poddar",
+    "Anthony MacAllister"
   ],
   "license": "MIT",
   "bugs": {
@@ -32,19 +33,7 @@
   },
   "homepage": "https://github.com/jmlue42/spectral-jsonapi-ruleset#readme",
   "devDependencies": {
-    "@stoplight/spectral-core": "^1.14.2",
-    "@stoplight/spectral-parsers": "^1.0.2",
-    "chai": "^4.3.6",
-    "chai-as-promised": "^7.1.1",
-    "eslint": "^8.24.0",
-    "eslint-plugin-mocha": "^10.1.0",
-    "husky": "^8.0.1",
-    "jsonpath-plus": "^7.2.0",
-    "mocha": "^10.0.0",
-    "sinon": "^17.0.1"
-  },
-  "dependencies": {
-    "@stoplight/spectral-formats": "^1.4.0",
-    "@stoplight/spectral-functions": "^1.7.1"
+    "@stoplight/spectral-cli": "^6.11.0",
+    "husky": "^8.0.3"
   }
 }

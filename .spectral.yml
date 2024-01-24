@@ -1,0 +1,1143 @@
+extends: 
+ - spectral:oas
+formats:
+  - oas3.1
+
+aliases:
+  AllContentSchemas:
+    - "$.paths..content['application/vnd.api+json'].schema"
+  
+  ResourceObjects:
+    - "$.paths..responses..content[application/vnd.api+json].schema.properties.data.properties"
+    - "$.paths..responses..content[application/vnd.api+json].schema.properties.data.allOf[*].properties"
+    - "$.paths..responses..content[application/vnd.api+json].schema.properties.data.items.properties"
+    - "$.paths..responses..content[application/vnd.api+json].schema.properties.data.items.allOf[*].properties"
+    - "$.paths..content[application/vnd.api+json].schema.properties.included.items.properties"
+    - "$.paths..content[application/vnd.api+json].schema.properties.included.items.allOf[*].properties"
+    - "$.paths..patch.requestBody.content[application/vnd.api+json].schema.properties.data.properties"
+    - "$.paths..patch.requestBody.content[application/vnd.api+json].schema.properties.data.allOf[*].properties"
+  
+  POSTResourceObjects:
+    - "$.paths..post.requestBody.content[application/vnd.api+json].schema.properties.data.properties"
+    - "$.paths..post.requestBody.content[application/vnd.api+json].schema.properties.data.allOf[*].properties"
+
+  LinkObjects:
+    - "#AllContentSchemas..properties[links]"
+
+  MetaObjects:
+    - "#AllContentSchemas..properties[meta]"
+  
+  Relationships:
+    - "#AllContentSchemas..properties[relationships]"
+
+  RelationshipData:
+    - "#Relationships..data"
+
+  POSTRelationships:
+    - "$.paths..post.requestBody.content[application/vnd.api+json].schema.properties.data.properties[relationships].properties[*]"
+    - "$.paths..post.requestBody.content[application/vnd.api+json].schema.properties.data.allOf[*].properties[relationships].properties[*]"
+
+  PATCHRelationships:
+    - "$.paths..patch.requestBody.content[application/vnd.api+json].schema.properties.data.properties[relationships].properties[*]"
+    - "$.paths..patch.requestBody.content[application/vnd.api+json].schema.properties.data.allOf[*].properties[relationships].properties[*]"
+
+  SingleErrorResponses:
+    - "$.paths..responses[?(@property > '400' && @property < '500')].content[application/vnd.api+json].schema.properties.errors"
+    - "$.paths..responses[?(@property > '500' && @property < '600')].content[application/vnd.api+json].schema.properties.errors"
+    - "$.paths..responses[default].content[application/vnd.api+json].schema.properties.errors"
+  
+  ErrorObjects:
+    - "$.paths..responses[default,400,500].content[application/vnd.api+json].schema.properties.errors.items.properties"
+    - "$.paths..responses[default,400,500].content[application/vnd.api+json].schema.properties.errors.items.allOf[*].properties"
+    - "$.paths..responses[?(@property > '400' && @property < '500')].content[application/vnd.api+json].schema.properties.errors.items.properties"
+    - "$.paths..responses[?(@property > '400' && @property < '500')].content[application/vnd.api+json].schema.properties.errors.items.allOf[*].properties"
+    - "$.paths..responses[?(@property > '500' && @property < '600')].content[application/vnd.api+json].schema.properties.errors.items.properties"
+    - "$.paths..responses[?(@property > '500' && @property < '600')].content[application/vnd.api+json].schema.properties.errors.items.allOf[*].properties"
+
+rules:
+
+# ---------------------------------------------------------------------------
+# Section 4 Content Negotiation
+# ---------------------------------------------------------------------------
+
+  content-type:
+    description: "Clients and Servers MUST send all JSON:API data in as Content-Type: application/vnd.api+json without any media type parameters."
+    documentationUrl: "https://jsonapi.org/format/1.0/#content-negotiation"
+    message: "content MUST be 'application/vnd.api+json'"
+    severity: error
+    given: 
+      - "$.paths..requestBody.content"
+      - "$.paths..responses..content"
+    then:
+      field: "@key"
+      function: enumeration
+      functionOptions:
+        values:
+          - application/vnd.api+json
+
+  406-response-code:
+    description: "Servers MUST document and support response code 406 paths in case of invalid ACCEPT media values"
+    documentationUrl: "https://jsonapi.org/format/1.0/#content-negotiation-servers"
+    message: "All paths must support response codes: 406"
+    severity: error
+    given: "$.paths..responses"
+    then:
+      field: "406"
+      function: truthy
+
+  415-response-code:
+    description: "Servers MUST document and support response code 415 on POST or PATCH paths in case of invalid Content-Type media values"
+    documentationUrl: "https://jsonapi.org/format/1.0/#content-negotiation-servers"
+    message: "POST and PATCH paths must support response code: 415"
+    severity: error
+    given: "$.paths[*][post,patch].responses"
+    then:
+      field: "415"
+      function: truthy
+
+# ---------------------------------------------------------------------------
+# Section 5 Document Structure
+# Section 5.1 Top Level Object Schema
+# ---------------------------------------------------------------------------
+
+  top-level-json-object:
+    description: "A JSON object MUST be at the root of every JSON:API request/response body containing data"
+    documentationUrl: "https://jsonapi.org/format/1.0/#document-top-level"
+    message: "Request/response body must be wrapped in root level JSON object"
+    severity: error
+    given: "#AllContentSchemas"
+    then:
+      field: type
+      function: enumeration
+      functionOptions:
+        values:
+          - object
+
+  top-level-json-properties:
+    description: "Root JSON object MUST follow the jsonapi schema"
+    documentationUrl: "https://jsonapi.org/format/1.0/#document-top-level"
+    message: "Root JSON object MUST follow the jsonapi schema"
+    severity: error
+    given: "#AllContentSchemas"
+    then:
+      field: "properties"
+      function: schema
+      functionOptions:
+        dialect: "draft2020-12"
+        schema:
+          type: object
+          anyOf:
+            - required: ["data"]
+            - required: ["errors"]
+            - required: ["meta"]
+          not:
+            anyOf:
+              - required: ["data","errors"]
+          dependentRequired:
+            included: ["data"]
+          properties:
+            data:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - object
+                    - array
+                    - "null"
+            errors:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - array
+            meta:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - object
+            jsonapi:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - object
+            links:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - object
+            included:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - array
+
+# ---------------------------------------------------------------------------
+# Section 5.2 Resource Objects
+# ---------------------------------------------------------------------------
+  
+  resource-object-properties:
+    description: "Verify allowed properties in Resource Objects"
+    documentationUrl: "https://jsonapi.org/format/1.0/#document-resource-objects"
+    message: "'data' objects/items MUST meet Resource Object restrictions"
+    severity: error
+    given: 
+      - "#ResourceObjects"
+      - "#POSTResourceObjects"
+    then:
+      - field: type
+        function: truthy
+      - field: "@key"
+        function: enumeration
+        functionOptions:
+          values:
+            - id
+            - type
+            - attributes
+            - relationships
+            - links
+            - meta
+
+# TODO:// Error throws incorrectly (too much) in an allOf scenario where one item is valid, but the other does not. Changed to warn for now.
+  resource-object-id-required:
+    description: "Verify 'id' property in non-POST Resource Object"
+    documentationUrl: "https://jsonapi.org/format/1.0/#document-resource-objects"
+    message: "Could be missing 'id' property. Please verify the resource."
+    severity: warn
+    given: "#ResourceObjects"
+    then:
+      field: id
+      function: truthy
+
+# ---------------------------------------------------------------------------
+# Section 5.2.1 Resource Objects - Identification
+# ---------------------------------------------------------------------------
+
+  resource-object-property-types:
+    description: "'id' and 'type' MUST be of type 'string'"
+    documentationUrl: "https://jsonapi.org/format/1.0/#document-resource-object-identification"
+    message: "'id' and 'type' MUST be of type 'string'"
+    severity: error
+    given: 
+      - "#ResourceObjects.id"
+      - "#ResourceObjects.type"
+      - "#POSTResourceObjects.type"
+    then:
+      field: type
+      function: enumeration
+      functionOptions:
+        values:
+          - string
+
+# ---------------------------------------------------------------------------
+# Section 5.2.2 Resource Objects - Fields
+# ---------------------------------------------------------------------------
+
+  resource-object-reserved-fields:
+    description: "'id' and 'type' MUST NOT exist in 'attributes' or 'relationships'"
+    documentationUrl: "https://jsonapi.org/format/1.0/#document-resource-object-fields"
+    message: "'id' and 'type' MUST NOT exist in 'attributes' or 'relationships'"
+    severity: error
+    given: "#AllContentSchemas..properties[attributes,relationships].properties"
+    then:
+      - field: id
+        function: falsy
+      - field: type
+        function: falsy
+
+# ---------------------------------------------------------------------------
+# Section 5.2.3 Resource Objects - Attributes
+# ---------------------------------------------------------------------------
+
+  attributes-object-type:
+    description: "The value of 'attributes' property MUST be an object"
+    documentationUrl: "https://jsonapi.org/format/1.0/#document-resource-object-attributes"
+    message: "The value of 'attributes' property MUST be an object"
+    severity: error
+    given: "#AllContentSchemas..properties[attributes]"
+    then:
+      field: type
+      function: enumeration
+      functionOptions:
+        values:
+          - object
+
+  attributes-object-properties:
+    description: "Attributes object MUST NOT contain a 'relationships' or 'links' property"
+    documentationUrl: "https://jsonapi.org/format/1.0/#document-resource-object-attributes"
+    message: "Attributes object MUST NOT contain a 'relationships' or 'links' property"
+    severity: error
+    given: "#AllContentSchemas..properties[attributes]..properties"
+    then:
+      - field: relationships
+        function: falsy
+      - field: links
+        function: falsy
+
+  attributes-object-foreign-keys:
+    description: "Foreign Keys SHOULD NOT appear in attributes. RECOMMEND using 'relationships'"
+    documentationUrl: "https://jsonapi.org/format/1.0/#document-resource-object-attributes"
+    message: "Foreign key? If so, it would be better to remove and use a relationship."
+    severity: info
+    given: "#AllContentSchemas..properties[attributes]..properties[*]~"
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ".*_id$"
+
+# ---------------------------------------------------------------------------
+# Section 5.2.4 Resource Objects - Relationships (Addresses 5.2.6 and 5.3)
+# ---------------------------------------------------------------------------
+
+  relationships-object-type:
+    description: "Relationships MUST be an object"
+    documentationUrl: "https://jsonapi.org/format/1.0/#document-resource-object-relationships"
+    message: "Relationships MUST be an object"
+    severity: error
+    given: "#Relationships"
+    then:
+      field: type
+      function: enumeration
+      functionOptions:
+        values:
+          - object
+
+  relationship-schema:
+    description: "relationship object MUST follow the schema"
+    documentationUrl: "https://jsonapi.org/format/1.0/#document-resource-object-relationships"
+    message: "relationship object MUST follow the schema"
+    severity: error
+    given: "#Relationships.properties[*]"
+    then:
+      - field: type
+        function: enumeration
+        functionOptions:
+          values:
+            - object
+      - field: properties
+        function: schema
+        functionOptions:
+          dialect: "draft2020-12"
+          schema:
+            type: object
+            anyOf:
+              - required: ["links"]
+              - required: ["data"]
+              - required: ["meta"]
+            properties:
+              links:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                      - object
+                  properties:
+                    type: object
+                    anyOf:
+                      - required: ["self"]
+                      - required: ["related"]
+                    properties:
+                      self:
+                        type: object
+                      related:
+                        type: object
+              data:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                      - object
+                      - array
+                      - "null"
+              meta:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                      - object
+            additionalProperties: false
+
+  relationship-data-properties:
+    description: "relationship data May only contain: 'id', 'type' and 'meta'"
+    documentationUrl: "https://jsonapi.org/format/1.0/#document-resource-identifier-objects"
+    message: "relationship data May only contain: 'id', 'type' and 'meta'"
+    severity: error
+    given: 
+      - "#RelationshipData.properties"
+      - "#RelationshipData.allOf[*].properties"
+      - "#RelationshipData.items.properties"
+      - "#RelationshipData.items.allOf[*].properties"
+    then:
+      field: "@key"
+      function: enumeration
+      functionOptions:
+        values:
+          - id
+          - type
+          - meta
+  
+  relationship-data-schema:
+    description: "relationship data items MUST follow schema"
+    documentationUrl: "https://jsonapi.org/format/1.0/#document-resource-identifier-objects"
+    message: "relationship data items MUST follow schema"
+    severity: error
+    given:
+      - "#RelationshipData.properties"
+      - "#RelationshipData.allOf[0].properties"
+      - "#RelationshipData.items.properties"
+      - "#RelationshipData.items.allOf[0].properties"
+    then:
+      function: schema
+      functionOptions:
+        dialect: "draft2020-12"
+        schema:
+          type: object
+          required: ["id","type"]
+          properties:
+            id:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - string
+            type:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - string
+            meta:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - object
+
+# ---------------------------------------------------------------------------
+# Section 5.5 Resource Objects - Meta Information
+# ---------------------------------------------------------------------------
+
+  meta-object:
+    description: "'meta' property MUST be of type object"
+    documentationUrl: "https://jsonapi.org/format/1.0/#document-meta"
+    message: "'meta' property MUST be of type object"
+    severity: error
+    given: "#MetaObjects"
+    then:
+      field: type
+      function: enumeration
+      functionOptions:
+        values:
+          - object
+
+# ---------------------------------------------------------------------------
+# Section 5.6 Resource Objects - Links
+# ---------------------------------------------------------------------------
+
+  links-object:
+    description: "'links' property MUST be an object"
+    documentationUrl: "https://jsonapi.org/format/1.0/#document-links"
+    message: "'links' property MUST be an object"
+    severity: error
+    given: "#LinkObjects"
+    then:
+      field: type
+      function: enumeration
+      functionOptions:
+        values:
+          - object
+
+  links-object-schema:
+    description: "A link must be represented as either a string containing the link's URL or an object"
+    documentationUrl: "https://jsonapi.org/format/1.0/#document-links"
+    message: "'link' properties must be of type string or object"
+    severity: error
+    given: "#LinkObjects.properties[*]..[?(@property === 'type')]^"
+    then:
+      field: type
+      function: enumeration
+      functionOptions:
+        values:
+          - string
+          - object
+
+  links-object-schema-properties:
+    description: "objects contained within a links object MUST contain 'href' (string) and MAY contain 'meta'"
+    documentationUrl: "https://jsonapi.org/format/1.0/#document-links"
+    message: "objects contained within a links object MUST contain 'href' (string) and MAY contain 'meta'"
+    severity: error
+    given: "#LinkObjects.properties..properties"
+    then:
+      - field: "@key"
+        function: enumeration
+        functionOptions:
+          values:
+            - href
+            - meta
+      - field: href
+        function: truthy
+      - field: href.type
+        function: enumeration
+        functionOptions:
+          values:
+            - string
+
+# ---------------------------------------------------------------------------
+# Section 5.7 Resource Objects - JSON:API Object
+# ---------------------------------------------------------------------------
+
+  jsonapi-object:
+    description: "jsonapi object MUST match schema"
+    documentationUrl: "https://jsonapi.org/format/1.0/#document-jsonapi-object"
+    message: "jsonapi object MUST match schema"
+    severity: error
+    given: "#AllContentSchemas..properties[?(@property === 'jsonapi')]"
+    then:
+      - field: type
+        function: enumeration
+        functionOptions:
+          values:
+            - object
+      - field: "properties[*]~"
+        function: enumeration
+        functionOptions:
+          values:
+            - version
+      - field: properties.version
+        function: truthy
+      - field: properties.version.type
+        function: enumeration
+        functionOptions:
+          values:
+            - string
+
+# ---------------------------------------------------------------------------
+# Section 6 Fetching Data
+# Section 6.1
+# Section 6.2 Responses Codes - 200, 404
+# ---------------------------------------------------------------------------
+
+  get-200-response-code:
+    description: "Servers MUST support response code 200 on GET paths on successful request"
+    documentationUrl: "https://jsonapi.org/format/1.0/#fetching-resources-responses"
+    message: "GET paths must support response code: 200"
+    severity: error
+    given: "$.paths[*][get].responses"
+    then:
+      field: "200"
+      function: truthy
+
+# TODO:// verify a 404 response exists on a GET request that returns a single resource
+
+# ---------------------------------------------------------------------------
+# Section 6.3 Fetching Resources - Inclusion of Related Resources
+# ---------------------------------------------------------------------------
+
+  400-response-code:
+    description: "Servers MUST support response code 400 for all paths"
+    message: "All paths must support response codes: 400"
+    severity: error
+    given: "$.paths..responses"
+    then:
+      field: "400"
+      function: truthy
+
+  include-parameter:
+    description: "'include' query param MUST be a string array (csv)"
+    documentationUrl: "https://jsonapi.org/format/1.0/#fetching-includes"
+    message: "'include' query param MUST be a string array (csv)"
+    severity: error
+    given: "$.paths..parameters[?(@.name == 'include')]"
+    then:
+      - field: in
+        function: enumeration
+        functionOptions:
+          values:
+            - query
+      - field: style
+        function: truthy
+      - field: style
+        function: enumeration
+        functionOptions:
+          values:
+            - form
+      - field: explode
+        function: defined
+      - field: explode
+        function: falsy
+      - field: schema
+        function: schema
+        functionOptions:
+          dialect: "draft2020-12"
+          schema:
+            type: object
+            properties:
+              type:
+                type: string
+                enum:
+                  - array
+              items:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                      - string
+
+# ---------------------------------------------------------------------------
+# Section 6.4 Fetching Resources - Sparse Fieldsets
+# ---------------------------------------------------------------------------
+
+  fields-parameter:
+    description: "'fields' query param MUST be a deepObject"
+    documentationUrl: "https://jsonapi.org/format/1.0/#fetching-sparse-fieldsets"
+    message: "'fields' query param MUST be a deepObject"
+    severity: error
+    given: "$.paths..parameters[?(@.name == 'fields')]"
+    then:
+      - field: in
+        function: enumeration
+        functionOptions:
+          values:
+            - query
+      - field: style
+        function: truthy
+      - field: style
+        function: enumeration
+        functionOptions:
+          values:
+            - deepObject
+      - field: schema
+        function: schema
+        functionOptions:
+          dialect: "draft2020-12"
+          schema:
+            type: object
+            properties:
+              type:
+                type: string
+                enum:
+                  - object
+
+# ---------------------------------------------------------------------------
+# Section 6.5 Fetching Resources - Sorting
+# ---------------------------------------------------------------------------
+
+  sort-parameter:
+    description: "'sort' query param MUST be a string array (csv)"
+    documentationUrl: "https://jsonapi.org/format/1.0/#fetching-sorting"
+    message: "'sort' query param MUST be a string array (csv)"
+    severity: error
+    given: "$.paths..parameters[?(@.name == 'sort')]"
+    then:
+      - field: in
+        function: enumeration
+        functionOptions:
+          values:
+            - query
+      - field: style
+        function: truthy
+      - field: style
+        function: enumeration
+        functionOptions:
+          values:
+            - form
+      - field: explode
+        function: defined
+      - field: explode
+        function: falsy
+      - field: schema
+        function: schema
+        functionOptions:
+          dialect: "draft2020-12"
+          schema:
+            type: object
+            properties:
+              type:
+                type: string
+                enum:
+                  - array
+              items:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                      - string
+
+# ---------------------------------------------------------------------------
+# Section 6.6 Fetching Resources - Pagination
+# ---------------------------------------------------------------------------
+
+# TODO:// verify 'page' param only on collections
+  page-parameter:
+    description: "'page' query param MUST follow schema"
+    documentationUrl: "https://jsonapi.org/format/1.0/#fetching-pagination"
+    message: "'page' query param MUST follow schema"
+    severity: error
+    given: "$.paths..parameters[?(@.name == 'page')]"
+    then:
+      - field: in
+        function: enumeration
+        functionOptions:
+          values:
+            - query
+      - field: style
+        function: truthy
+      - field: style
+        function: enumeration
+        functionOptions:
+          values:
+            - deepObject
+      - field: schema
+        function: schema
+        functionOptions:
+          dialect: "draft2020-12"
+          schema:
+            type: object
+            properties:
+              type:
+                type: string
+                enum:
+                  - object
+              properties:
+                type: object
+                additionalProperties: false
+                properties:
+                  cursor:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        enum: ["string"]
+                  offset:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        enum: ["integer"]
+                      format:
+                        type: string
+                        enum: ["int32"]
+                      minimum:
+                        type: integer
+                        minimum: 0
+                  limit:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        enum: ["integer"]
+                      format:
+                        type: string
+                        enum: ["int32"]
+
+# TODO:// verify first,last,prev,next links only on collections
+
+# ---------------------------------------------------------------------------
+# Section 6.7 Fetching Resources - Filtering
+# ---------------------------------------------------------------------------
+
+# TODO:// verify 'filter' param only on collections
+
+# ---------------------------------------------------------------------------
+# Section 7.1 Creating Resources
+# ---------------------------------------------------------------------------
+
+# TODO:// support x-http-method-override: PATCH
+
+  post-requests-single-object:
+    description: "POST requests MAY only contain a single resource object"
+    documentationUrl: "https://jsonapi.org/format/1.0/#crud-creating"
+    message: "POST requests MAY only contain a single resource object"
+    severity: error
+    given: "$.paths..post.requestBody.content[application/vnd.api+json].schema.properties.data[?(@property==='type' && @ === 'array')]"
+    then:
+      function: falsy
+
+  post-relationships:
+    description: "If relationships exist in POST request, 'data' is REQUIRED"
+    documentationUrl: "https://jsonapi.org/format/1.0/#crud-creating"
+    message: "If relationships exist in POST request, 'data' is REQUIRED"
+    severity: error
+    given: "#POSTRelationships"
+    then:
+      field: required
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          items:
+            type: string
+            anyOf:
+              - enum:
+                  - data
+              - enum:
+                  - data
+                  - links
+                  - meta
+
+  403-response-code:
+    description: "Servers MUST document and support response code 403"
+    message: "All paths must support response codes: 403"
+    severity: error
+    given: "$.paths..responses"
+    then:
+      field: "403"
+      function: truthy
+
+  201-response-location-header:
+    description: "A POST 201 response SHOULD return a Location header"
+    documentationUrl: "https://jsonapi.org/format/1.0/#crud-creating-responses"
+    message: "A POST 201 response SHOULD return a Location header"
+    severity: info
+    given: "$.paths[*][post].responses.201.headers"
+    then:
+      field: Location
+      function: defined
+  
+  post-201-response:
+    description: "A POST 201 response MUST return the primary resource"
+    documentationUrl: "https://jsonapi.org/format/1.0/#crud-creating-responses"
+    message: "A POST 201 response MUST return the primary resource"
+    severity: info
+    given: "$.paths[*][post].responses.201.content[application/vnd.api+json].schema"
+    then:
+      field: required
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          items:
+            type: string
+            anyOf:
+              - enum:
+                  - data
+              - enum:
+                  - data
+                  - meta
+                  - jsonapi
+                  - links
+
+  post-2xx-response-codes:
+    description: "POST requests MUST support one Of the following 2xx codes: 201, 202 or 204"
+    documentationUrl: "https://jsonapi.org/format/1.0/#crud-creating-responses"
+    message: "POST requests MUST support one Of the following 2xx codes: 201, 202 or 204"
+    severity: error
+    given: "$.paths[*][post].responses"
+    then:
+      function: schema
+      functionOptions:
+        dialect: "draft2020-12"
+        schema:
+          type: object
+          anyOf:
+            - required: ["201"]
+            - required: ["202"]
+            - required: ["204"]
+     
+  post-409-response-code:
+    description: "POST requests MUST document and support response code 409"
+    documentationUrl: "https://jsonapi.org/format/1.0/#crud-creating-responses"
+    message: "POST paths must support response codes: 409"
+    severity: error
+    given: "$.paths[*][post].responses"
+    then:
+      field: "409"
+      function: truthy
+  
+  post-409-response:
+    description: "POST 409 response SHOULD return 'source' property to identify conflict"
+    documentationUrl: "https://jsonapi.org/format/1.0/#crud-creating-responses"
+    message: "POST 409 response SHOULD return 'source' property to identify conflict"
+    severity: info
+    given: "$.paths[*][post].responses"
+    then:
+      field: "409"
+      function: falsy
+
+# ---------------------------------------------------------------------------
+# Section 7.2 Updating Resources
+# ---------------------------------------------------------------------------
+
+# TODO:// support x-http-method-override: PATCH
+
+  put-disallowed:
+    description: "PUT verb is not allowed in jsonapi, use PATCH instead."
+    documentationUrl: "https://jsonapi.org/format/1.0/#crud-updating"
+    message: "PUT verb is not allowed in jsonapi, use PATCH instead."
+    severity: error
+    given: "$.paths[*][put]"
+    then:
+      - function: falsy
+
+  patch-requests-single-object:
+    description: "PATCH requests MAY only contain a single resource object"
+    documentationUrl: "https://jsonapi.org/format/1.0/#crud-creating"
+    message: "PATCH requests MAY only contain a single resource object"
+    severity: error
+    given: "$.paths..patch.requestBody.content[application/vnd.api+json].schema.properties.data[?(@property==='type' && @ === 'array')]"
+    then:
+      function: falsy
+
+  patch-relationships:
+    description: "If relationships exist in PATCH request, 'data' is REQUIRED"
+    documentationUrl: "https://jsonapi.org/format/1.0/#crud-creating"
+    message: "If relationships exist in PAST request, 'data' is REQUIRED"
+    severity: error
+    given: "#PATCHRelationships"
+    then:
+      field: required
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          items:
+            type: string
+            anyOf:
+              - enum:
+                  - data
+              - enum:
+                  - data
+                  - links
+                  - meta
+
+  patch-2xx-response-codes:
+    description: "PATCH requests MUST support at least one of the following 2xx codes: 200, 202 or 204"
+    documentationUrl: "https://jsonapi.org/format/1.0/#crud-updating-responses"
+    message: "POST requests MUST support at least one of the following 2xx codes: 200, 202 or 204"
+    severity: error
+    given: "$.paths[*][patch].responses"
+    then:
+      function: schema
+      functionOptions:
+        dialect: "draft2020-12"
+        schema:
+          type: object
+          anyOf:
+            - required: ["200"]
+            - required: ["202"]
+            - required: ["204"]
+
+  patch-404-response-code:
+    description: "PATCH requests MUST support response code 404"
+    documentationUrl: "https://jsonapi.org/format/1.0/#crud-updating-responses"
+    message: "PATCH requests MUST support response code 404"
+    severity: error
+    given: "$.paths[*][patch].responses"
+    then:
+      field: "404"
+      function: truthy
+
+  patch-409-response-code:
+    description: "PATCH requests MUST document and support response code 409"
+    documentationUrl: "https://jsonapi.org/format/1.0/#crud-updating-responses"
+    message: "PATCH requests MUST support response codes: 409"
+    severity: error
+    given: "$.paths[*][patch].responses"
+    then:
+      field: "409"
+      function: truthy
+  
+  patch-409-response:
+    description: "PATCH 409 response SHOULD return 'source' property to identify conflict"
+    documentationUrl: "https://jsonapi.org/format/1.0/#crud-updating-responses"
+    message: "PATCH 409 response SHOULD return 'source' property to identify conflict"
+    severity: info
+    given: "$.paths[*][patch].responses"
+    then:
+      field: "409"
+      function: falsy
+
+# ---------------------------------------------------------------------------
+# Section 7.3 Updating Relationships
+# ---------------------------------------------------------------------------
+
+# TODO:// Revisit if/when updating relationships becomes needed
+
+# ---------------------------------------------------------------------------
+# Section 7.4 Deleting Resources
+# ---------------------------------------------------------------------------
+
+  delete-2xx-response-codes:
+    description: "DELETE requests MUST support at least one of the following 2xx codes: 200, 202 or 204"
+    documentationUrl: "https://jsonapi.org/format/1.0/#crud-deleting-responses"
+    message: "DELETE requests MUST support at least one of the following 2xx codes: 200, 202 or 204"
+    severity: error
+    given: "$.paths[*][delete].responses"
+    then:
+      function: schema
+      functionOptions:
+        dialect: "draft2020-12"
+        schema:
+          type: object
+          anyOf:
+            - required: ["200"]
+            - required: ["202"]
+            - required: ["204"]
+
+  delete-404-response-code:
+    description: "DELETE requests MUST support response code 404"
+    documentationUrl: "https://jsonapi.org/format/1.0/#crud-deleting-responses"
+    message: "DELETE requests MUST support response code 404"
+    severity: error
+    given: "$.paths[*][delete].responses"
+    then:
+      field: "404"
+      function: truthy
+
+# ---------------------------------------------------------------------------
+# Section 9 Errors
+# Section 9.1 Errors - Processing Errors
+# ---------------------------------------------------------------------------
+
+  error-processing:
+    description: "When returning multiple errors choose the most generally available code '400' or '500'. Other error codes MUST return only a single error."
+    documentationUrl: "https://jsonapi.org/format/1.0/#errors-processing"
+    message: "Error Codes != 400 and != 500 MUST set maxItems to 1"
+    severity: error
+    given: "#SingleErrorResponses"
+    then:
+      - field: maxItems
+        function: truthy
+      - field: maxItems
+        function: enumeration
+        functionOptions:
+          values:
+            - 1
+
+# ---------------------------------------------------------------------------
+# Section 9.2 Errors - Error Object
+# ---------------------------------------------------------------------------
+
+  error-object-schema:
+    description: "Error objects MUST follow schema"
+    documentationUrl: "https://jsonapi.org/format/1.0/#error-objects"
+    message: "Error objects (item object) MUST follow schema"
+    severity: error
+    given: "#ErrorObjects"
+    then:
+      - field: "@key"
+        function: enumeration
+        functionOptions:
+          values:
+            - id
+            - links
+            - status
+            - code
+            - title
+            - detail
+            - source
+            - meta
+      - field: "links.type"
+        function: enumeration
+        functionOptions:
+          values:
+            - object
+      - field: "source.type"
+        function: enumeration
+        functionOptions:
+          values:
+            - object
+      - field: "meta.type"
+        function: enumeration
+        functionOptions:
+          values:
+            - object
+      - field: "status.type"
+        function: enumeration
+        functionOptions:
+          values:
+            - string
+      - field: "code.type"
+        function: enumeration
+        functionOptions:
+          values:
+            - string
+      - field: "title.type"
+        function: enumeration
+        functionOptions:
+          values:
+            - string
+      - field: "detail.type"
+        function: enumeration
+        functionOptions:
+          values:
+            - string
+  
+  error-object-links:
+    description: "Error object links property MUST contain 'about'"
+    documentationUrl: "https://jsonapi.org/format/1.0/#error-objects"
+    message: "Error object links property MUST contain 'about'"
+    severity: error
+    given: "#ErrorObjects.links.properties"
+    then:
+      - field: "about"
+        function: truthy
+
+  error-object-source-schema:
+    description: "Error object source MUST follow schema"
+    documentationUrl: "https://jsonapi.org/format/1.0/#error-objects"
+    message: "Error object source MUST follow schema"
+    severity: error
+    given: "#ErrorObjects.source"
+    then:
+      field: "properties"
+      function: schema
+      functionOptions:
+        dialect: "draft2020-12"
+        schema:
+          type: object
+          properties:
+            parameter:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum: ["string"]
+            pointer:
+              type: object
+              properties:
+                "oneOf":
+                  type: array
+                  items:
+                    oneOf:
+                      - type: object
+                        required: [type,format]
+                        properties:
+                          type:
+                            type: string
+                            enum: ["string"]
+                          format:
+                            type: string
+                            enum: ["json-pointer"]
+                      - type: object
+                        properties:
+                          type:
+                            type: string
+                            enum: ["array"]
+                          items:
+                            type: object
+                            required: [type,format]
+                            properties:
+                              type:
+                                type: string
+                                enum: ["string"]
+                              format:
+                                type: string
+                                enum: ["json-pointer"]
