@@ -562,7 +562,7 @@ rules:
     documentationUrl: "https://jsonapi.org/format/1.0/#fetching-includes"
     message: "'include' query param MUST be a string array (csv)"
     severity: error
-    given: "$.paths..parameters[?(@.name == 'include')]"
+    given: "$.paths..parameters[*][?(@property === 'name' && @ === 'include')]^"
     then:
       - field: in
         function: enumeration
@@ -608,7 +608,7 @@ rules:
     documentationUrl: "https://jsonapi.org/format/1.0/#fetching-sparse-fieldsets"
     message: "'fields' query param MUST be a deepObject"
     severity: error
-    given: "$.paths..parameters[?(@.name == 'fields')]"
+    given: "$.paths..parameters[*][?(@property === 'name' && @ === 'fields')]^"
     then:
       - field: in
         function: enumeration
@@ -643,7 +643,7 @@ rules:
     documentationUrl: "https://jsonapi.org/format/1.0/#fetching-sorting"
     message: "'sort' query param MUST be a string array (csv)"
     severity: error
-    given: "$.paths..parameters[?(@.name == 'sort')]"
+    given: "$.paths..parameters[*][?(@property === 'name' && @ === 'sort')]^"
     then:
       - field: in
         function: enumeration
@@ -690,7 +690,7 @@ rules:
     documentationUrl: "https://jsonapi.org/format/1.0/#fetching-pagination"
     message: "'page' query param MUST follow schema"
     severity: error
-    given: "$.paths..parameters[?(@.name == 'page')]"
+    given: "$.paths..parameters[*][?(@property === 'name' && @ === 'page')]^"
     then:
       - field: in
         function: enumeration
