@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "spectral rules for json:api",
   "scripts": {
-    "test": "./node_modules/.bin/spectral lint examples/valid/* -r ./.spectral.yml",
+    "test": "spectral lint examples/valid/* -r ./.spectral.yml",
     "prepare": "husky install"
   },
   "repository": {
