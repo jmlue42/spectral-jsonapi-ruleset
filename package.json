@@ -1,9 +1,11 @@
 {
   "name": "spectral-jsonapi-ruleset",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "spectral rules for json:api",
   "scripts": {
-    "test": "./node_modules/.bin/spectral lint examples/valid/* -r ./.spectral.yml",
+    "test": "npm run test:1.0 && npm run test:1.1",
+    "test:1.0": "./node_modules/.bin/spectral lint examples/valid/* -r ./.spectral.yml",
+    "test:1.1": "./node_modules/.bin/spectral lint examples/valid-1.1/* -r ./jsonapi-1.1.yml",
     "prepare": "husky install"
   },
   "repository": {
