@@ -69,7 +69,7 @@ rules:
 # Section 4 Content Negotiation
 # ---------------------------------------------------------------------------
 
-  content-type:
+  json:api:1.0:sec4:content-type:
     description: "Clients and Servers **MUST** send all JSON:API data as Content-Type:
       `application/vnd.api+json` without any media type parameters.\r\n\r\n**Invalid
       Examples:**\r\n```YAML\r\nrequestBody:\r\n  content:\r\n    application/json\r\n\r\nresponses:\r\n
@@ -90,7 +90,7 @@ rules:
         values:
           - application/vnd.api+json
 
-  406-response-code:
+  json:api:1.0:sec4:406-response-code:
     description: "Servers **MUST** document and support response code **406** paths
       in case of invalid `ACCEPT` media values.\r\n\r\n**Invalid Example:**\r\n```YAML\r\npaths:\r\n
       \ /myResources:\r\n    get:\r\n      responses:\r\n        '200':\r\n          $ref:
@@ -107,7 +107,7 @@ rules:
       field: "406"
       function: truthy
 
-  415-response-code:
+  json:api:1.0:sec4:415-response-code:
     description: "Servers **MUST** document and support response code **415** on `POST`
       or `PATCH` paths in case of invalid `Content-Type` media values.\r\n\r\n**Invalid
       Example:**\r\n```YAML\r\npaths:\r\n  /myResources:\r\n    post:\r\n      responses:\r\n
@@ -129,7 +129,7 @@ rules:
 # Section 5.1 Top Level Object Schema
 # ---------------------------------------------------------------------------
 
-  top-level-json-object:
+  json:api:1.0:sec5:top-level-json-object:
     description: "A JSON object **MUST** be at the root of every JSON:API request/response
       body containing data\r\n\r\nValid Examples:\r\n```YAML\r\ncontent:\r\n  application/vnd.api+json:\r\n
       \   schema:\r\n      type: object\r\n```\r\n\r\nRelated specification information
@@ -145,7 +145,7 @@ rules:
         values:
           - object
 
-  top-level-json-properties:
+  json:api:1.0:sec5:top-level-json-properties:
     description: "Root JSON object **MUST** follow the jsonapi schema\r\n\r\n**Schema
       Rules:**\r\n- **MUST** contain at least one of: `data`, `errors`, `meta` properties\r\n-
       `data` and `errors` **MAY NOT** coexist in the same document\r\n- **MAY** contain:
@@ -228,7 +228,7 @@ rules:
 # Section 5.2 Resource Objects
 # ---------------------------------------------------------------------------
   
-  resource-object-properties:
+  json:api:1.0:sec5:resource-object-properties:
     description: "Verify allowed properties in Resource Objects\r\n\r\n**Allowed properties:**
       `id`,`type`,`attributes`,`relationships`,`links`,`meta`\r\n\r\n**Invalid Example:**\r\n```YAML\r\ntype:
       object\r\nproperties:\r\n  id:\r\n    type: string\r\n    format: uri\r\n    example:
@@ -261,7 +261,7 @@ rules:
             - meta
 
 # TODO:// Error throws incorrectly (too much) in an allOf scenario where one item is valid, but the other does not. Changed to warn for now.
-  resource-object-id-required:
+  json:api:1.0:sec5:resource-object-id-required:
     description: "Verify `id` property exists in Resource Object (except POST requestBody)\r\n\r\n**Valid
       Example:**\r\n```YAML\r\n# path..responses...\r\n# path.patch.requestBody...\r\n\r\ntype:
       object\r\nrequired:\r\n  - id\r\n  - type\r\nproperties:\r\n  id:\r\n    type:
@@ -282,7 +282,7 @@ rules:
 # Section 5.2.1 Resource Objects - Identification
 # ---------------------------------------------------------------------------
 
-  resource-object-property-types:
+  json:api:1.0:sec5:resource-object-property-types:
     description: "`id` and `type` **MUST** be of type `string`\r\n\r\n**Invalid Example:**\r\n```YAML\r\ntype:
       object\r\nproperties:\r\n  id:\r\n    type: number\r\n  type:\r\n    type: string\r\n
       \   enum:\r\n      - resources\r\n```\r\n\r\n**Valid Example:**\r\n```YAML\r\ntype:
@@ -308,7 +308,7 @@ rules:
 # Section 5.2.2 Resource Objects - Fields
 # ---------------------------------------------------------------------------
 
-  resource-object-reserved-fields:
+  json:api:1.0:sec5:resource-object-reserved-fields:
     description: "`id` and `type` **MUST NOT** exist in `attributes` or `relationships`\r\n\r\n**Invalid
       Example:**\r\n```YAML\r\ntype: object\r\nrequired:\r\n  - id\r\n  - type\r\n
       \ - attributes\r\nproperties:\r\n  id:\r\n    type: string\r\n    format: uri\r\n
@@ -336,7 +336,7 @@ rules:
 # Section 5.2.3 Resource Objects - Attributes
 # ---------------------------------------------------------------------------
 
-  attributes-object-type:
+  json:api:1.0:sec5:attributes-object-type:
     description: "`attributes` property **MUST** be an `object`\r\n\r\n**Invalid Examples:**\r\n```YAML\r\n#
       data (Resource Object)\r\n# ...  \r\nproperties:\r\n  attributes:\r\n    type:
       array \r\n```\r\n\r\n**Valid Example:**\r\n```YAML\r\n# data (Resource Object)\r\n#
@@ -353,7 +353,7 @@ rules:
         values:
           - object
 
-  attributes-object-properties:
+  json:api:1.0:sec5:attributes-object-properties:
     description: "`attributes` object **MUST NOT** contain a `relationships` or `links`
       property\r\n\r\n**Invalid Example:**\r\n```YAML\r\n# data (Resource Object)\r\n#
       ...  \r\nproperties:\r\n  attributes:\r\n    type: object\r\n    required:\r\n
@@ -377,7 +377,7 @@ rules:
       - field: links
         function: falsy
 
-  attributes-object-foreign-keys:
+  json:api:1.0:sec5:attributes-object-foreign-keys:
     description: "Foreign Keys **SHOULD NOT** appear in `attributes`. **RECOMMEND**
       using `relationships`\r\n\r\nAlthough has-one foreign keys (e.g. author_id)
       are often stored internally alongside other information to be represented in
@@ -413,7 +413,7 @@ rules:
 # Section 5.2.4 Resource Objects - Relationships (Addresses 5.2.6 and 5.3)
 # ---------------------------------------------------------------------------
 
-  relationships-object-type:
+  json:api:1.0:sec5:relationships-object-type:
     description: "relationships **MUST** be an `object`\r\n\r\n**Invalid Example:**\r\n```YAML\r\nrelationships:\r\n
       \ type: array\r\n```\r\n\r\n**Valid Example:**\r\n```YAML\r\nrelationships:\r\n
       \ type: object\r\n```\r\n\r\nRelated specification information can be found
@@ -429,7 +429,7 @@ rules:
         values:
           - object
 
-  relationship-schema:
+  json:api:1.0:sec5:relationship-schema:
     description: "relationship object **MUST** follow the schema\r\n\r\n**Schema Rules:**\r\n-
       **MUST** contain at least one of: `links`,`data`,`meta`\r\n- `links` object
       **MUST** contain at least one of: `self`, `related`\r\n- `data` **MAY** be `null`,
@@ -501,7 +501,7 @@ rules:
                       - object
             additionalProperties: false
 
-  relationship-data-properties:
+  json:api:1.0:sec5:relationship-data-properties:
     description: "relationship `data` **MAY** only contain: `id`, `type` and `meta`\r\n\r\nInvalid
       Example:\r\n```YAML\r\ntype: object\r\nrequired:\r\n  - id\r\n  - type\r\nproperties:\r\n
       \ id:\r\n    type: string\r\n    format: uuid\r\n    example: 2357c52f-6c78-4747-8106-e185c08143aa\r\n
@@ -528,7 +528,7 @@ rules:
           - type
           - meta
   
-  relationship-data-schema:
+  json:api:1.0:sec5:relationship-data-schema:
     description: "relationship data items **MUST** follow schema\r\n\r\n**Schema Rules:**\r\n-
       `id` **MUST** be a `string`\r\n- `type` **MUST** be a `string`\r\n- `meta` **MUST**
       be an `object`\r\n\r\n**Invalid Examples:**\r\n```YAML\r\ntype: object\r\nrequired:\r\n
@@ -580,7 +580,7 @@ rules:
 # Section 5.5 Resource Objects - Meta Information
 # ---------------------------------------------------------------------------
 
-  meta-object:
+  json:api:1.0:sec5:meta-object:
     description: "`meta` property **MUST** be of type `object`\r\n\r\n**Invalid Examples:**\r\n```YAML\r\nproperties:\r\n
       \ meta:\r\n    type: string \r\n```\r\n\r\n**Valid Example:**\r\n```YAML\r\nproperties:\r\n
       \ meta:\r\n    type: object\r\n```\r\n\r\nRelated specification information
@@ -600,7 +600,7 @@ rules:
 # Section 5.6 Resource Objects - Links
 # ---------------------------------------------------------------------------
 
-  links-object:
+  json:api:1.0:sec5:links-object:
     description: "`links` property **MUST** be an `object`\r\n\r\n**Invalid Examples:**\r\n```YAML\r\nproperties:\r\n
       \ links:\r\n    type: array \r\n```\r\n\r\n**Valid Example:**\r\n```YAML\r\nproperties:\r\n
       \ links:\r\n    type: object\r\n```\r\n\r\nRelated specification information
@@ -616,7 +616,7 @@ rules:
         values:
           - object
 
-  links-object-schema:
+  json:api:1.0:sec5:links-object-schema:
     description: "A link **MUST** be represented as either a `string` containing the
       link's URL or an `object`.\r\n\r\n**Invalid Examples:**\r\n```YAML\r\nproperties:\r\n
       \ links:\r\n    type: object\r\n    properties:\r\n        self:\r\n            type:
@@ -639,7 +639,7 @@ rules:
           - string
           - object
 
-  links-object-schema-properties:
+  json:api:1.0:sec5:links-object-schema-properties:
     description: "objects contained within a `links` object **MUST** contain `href`
       (string) and **MAY** contain `meta`\r\n\r\nA link **MUST** be represented as
       either a `string` containing the link's URL or an `object`.\r\n\r\n**Invalid
@@ -677,7 +677,7 @@ rules:
 # Section 5.7 Resource Objects - JSON:API Object
 # ---------------------------------------------------------------------------
 
-  jsonapi-object:
+  json:api:1.0:sec5:jsonapi-object:
     description: "`jsonapi` object **MUST** match schema\r\n\r\n**Schema Rules:**\r\n-
       `jsonapi` **MUST** be an `object`\r\n- **MUST** contain `string` `version`\r\n\r\n**Valid
       Example:**\r\n```YAML\r\nproperties:\r\n  jsonapi:\r\n    type: object\r\n    properties:\r\n
@@ -712,7 +712,7 @@ rules:
 # Section 6.2 Responses Codes - 200, 404
 # ---------------------------------------------------------------------------
 
-  get-200-response-code:
+  json:api:1.0:sec6:get-200-response-code:
     description: "`GET` requests **MUST** support response code 200\r\n\r\n**Invalid
       Example:**\r\n```YAML\r\npaths:\r\n  /myResources/{id}:\r\n    get:\r\n      responses:\r\n
       \       '404':\r\n          $ref: '#/components/responses/404Error'\r\n```\r\n\r\n**Valid
@@ -734,7 +734,7 @@ rules:
 # Section 6.3 Fetching Resources - Inclusion of Related Resources
 # ---------------------------------------------------------------------------
 
-  400-response-code:
+  json:api:1.0:sec6:400-response-code:
     description: "Servers **MUST** document and support response code **400** for
       all paths\r\n\r\n**Invalid Example:**\r\n```YAML\r\npaths:\r\n  /myResources:\r\n
       \   get:\r\n      responses:\r\n        '200':\r\n          $ref: '#/components/responses/MyResource_Collection'\r\n```\r\n\r\n**Valid
@@ -748,7 +748,7 @@ rules:
       field: "400"
       function: truthy
 
-  include-parameter:
+  json:api:1.0:sec6:include-parameter:
     description: "`include` query param **MUST** be a string array (csv)\r\n\r\n**Valid
       Example:**\r\n```YAML\r\nname: include\r\ndescription: csv formatted parameter
       of relationship names to include in response\r\nin: query\r\nstyle: form\r\nexplode:
@@ -799,7 +799,7 @@ rules:
 # Section 6.4 Fetching Resources - Sparse Fieldsets
 # ---------------------------------------------------------------------------
 
-  fields-parameter:
+  json:api:1.0:sec6:fields-parameter:
     description: "`fields` query param **MUST** be a `deepObject`\r\n\r\n**Valid Example:**\r\n```YAML\r\nname:
       fields\r\ndescription: schema for 'fields' query parameter\r\nin: query\r\nschema:\r\n
       \ type: object\r\nstyle: deepObject\r\nexample:\r\n  people: \"name\"\r\n  articles:
@@ -838,7 +838,7 @@ rules:
 # Section 6.5 Fetching Resources - Sorting
 # ---------------------------------------------------------------------------
 
-  sort-parameter:
+  json:api:1.0:sec6:sort-parameter:
     description: "`sort` query param **MUST** be a string array (csv)\r\n\r\n**Valid
       Example:**\r\n```YAML\r\nname: sort\r\ndescription: csv formatted parameter
       of fields to sort by\r\nin: query\r\nstyle: form\r\nexplode: false\r\nschema:\r\n
@@ -890,7 +890,7 @@ rules:
 # ---------------------------------------------------------------------------
 
 # TODO:// verify 'page' param only on collections
-  page-parameter:
+  json:api:1.0:sec6:page-parameter:
     description: "`page` query param **MUST** follow schema\r\n\r\n**Schema Rules:**\r\n-
       **MUST** be type `object`\r\n- **MUST** be style `deepObject`\r\n- contents
       depend on strategy:\r\n  - cursor: `string` `cursor` and `int32` `limit`\r\n
@@ -979,7 +979,7 @@ rules:
 
 # TODO:// support x-http-method-override: PATCH
 
-  post-requests-single-object:
+  json:api:1.0:sec7:post-requests-single-object:
     description: "POST requests **MUST** only contain a single resource object\r\n\r\n**Invalid
       Example:**\r\n```YAML\r\ncontent:\r\n  application/vnd.api+json:\r\n    schema:\r\n
       \     type: object\r\n      required:\r\n        - data\r\n      properties:\r\n
@@ -995,7 +995,7 @@ rules:
     then:
       function: falsy
 
-  post-relationships:
+  json:api:1.0:sec7:post-relationships:
     description: "If relationships exist in POST request, `data` is REQUIRED\r\n\r\n**Invalid
       Example:**\r\n```YAML\r\nrelationships:\r\n  type: object\r\n  properties:\r\n
       \   manufacturer:\r\n      type: object\r\n      properties:\r\n        links:\r\n
@@ -1024,7 +1024,7 @@ rules:
                   - links
                   - meta
 
-  403-response-code:
+  json:api:1.0:sec7:403-response-code:
     description: "Servers **MUST** document and support response code **403** for
       all paths\r\n\r\n**Invalid Example:**\r\n```YAML\r\npaths:\r\n  /myResources:\r\n
       \   get:\r\n      responses:\r\n        '200':\r\n          $ref: '#/components/responses/MyResource_Collection'\r\n```\r\n\r\n**Valid
@@ -1038,7 +1038,7 @@ rules:
       field: "403"
       function: truthy
 
-  201-response-location-header:
+  json:api:1.0:sec7:201-response-location-header:
     description: "A POST 201 response **SHOULD** return a `Location` header identifying
       the location of the newly created resource.\r\n\r\n**Valid Example:**\r\n```YAML\r\nheaders:\r\n
       \ Location:\r\n    schema:\r\n      type: string\r\n      format: uri\r\n    example:
@@ -1053,7 +1053,7 @@ rules:
       field: Location
       function: defined
   
-  post-201-response:
+  json:api:1.0:sec7:post-201-response:
     description: "A POST 201 response **MUST** return the primary resource\r\n\r\nRelated
       specification information can be found [here](https://jsonapi.org/format/1.0/#crud-creating-responses)."
     documentationUrl: "https://jsonapi.org/format/1.0/#crud-creating-responses"
@@ -1077,7 +1077,7 @@ rules:
                   - jsonapi
                   - links
 
-  post-2xx-response-codes:
+  json:api:1.0:sec7:post-2xx-response-codes:
     description: "`POST` requests **MUST** support one Of the following 2xx codes:
       201, 202 or 204\r\n\r\n**Invalid Example:**\r\n```YAML\r\npaths:\r\n  /myResources:\r\n
       \   post:\r\n      responses:\r\n        '404':\r\n          $ref: '#/components/responses/404Error'\r\n```\r\n\r\n**Valid
@@ -1104,7 +1104,7 @@ rules:
             - required: ["202"]
             - required: ["204"]
      
-  post-409-response-code:
+  json:api:1.0:sec7:post-409-response-code:
     description: "`POST` requests **MUST** document and support response code 409\r\n\r\n**Invalid
       Example:**\r\n```YAML\r\npaths:\r\n  /myResources:\r\n    post:\r\n      responses:\r\n
       \       '201':\r\n          $ref: '#/components/responses/MyResource_Single'\r\n```\r\n\r\n**Valid
@@ -1120,7 +1120,7 @@ rules:
       field: "409"
       function: truthy
   
-  post-409-response:
+  json:api:1.0:sec7:post-409-response:
     description: "POST 409 response **SHOULD** return `source` property to identify
       conflict\r\n\r\n**Example:**\r\n```YAML\r\n# Example showing use of source in
       error object.\r\n\r\ntype: array\r\nitems:\r\n    type: object\r\n    properties:\r\n
@@ -1146,7 +1146,7 @@ rules:
 
 # TODO:// support x-http-method-override: PATCH
 
-  put-disallowed:
+  json:api:1.0:sec7:put-disallowed:
     description: "`PUT` verb is not allowed in jsonapi, use `PATCH` instead.\r\n\r\n**Invalid
       Example:**\r\n```YAML\r\n/myResources/{id}:\r\n    put:\r\n```\r\n\r\n**Valid
       Example:**\r\n```YAML\r\n/myResources/{id}:\r\n    patch:\r\n```\r\n\r\nRelated
@@ -1158,7 +1158,7 @@ rules:
     then:
       - function: falsy
 
-  patch-requests-single-object:
+  json:api:1.0:sec7:patch-requests-single-object:
     description: "PATCH requests **MUST** only contain a single resource object\r\n\r\n**Invalid
       Example:**\r\n```YAML\r\ncontent:\r\n  application/vnd.api+json:\r\n    schema:\r\n
       \     type: object\r\n      required:\r\n        - data\r\n      properties:\r\n
@@ -1174,7 +1174,7 @@ rules:
     then:
       function: falsy
 
-  patch-relationships:
+  json:api:1.0:sec7:patch-relationships:
     description: "If relationships exist in PATCH request, `data` is REQUIRED\r\n\r\n**Invalid
       Example:**\r\n```YAML\r\nrelationships:\r\n  type: object\r\n  properties:\r\n
       \   manufacturer:\r\n      type: object\r\n      properties:\r\n        links:\r\n
@@ -1203,7 +1203,7 @@ rules:
                   - links
                   - meta
 
-  patch-2xx-response-codes:
+  json:api:1.0:sec7:patch-2xx-response-codes:
     description: "`PATCH` requests **MUST** support at least one of the following
       2xx codes: 200, 202 or 204\r\n\r\n**Invalid Example:**\r\n```YAML\r\npaths:\r\n
       \ /myResources/{id}:\r\n    patch:\r\n      responses:\r\n        '404':\r\n
@@ -1232,7 +1232,7 @@ rules:
             - required: ["202"]
             - required: ["204"]
 
-  patch-404-response-code:
+  json:api:1.0:sec7:patch-404-response-code:
     description: "`PATCH` requests **MUST** support response code 404\r\n\r\n**Invalid
       Example:**\r\n```YAML\r\npaths:\r\n  /myResources/{id}:\r\n    patch:\r\n      responses:\r\n
       \       '200':\r\n          $ref: '#/components/responses/MyResource_Single'\r\n```\r\n\r\n**Valid
@@ -1248,7 +1248,7 @@ rules:
       field: "404"
       function: truthy
 
-  patch-409-response-code:
+  json:api:1.0:sec7:patch-409-response-code:
     description: "`PATCH` requests **MUST** document and support response code 409\r\n\r\n**Invalid
       Example:**\r\n```YAML\r\npaths:\r\n  /myResources/{id}:\r\n    patch:\r\n      responses:\r\n
       \       '200':\r\n          $ref: '#/components/responses/MyResource_Single'\r\n```\r\n\r\n**Valid
@@ -1264,7 +1264,7 @@ rules:
       field: "409"
       function: truthy
   
-  patch-409-response:
+  json:api:1.0:sec7:patch-409-response:
     description: "PATCH 409 response **SHOULD** return `source` property to identify
       conflict\r\n\r\n**Example:**\r\n```YAML\r\n# Example showing use of source in
       error object.\r\n# Examples describe a conflict between the {id} parameter and
@@ -1296,7 +1296,7 @@ rules:
 # Section 7.4 Deleting Resources
 # ---------------------------------------------------------------------------
 
-  delete-2xx-response-codes:
+  json:api:1.0:sec7:delete-2xx-response-codes:
     description: "`DELETE` requests **MUST** support at least one of the following
       2xx codes: 200, 202, or 204\r\n\r\n**Invalid Example:**\r\n```YAML\r\npaths:\r\n
       \ /myResources/{id}:\r\n    delete:\r\n      responses:\r\n        '404':\r\n
@@ -1325,7 +1325,7 @@ rules:
             - required: ["202"]
             - required: ["204"]
 
-  delete-404-response-code:
+  json:api:1.0:sec7:delete-404-response-code:
     description: "`DELETE` requests **MUST** support response code 404\r\n\r\n**Invalid
       Example:**\r\n```YAML\r\npaths:\r\n  /myResources/{id}:\r\n    delete:\r\n      responses:\r\n
       \       '204':\r\n          description: Successful Operation. No Content.\r\n```\r\n\r\n**Valid
@@ -1346,7 +1346,7 @@ rules:
 # Section 9.1 Errors - Processing Errors
 # ---------------------------------------------------------------------------
 
-  error-processing:
+  json:api:1.0:sec9:error-processing:
     description: "When returning multiple errors choose the most generally available
       response code '400' or '500'. Other error response codes **MUST** return only
       a single error.\r\n\r\n**Valid Example:** 400 Multiple errors\r\n```YAML\r\n400Error:\r\n
@@ -1384,7 +1384,7 @@ rules:
 # Section 9.2 Errors - Error Object
 # ---------------------------------------------------------------------------
 
-  error-object-schema:
+  json:api:1.0:sec9:error-object-schema:
     description: "error objects **MUST** follow schema\r\n\r\n**Schema Rules:**\r\n-
       **MAY** contain the following fields: `id`,`links`,`status`,`code`,`title`,`detail`,`source`,`meta`\r\n-
       `id`,`status`,`code`,`title`,`detail` **MUST** be an `object`\r\n- `links`,`source`,`meta`
@@ -1461,7 +1461,7 @@ rules:
           values:
             - string
   
-  error-object-links:
+  json:api:1.0:sec9:error-object-links:
     description: "error object `links` property **MUST** contain an `about` link.\r\n\r\n**Invalid
       Example:**\r\n```YAML\r\n# Error Object\r\n# ...\r\nlinks:\r\n  type: object\r\n
       \ description: links that lead to further detail about the particular occurrence
@@ -1478,7 +1478,7 @@ rules:
       - field: "about"
         function: truthy
 
-  error-object-source-schema:
+  json:api:1.0:sec9:error-object-source-schema:
     description: "error object `source` **MUST** follow schema\r\n\r\n**Schema Rules:**\r\n-
       `source` **MUST** be an `object`\r\n- **MUST** contain at least one of: `pointer`
       or `parameter`\r\n- `parameter` **MUST** be a `string`\r\n- `pointer` **MUST**
