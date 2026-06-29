@@ -1,0 +1,296 @@
+description: "# [{json:api}](https://jsonapi.org/) - [v1.1](https://jsonapi.org/format/1.1/)\r\n>
+  A Specification for Building APIs in JSON\r\n\r\nThis ruleset is an **additive overlay** on top of
+  the v1.0 ruleset (`.spectral.yml`). It inherits every v1.0 rule and its aliases unchanged, and
+  only redefines the handful of rules whose behaviour was relaxed or extended in
+  [JSON:API v1.1](https://jsonapi.org/format/1.1/): the `ext`/`profile` media type parameters,
+  the expanded `links` object members, the new `jsonapi` object members (`ext`, `profile`, `meta`),
+  and the `lid` local-identifier member on resource objects and resource identifier objects.\r\n\r\nPoint
+  Spectral at this file to lint a JSON:API **v1.1** definition; keep using `.spectral.yml` for v1.0."
+
+# Inherit the complete v1.0 ruleset (rules + aliases + spectral:oas). Redefining a rule
+# below by its key REPLACES the inherited definition; every other rule is inherited as-is.
+extends:
+  - ./.spectral.yml
+
+formats:
+  - oas3.1
+
+# NOTE: Spectral does not inherit `aliases` through `extends`, so the alias block from
+# `.spectral.yml` is duplicated here verbatim. Keep the two in sync if aliases change.
+aliases:
+  AllContentSchemas:
+    - "$.paths..content['application/vnd.api+json'].schema"
+
+  ResourceObjects:
+    - "$.paths..responses..content[application/vnd.api+json].schema.properties.data.properties"
+    - "$.paths..responses..content[application/vnd.api+json].schema.properties.data.allOf[*].properties"
+    - "$.paths..responses..content[application/vnd.api+json].schema.properties.data.items.properties"
+    - "$.paths..responses..content[application/vnd.api+json].schema.properties.data.items.allOf[*].properties"
+    - "$.paths..content[application/vnd.api+json].schema.properties.included.items.properties"
+    - "$.paths..content[application/vnd.api+json].schema.properties.included.items.allOf[*].properties"
+    - "$.paths..patch.requestBody.content[application/vnd.api+json].schema.properties.data.properties"
+    - "$.paths..patch.requestBody.content[application/vnd.api+json].schema.properties.data.allOf[*].properties"
+
+  POSTResourceObjects:
+    - "$.paths..post.requestBody.content[application/vnd.api+json].schema.properties.data.properties"
+    - "$.paths..post.requestBody.content[application/vnd.api+json].schema.properties.data.allOf[*].properties"
+
+  LinkObjects:
+    - "#AllContentSchemas..properties[links]"
+
+  MetaObjects:
+    - "#AllContentSchemas..properties[meta]"
+
+  Relationships:
+    - "#AllContentSchemas..properties[relationships]"
+
+  RelationshipData:
+    - "#Relationships..data"
+
+  POSTRelationships:
+    - "$.paths..post.requestBody.content[application/vnd.api+json].schema.properties.data.properties[relationships].properties[*]"
+    - "$.paths..post.requestBody.content[application/vnd.api+json].schema.properties.data.allOf[*].properties[relationships].properties[*]"
+
+  PATCHRelationships:
+    - "$.paths..patch.requestBody.content[application/vnd.api+json].schema.properties.data.properties[relationships].properties[*]"
+    - "$.paths..patch.requestBody.content[application/vnd.api+json].schema.properties.data.allOf[*].properties[relationships].properties[*]"
+
+  SingleErrorResponses:
+    - "$.paths..responses[?(@property > '400' && @property < '500')].content[application/vnd.api+json].schema.properties.errors"
+    - "$.paths..responses[?(@property > '500' && @property < '600')].content[application/vnd.api+json].schema.properties.errors"
+    - "$.paths..responses[default].content[application/vnd.api+json].schema.properties.errors"
+
+  ErrorObjects:
+    - "$.paths..responses[default,400,500].content[application/vnd.api+json].schema.properties.errors.items.properties"
+    - "$.paths..responses[default,400,500].content[application/vnd.api+json].schema.properties.errors.items.allOf[*].properties"
+    - "$.paths..responses[?(@property > '400' && @property < '500')].content[application/vnd.api+json].schema.properties.errors.items.properties"
+    - "$.paths..responses[?(@property > '400' && @property < '500')].content[application/vnd.api+json].schema.properties.errors.items.allOf[*].properties"
+    - "$.paths..responses[?(@property > '500' && @property < '600')].content[application/vnd.api+json].schema.properties.errors.items.properties"
+    - "$.paths..responses[?(@property > '500' && @property < '600')].content[application/vnd.api+json].schema.properties.errors.items.allOf[*].properties"
+
+rules:
+
+# ---------------------------------------------------------------------------
+# Section 4 Content Negotiation (v1.1)
+# v1.1 permits the `ext` and `profile` media type parameters on the JSON:API media type.
+# https://jsonapi.org/format/1.1/#content-negotiation
+# ---------------------------------------------------------------------------
+
+  content-type:
+    description: "Clients and Servers **MUST** send all JSON:API data as Content-Type:
+      `application/vnd.api+json`. In v1.1 this media type **MAY** carry the `ext` and/or
+      `profile` media type parameters (and no others).\r\n\r\n**Valid Examples:**\r\n```YAML\r\napplication/vnd.api+json\r\napplication/vnd.api+json; ext=\"https://jsonapi.org/ext/atomic\"\r\napplication/vnd.api+json; profile=\"https://example.com/resource-timestamps\"\r\n```\r\n\r\nRelated
+      specification information can be found [here](https://jsonapi.org/format/1.1/#content-negotiation-servers)."
+    documentationUrl: "https://jsonapi.org/format/1.1/#content-negotiation"
+    message: "content MUST be 'application/vnd.api+json', optionally with only 'ext'/'profile' media type parameters"
+    severity: error
+    given:
+      - "$.paths..requestBody.content"
+      - "$.paths..responses..content"
+    then:
+      field: "@key"
+      function: pattern
+      functionOptions:
+        match: '^application/vnd\.api\+json(\s*;\s*(ext|profile)="[^"]*")*$'
+
+# ---------------------------------------------------------------------------
+# Section 5.4 Links (v1.1)
+# v1.1 link objects gain `rel`, `describedby`, `title`, `type`, `hreflang` members.
+# https://jsonapi.org/format/1.1/#document-links
+# ---------------------------------------------------------------------------
+
+  links-object-schema-properties:
+    description: "Objects contained within a `links` object **MUST** contain `href`
+      (string) and **MAY** contain `rel`, `describedby`, `title`, `type`, `hreflang`
+      and `meta` (v1.1).\r\n\r\nRelated specification information can be found [here](https://jsonapi.org/format/1.1/#document-links)."
+    documentationUrl: "https://jsonapi.org/format/1.1/#document-links"
+    message: "link objects MUST contain 'href' (string) and MAY contain 'rel', 'describedby', 'title', 'type', 'hreflang', 'meta'"
+    severity: error
+    given: "#LinkObjects.properties..properties"
+    then:
+      - field: "@key"
+        function: enumeration
+        functionOptions:
+          values:
+            - href
+            - rel
+            - describedby
+            - title
+            - type
+            - hreflang
+            - meta
+      - field: href
+        function: truthy
+      - field: href.type
+        function: enumeration
+        functionOptions:
+          values:
+            - string
+
+# ---------------------------------------------------------------------------
+# Section 5.7 JSON:API Object (v1.1)
+# v1.1 adds `ext`, `profile` and `meta` members; `version` remains optional.
+# https://jsonapi.org/format/1.1/#document-jsonapi-object
+# ---------------------------------------------------------------------------
+
+  jsonapi-object:
+    description: "`jsonapi` object **MUST** match schema (v1.1).\r\n\r\n**Schema Rules:**\r\n-
+      `jsonapi` **MUST** be an `object`\r\n- **MAY** contain `version` (`string`), `ext`
+      (`array`), `profile` (`array`) and `meta` (`object`)\r\n\r\n**Valid Example:**\r\n```YAML\r\nproperties:\r\n
+      \ jsonapi:\r\n    type: object\r\n    properties:\r\n      version:\r\n        type: string\r\n        example: '1.1'\r\n      ext:\r\n        type: array\r\n      profile:\r\n        type: array\r\n      meta:\r\n        type: object\r\n```\r\n\r\nRelated
+      specification information can be found [here](https://jsonapi.org/format/1.1/#document-jsonapi-object)."
+    documentationUrl: "https://jsonapi.org/format/1.1/#document-jsonapi-object"
+    message: "jsonapi object MUST match schema"
+    severity: error
+    given: "#AllContentSchemas..properties[?(@property === 'jsonapi')]"
+    then:
+      - field: type
+        function: enumeration
+        functionOptions:
+          values:
+            - object
+      - field: "properties[*]~"
+        function: enumeration
+        functionOptions:
+          values:
+            - version
+            - ext
+            - profile
+            - meta
+      - field: properties.version.type
+        function: enumeration
+        functionOptions:
+          values:
+            - string
+
+# ---------------------------------------------------------------------------
+# Section 5.2 Resource Objects - Identification (v1.1)
+# v1.1 adds the `lid` (local id) member, valid wherever `id` is.
+# https://jsonapi.org/format/1.1/#document-resource-object-identification
+# ---------------------------------------------------------------------------
+
+  resource-object-properties:
+    description: "Verify allowed properties in Resource Objects (v1.1).\r\n\r\n**Allowed
+      properties:** `id`, `lid`, `type`, `attributes`, `relationships`, `links`, `meta`\r\n\r\nRelated
+      specification information can be found [here](https://jsonapi.org/format/1.1/#document-resource-objects)."
+    documentationUrl: "https://jsonapi.org/format/1.1/#document-resource-objects"
+    message: "'data' objects/items MUST meet Resource Object restrictions"
+    severity: error
+    given:
+      - "#ResourceObjects"
+      - "#POSTResourceObjects"
+    then:
+      - field: type
+        function: truthy
+      - field: "@key"
+        function: enumeration
+        functionOptions:
+          values:
+            - id
+            - lid
+            - type
+            - attributes
+            - relationships
+            - links
+            - meta
+
+  resource-object-id-required:
+    description: "A Resource Object **MUST** contain an `id` (or, for client-generated
+      resources in v1.1, a `lid`) - except in a POST requestBody where neither is required.\r\n\r\n**NOTE:**
+      Currently this rule triggers against `allOf` structures unless all items have `id`/`lid`.
+      Until this is corrected it is set as a warning.\r\n\r\nRelated specification information
+      can be found [here](https://jsonapi.org/format/1.1/#document-resource-object-identification)."
+    documentationUrl: "https://jsonapi.org/format/1.1/#document-resource-object-identification"
+    message: "Could be missing 'id'/'lid' property. Please verify the resource."
+    severity: warn
+    given: "#ResourceObjects"
+    then:
+      function: schema
+      functionOptions:
+        dialect: "draft2020-12"
+        schema:
+          type: object
+          anyOf:
+            - required: ["id"]
+            - required: ["lid"]
+
+# ---------------------------------------------------------------------------
+# Section 8 Resource Identifier Objects (v1.1)
+# v1.1 allows `lid` in resource identifier objects (relationship linkage).
+# https://jsonapi.org/format/1.1/#document-resource-identifier-objects
+# ---------------------------------------------------------------------------
+
+  relationship-data-properties:
+    description: "Relationship `data` (resource identifier object) **MAY** only contain:
+      `id`, `lid`, `type` and `meta` (v1.1).\r\n\r\nRelated specification information can
+      be found [here](https://jsonapi.org/format/1.1/#document-resource-identifier-objects)."
+    documentationUrl: "https://jsonapi.org/format/1.1/#document-resource-identifier-objects"
+    message: "relationship data May only contain: 'id', 'lid', 'type' and 'meta'"
+    severity: error
+    given:
+      - "#RelationshipData.properties"
+      - "#RelationshipData.allOf[*].properties"
+      - "#RelationshipData.items.properties"
+      - "#RelationshipData.items.allOf[*].properties"
+    then:
+      field: "@key"
+      function: enumeration
+      functionOptions:
+        values:
+          - id
+          - lid
+          - type
+          - meta
+
+  relationship-data-schema:
+    description: "Relationship data items **MUST** follow schema (v1.1).\r\n\r\n**Schema
+      Rules:**\r\n- **MUST** contain `type` (`string`) and at least one of `id`/`lid` (`string`)\r\n-
+      `meta` **MUST** be an `object`\r\n\r\nRelated specification information can be found
+      [here](https://jsonapi.org/format/1.1/#document-resource-identifier-objects)."
+    documentationUrl: "https://jsonapi.org/format/1.1/#document-resource-identifier-objects"
+    message: "relationship data items MUST follow schema"
+    severity: error
+    given:
+      - "#RelationshipData.properties"
+      - "#RelationshipData.allOf[0].properties"
+      - "#RelationshipData.items.properties"
+      - "#RelationshipData.items.allOf[0].properties"
+    then:
+      function: schema
+      functionOptions:
+        dialect: "draft2020-12"
+        schema:
+          type: object
+          required: ["type"]
+          anyOf:
+            - required: ["id"]
+            - required: ["lid"]
+          properties:
+            id:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - string
+            lid:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - string
+            type:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - string
+            meta:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - object
