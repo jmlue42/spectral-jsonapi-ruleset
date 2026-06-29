@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/jmlue42/spectral-jsonapi-ruleset#readme",
   "devDependencies": {
-    "@stoplight/spectral-cli": "^6.11.0",
+    "@stoplight/spectral-cli": "^6.16.0",
     "husky": "^8.0.3"
   }
 }
